@@ -307,3 +307,22 @@ h1, h2, h3, .font-display {
   0%   { transform: scale(0.8); opacity: 0.9; }
   100% { transform: scale(1.9); opacity: 0; }
 }
+
+/* Timeline start / end caps — a clear beginning and a clear finish so the
+   arc reads as bounded rather than trailing off. */
+.tl-cap {
+  position: absolute;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  transform: rotate(45deg);
+  background: var(--dot, var(--accent));
+  box-shadow: 0 0 0 4px var(--bg);
+  z-index: 2;
+}
+
+.tl-cap-end {
+  background: var(--bg);
+  border: 3px solid var(--dot, var(--accent));
+}

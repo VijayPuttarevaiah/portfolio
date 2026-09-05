@@ -39,14 +39,47 @@ npx vercel --prod # production
 Or push to GitHub and import the repo at vercel.com — the defaults work, no
 build configuration needed.
 
-Set one environment variable so Open Graph and canonical URLs resolve to
-absolute addresses:
+### Environment variables
 
-| Variable | Value |
-|---|---|
-| `NEXT_PUBLIC_SITE_URL` | `https://your-domain.com` |
+| Variable | Required | Purpose |
+|---|---|---|
+| `NEXT_PUBLIC_SITE_URL` | no | Absolute Open Graph / canonical URLs. Falls back to `https://vijayputtarevaiah.vercel.app`. |
+| `RESEND_API_KEY` | **yes, for the contact form** | Sends form submissions to your inbox. Without it the form returns a clear "not configured" message instead of failing silently. |
+| `CONTACT_TO` | no | Destination address. Defaults to the email in `resume.ts`. |
+| `CONTACT_FROM` | no | Sender. Defaults to `Portfolio <onboarding@resend.dev>`. |
 
-It falls back to `https://vijayputtarevaiah.vercel.app` if unset.
+### Turning on the contact form
+
+1. Sign up at [resend.com](https://resend.com) — the free tier covers 100 emails/day.
+2. **API Keys → Create API Key**, copy it.
+3. Add `RESEND_API_KEY` in Vercel → Settings → Environment Variables, then redeploy.
+4. For local testing, put it in `.env.local` (already gitignored).
+
+You do **not** need to verify a domain. Resend's `onboarding@resend.dev`
+sender works for delivery to your own account address, which is exactly what
+this form does. Add `CONTACT_FROM` with a verified domain later if you want
+the sender to read as yours.
+
+### Contact form protections
+
+The route at `src/app/api/contact/route.ts` applies, in order:
+
+- **Rate limit** — 3 messages per IP per hour, checked before any other work.
+- **Honeypot** — a hidden `company` field. Bots fill it; the response is a
+  fake success so they learn nothing.
+- **Timing check** — submissions under 3 seconds after the form opens are
+  treated the same way.
+- **Validation** — required fields, permissive email format, length caps
+  (name 100, subject 150, message 4000).
+- **Header-injection guard** — CR/LF stripped from single-line fields.
+- **HTML escaping** on everything rendered into the email body.
+
+One honest limitation: the rate limiter holds state in the memory of a single
+serverless instance. Vercel may run several concurrently, so someone spraying
+across cold starts could exceed 3/hour. It reliably stops the realistic case —
+one person or script hammering the form. To make it airtight, swap the `Map`
+in `src/lib/rateLimit.ts` for Upstash Redis; the function signature is
+already the right shape.
 
 ## Where the content lives
 
