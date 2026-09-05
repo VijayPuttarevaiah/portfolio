@@ -54,8 +54,7 @@ It falls back to `https://vijayputtarevaiah.vercel.app` if unset.
 site is defined there and nowhere else — components only render it. To change
 copy, edit that file.
 
-That file also carries the accuracy constraints inherited from the parent
-repository's `CONTEXT.md`, as comments at the top. The important ones:
+That file also documents the accuracy rules the content follows:
 
 - **"3+ years"** of software engineering (Wipro 2yr3mo + Acuver 1yr = 3yr3mo).
   Never write 3.5 — 3.25 does not clear 3.5.
