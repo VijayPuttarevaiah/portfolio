@@ -74,10 +74,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b0a12" },
-  ],
+  // Site is dark regardless of OS, so the browser chrome should match.
+  themeColor: "#0c0b10",
 };
 
 /**
@@ -88,14 +86,11 @@ const themeScript = `
 (function () {
   document.documentElement.classList.add('js');
   try {
+    // Dark is the site's identity, not a preference to be negotiated with
+    // the OS. Only an explicit click on the toggle switches to light.
     var stored = localStorage.getItem('theme');
-    if (stored === 'dark' || stored === 'light') {
-      document.documentElement.dataset.theme = stored;
-    } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-      // No stored choice: honour an explicit OS light preference,
-      // otherwise stay on the site's dark default.
-      document.documentElement.dataset.theme = 'light';
-    }
+    document.documentElement.dataset.theme =
+      stored === 'light' ? 'light' : 'dark';
   } catch (e) {}
 })();
 `;
