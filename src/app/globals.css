@@ -333,3 +333,69 @@ h1, h2, h3, .font-display {
     transform: scaleY(1) !important;
   }
 }
+
+/* ---------------------------------------------------------------
+   Brand marks on the timelines
+   --------------------------------------------------------------- */
+.brand-mark {
+  display: grid;
+  place-items: center;
+  border-radius: 9999px;
+  background: var(--bg-elevated);
+  border: 2px solid var(--brand, var(--accent));
+  box-shadow:
+    0 0 0 5px var(--bg),
+    0 0 22px color-mix(in srgb, var(--brand, var(--accent)) 28%, transparent);
+  flex-shrink: 0;
+}
+
+.brand-mark-img {
+  filter: brightness(0) invert(1);
+  opacity: 0.92;
+}
+
+.brand-mark-text {
+  font-family: var(--font-funnel), sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: -0.02em;
+  color: var(--brand, var(--accent));
+}
+
+/* The open-ended "next" marker: dashed, hollow, unmistakably not a job held */
+.tl-next-mark {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 9999px;
+  border: 2px dashed var(--accent);
+  color: var(--accent);
+  background: var(--bg);
+  box-shadow: 0 0 0 5px var(--bg);
+}
+
+/* Small pulsing dot marking the current position on a track */
+.tl-live {
+  position: relative;
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--h3);
+}
+
+.tl-live::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 9999px;
+  border: 2px solid var(--h3);
+  animation: tl-pulse 2.2s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tl-live::after {
+    animation: none;
+  }
+}
