@@ -417,18 +417,36 @@ export type Photo = {
 };
 
 /**
- * Photos of Vijay at work.
+ * Photos of the places behind the work, all supplied by Vijay.
  *
- * EMPTY ON PURPOSE — awaiting real images from Vijay.
- *
- * To add: drop files in public/photos/ and list them here. Only use photos
- * he actually supplies. Never a stock photo, never a generated image: a
- * picture captioned "me at work" that isn't him is a fabrication in exactly
- * the way an invented metric would be.
+ * Captions describe the location only. They never assert that a given
+ * building is where a specific project shipped, because that is not
+ * something a photograph establishes.
  *
  * The Gallery section renders nothing while this array is empty.
  */
-export const photos: Photo[] = [];
+export const photos: Photo[] = [
+  {
+    src: "/photos/vijay-office.jpg",
+    alt: "Vijay Puttarevaiah standing in an office atrium, wearing a work badge on a lanyard.",
+    caption: "On site at Wipro",
+  },
+  {
+    src: "/photos/wipro-campus.jpg",
+    alt: "Wipro's Kodathi campus in Bengaluru, seen from the central courtyard between two office towers.",
+    caption: "Wipro Kodathi campus, Bengaluru",
+  },
+  {
+    src: "/photos/wipro-entrance.jpg",
+    alt: "The main gate at Wipro's Kodathi campus, with the Wipro sign in the foreground.",
+    caption: "Kodathi campus, Gate 1",
+  },
+  {
+    src: "/photos/acuver-office.jpg",
+    alt: "The Acuver Consulting office floor, with desks behind a glass partition and the company sign on the wall.",
+    caption: "Acuver Consulting, Bengaluru",
+  },
+];
 
 export type JourneyKind = "education" | "work" | "now" | "next";
 
