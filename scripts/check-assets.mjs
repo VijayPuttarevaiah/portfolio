@@ -6,9 +6,6 @@ const pub = join(process.cwd(), "public");
 const row = (ok, label, note = "") =>
   console.log(`  ${ok ? "present" : "MISSING"}  ${label}${note ? "  — " + note : ""}`);
 
-console.log("\nResume");
-row(existsSync(join(pub, "resume.pdf")), "public/resume.pdf", "hero Resume button");
-
 console.log("\nPhotos  (public/photos/)");
 const wanted = ["wipro-campus", "wipro-entrance", "acuver-office", "vijay-office"];
 const dir = join(pub, "photos");
