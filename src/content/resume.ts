@@ -5,8 +5,10 @@
  * repository. Nothing is invented, inflated, or rounded up.
  *
  * Hard constraints carried over from CONTEXT.md — do not "improve" these:
- *  - "3+ years" of software engineering (Wipro 2yr3mo + Acuver 1yr = 3yr3mo).
- *    NEVER write 3.5 — 3.25 does not clear 3.5.
+ *  - "3.5 years" of software engineering. Measured as elapsed time in the
+ *    field: Apr 2022 (Wipro start) to Dec 2025 (Acuver end) is 3yr8mo, so
+ *    3.5 is accurate and slightly conservative. Do NOT recompute this as
+ *    summed employment months (3yr3mo) and "correct" it back down to 3+.
  *  - "5 years" is TOTAL industry experience, not engineering experience.
  *  - Amazon was NOT a software engineering role (Transaction Risk
  *    Investigator). Never imply otherwise, and never surface the technical
@@ -21,7 +23,7 @@ export const person = {
   name: "Vijay Puttarevaiah",
   headline: "Software Engineer",
   tagline:
-    "I build software that has to keep running — services, APIs, and the infrastructure around them. Three years of that in production, at Wipro and Acuver Consulting.",
+    "I build software that has to keep running — services, APIs, and the infrastructure around them. Three and a half years of that in production, at Wipro and Acuver Consulting.",
   /** Not displayed on the page — retained for structured data only. */
   location: "Halifax, Nova Scotia",
   email: "vijayputtarevaiah@gmail.com",
@@ -31,13 +33,14 @@ export const person = {
   linkedin: "https://linkedin.com/in/vijayputtarevaiah",
   linkedinHandle: "in/vijayputtarevaiah",
   resumeHref: "/resume.pdf",
+  portfolio: "https://vijayputtarevaiah.vercel.app",
   workAuth: "Eligible to work in Canada",
   availability: "Available for Winter 2027 co-op — 4 and 8 month terms",
 } as const;
 
 /** Hero stat strip. Each figure is verified in CONTEXT.md. */
 export const stats = [
-  { value: "3+", label: "years as a software engineer" },
+  { value: "3.5", label: "years as a software engineer" },
   { value: "5", label: "years in industry overall" },
   { value: "2", label: "AWS certifications" },
   { value: "3.88", label: "GPA at Dalhousie, out of 4.30" },
@@ -45,7 +48,7 @@ export const stats = [
 
 export const about = {
   paragraphs: [
-    "I spent three years building backend systems before coming back to school. Order routing for a US wholesale retailer, a claims platform for a healthcare technology company, and carrier integrations moving shipment data across eight logistics providers.",
+    "I spent three and a half years building backend systems before coming back to school. Order routing for a US wholesale retailer, a claims platform for a healthcare technology company, and carrier integrations moving shipment data across eight logistics providers.",
     "My undergraduate degree is in Electrical and Electronics Engineering, not computer science. I moved into software through certifications and work I actually shipped. That route probably explains what I care about: whether a system holds up in production, not which framework is fashionable this year.",
     "Most of what I am proud of is quiet. Test coverage that catches a regression before a customer does. Retry logic that survives a vendor API having a bad afternoon. Infrastructure written as code so anyone can rebuild it.",
     "I am finishing a Master of Applied Computer Science at Dalhousie University, which has pushed me further into cloud architecture, distributed systems, and building with LLMs responsibly.",

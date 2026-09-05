@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 type Props = {
   /** e.g. "3+", "5", "3.88", "85%" — digits animate, everything else is kept. */
@@ -34,7 +34,11 @@ export default function CountUp({
   style,
   durationMs = 1400,
 }: Props) {
-  const parsed = parse(value);
+  // Memoised deliberately. `parse` returns a fresh object, and this value is
+  // an effect dependency — without this the effect tore down and restarted on
+  // every animation frame, cancelling itself and leaving the counter stuck
+  // near zero instead of reaching its target.
+  const parsed = useMemo(() => parse(value), [value]);
   const ref = useRef<HTMLSpanElement>(null);
   const [display, setDisplay] = useState<string>(() =>
     parsed ? `${parsed.prefix}0${parsed.suffix}` : value,

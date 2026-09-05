@@ -40,7 +40,7 @@ const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://vijayputtarevaiah.vercel.app";
 
 const description =
-  "Software engineer with 3+ years building Java and Spring Boot services, event-driven systems, and AWS infrastructure. Currently completing a Master of Applied Computer Science at Dalhousie University.";
+  "Software engineer with 3.5 years building Java and Spring Boot services, event-driven systems, and AWS infrastructure. Currently completing a Master of Applied Computer Science at Dalhousie University.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
