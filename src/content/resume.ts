@@ -23,7 +23,7 @@ export const person = {
   name: "Vijay Puttarevaiah",
   headline: "Software Engineer",
   tagline:
-    "I build software that has to keep running — services, APIs, and the infrastructure around them. Three and a half years of that in production, at Wipro and Acuver Consulting.",
+    "I build software that has to keep running — services, APIs, and the infrastructure around them. Three and a half years of that in production, at Wipro and Acuver Consulting. I am currently a Master of Applied Computer Science student at Dalhousie University, open to a Winter 2027 co-op on a 4 month or 8 month term.",
   /** Not displayed on the page — retained for structured data only. */
   location: "Halifax, Nova Scotia",
   email: "vijayputtarevaiah@gmail.com",
@@ -43,7 +43,7 @@ export const stats = [
   { value: "3.5", label: "years as a software engineer" },
   { value: "5", label: "years in industry overall" },
   { value: "2", label: "AWS certifications" },
-  { value: "3.88", label: "GPA at Dalhousie, out of 4.30" },
+  { value: "3.88", label: "GPA at Dalhousie (current), out of 4.30" },
 ] as const;
 
 export const about = {
@@ -350,7 +350,7 @@ export const education = [
     institution: "Dalhousie University",
     location: "Halifax, Nova Scotia",
     period: "Jan 2026 — Apr 2027",
-    detail: "GPA 3.88 / 4.30",
+    detail: "GPA 3.88 / 4.30 (current)",
   },
   {
     credential: "Bachelor of Electrical and Electronics Engineering",
@@ -490,7 +490,7 @@ export const educationJourney: JourneyStop[] = [
     marker: "Now",
     title: "Master of Applied Computer Science",
     org: "Dalhousie University, Halifax",
-    period: "Jan 2026 — Apr 2027 · GPA 3.88 / 4.30",
+    period: "Jan 2026 — Apr 2027 · GPA 3.88 / 4.30 (current)",
     summary:
       "Back to school after five years in industry, this time for the computer science foundations. Coursework and projects have pushed deeper into cloud architecture, distributed systems, and building with LLMs.",
   },
@@ -535,17 +535,6 @@ export const professionalJourney: JourneyStop[] = [
     period: "Jan 2025 — Dec 2025 · 1 yr",
     summary:
       "Order rerouting between DoorDash and Roadie that cut affected orders from ~10% to under 1%. Carrier integrations and an ETL pipeline spanning eight logistics providers.",
-  },
-  {
-    year: "2027",
-    kind: "next",
-    brand: "next",
-    marker: "Next",
-    title: "Software Engineering Co-op",
-    org: "Seeking · Winter 2027",
-    period: "Jan 2027 start · 4 or 8 month terms",
-    summary:
-      "Looking for a team where three years of production backend work and a graduate degree both count for something.",
   },
 ];
 

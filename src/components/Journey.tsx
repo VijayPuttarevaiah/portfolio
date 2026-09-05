@@ -121,11 +121,10 @@ export default function Journey() {
       <Reveal delay={140}>
         <div className="mt-14 border-t border-[var(--border)] pt-8 text-center">
           <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-[var(--fg-subtle)]">
-            Where both tracks are heading
+            Available from January 2027
           </p>
           <p className="mx-auto mt-3 max-w-xl text-base leading-relaxed text-[var(--fg-muted)]">
-            A Winter 2027 co-op where three years of production backend work
-            and a graduate degree both count.
+            Open to a Winter 2027 co-op on either a 4 month or an 8 month term.
           </p>
         </div>
       </Reveal>
