@@ -18,8 +18,8 @@ export default function Experience() {
                 <p className="font-mono text-[0.72rem] uppercase tracking-[0.12em] text-[var(--fg-subtle)]">
                   {role.period}
                 </p>
-                <p className="mt-1.5 text-sm text-[var(--fg-subtle)]">
-                  {role.location}
+                <p className="mt-1.5 text-sm font-medium text-[var(--fg-muted)]">
+                  {role.duration}
                 </p>
               </div>
 

@@ -27,7 +27,7 @@ export default function Hero() {
       <div className="mx-auto w-full max-w-5xl px-6 pb-20 pt-16 sm:px-8 sm:pb-28 sm:pt-24">
         <Reveal>
           <p className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--fg-subtle)]">
-            {person.location} · {person.workAuth}
+            {person.availability}
           </p>
         </Reveal>
 

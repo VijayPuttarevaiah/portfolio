@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { navItems, person, recommendations } from "@/content/resume";
+import { navItems, person, photos, recommendations } from "@/content/resume";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Nav() {
@@ -10,7 +10,9 @@ export default function Nav() {
   const items = useMemo(
     () =>
       navItems.filter(
-        (i) => i.id !== "recommendations" || recommendations.length > 0,
+        (i) =>
+          (i.id !== "recommendations" || recommendations.length > 0) &&
+          (i.id !== "gallery" || photos.length > 0),
       ),
     [],
   );
