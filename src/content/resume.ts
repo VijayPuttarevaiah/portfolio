@@ -364,7 +364,7 @@ export const education = [
 export const certifications = [
   {
     name: "AWS Certified AI Practitioner",
-    href: "https://www.credly.com/earner/earned/badge/eeae3828-22e0-4ec6-9a81-d1a5ec79746c",
+    href: "https://www.credly.com/badges/eeae3828-22e0-4ec6-9a81-d1a5ec79746c/public_url",
     status: null,
   },
   {
