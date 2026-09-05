@@ -1,21 +1,20 @@
-# Photos
+# Drop your photos here
 
-Drop images here, then list them in `photos` in `src/content/resume.ts`:
+Save the image files into this folder using these exact names (lowercase, `.jpg`):
 
-```ts
-export const photos: Photo[] = [
-  {
-    src: "/photos/your-file.jpg",
-    alt: "Vijay presenting the VendorHub design to the team at Acuver",
-    caption: "Design walkthrough, Acuver Consulting",
-  },
-];
-```
+| Filename            | What it should be                    |
+|---------------------|--------------------------------------|
+| `wipro-campus.jpg`  | Wipro Kodathi campus                 |
+| `wipro-entrance.jpg`| Wipro Kodathi entrance / signage     |
+| `acuver-office.jpg` | Acuver Consulting office             |
+| `vijay-office.jpg`  | You at the office                    |
 
-Guidance:
-- **Landscape 4:3** crops best (the grid uses `aspect-[4/3]`).
-- ~1200px wide is plenty; Next.js optimizes and serves responsive sizes.
-- `alt` is required — describe what is happening, not "photo of me".
-- Only use photos you actually have rights to. No stock, no generated images.
+Notes:
 
-The Photos section and its nav link stay hidden while the array is empty.
+- `.png` is fine too — just say so and the references get updated.
+- You do not need all four. Whatever is here gets used; the rest are skipped.
+- The Gallery section does not render at all while this folder is empty, so
+  nothing looks broken in the meantime.
+- Only use photos you actually have the right to publish. Nothing stock,
+  nothing generated — a picture captioned "me at work" that isn't is a
+  fabrication like any other line on the site.
