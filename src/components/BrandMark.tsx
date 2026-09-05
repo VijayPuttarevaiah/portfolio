@@ -16,10 +16,18 @@ import Image from "next/image";
  * its filename below. Nothing else changes.
  */
 const LOGO_FILES: Record<string, string> = {
+  acuver: "/logos/acuver.png",
   amazon: "/logos/amazon.svg",
   dalhousie: "/logos/dalhousie.svg",
+  nie: "/logos/nie.png",
   wipro: "/logos/wipro.svg",
 };
+
+/**
+ * Wordmarks are much wider than they are tall, so squeezing them into a
+ * square tile leaves them unreadably small. These get a wider tile instead.
+ */
+const WIDE_LOGOS = new Set(["acuver"]);
 
 /** Brand colours for the ring, and initials for the monogram fallback. */
 const BRAND: Record<string, { color: string; initials: string }> = {
@@ -44,12 +52,13 @@ export default function BrandMark({
   const meta =
     BRAND[key] ?? { color: "var(--accent)", initials: label.slice(0, 2).toUpperCase() };
   const file = LOGO_FILES[key];
+  const wide = WIDE_LOGOS.has(key);
 
   return (
     <span
       className={file ? "brand-tile" : "brand-mark"}
       style={{
-        width: size,
+        width: wide ? Math.round(size * 1.55) : size,
         height: size,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ["--brand" as any]: meta.color,
@@ -61,7 +70,7 @@ export default function BrandMark({
         <Image
           src={file}
           alt=""
-          width={size}
+          width={wide ? Math.round(size * 1.55) : size}
           height={size}
           className="brand-tile-img"
           aria-hidden="true"
