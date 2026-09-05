@@ -345,8 +345,7 @@ export const education = [
   {
     credential: "Master of Applied Computer Science",
     institution: "Dalhousie University",
-    /** Not displayed on the page — retained for structured data only. */
-  location: "Halifax, Nova Scotia",
+    location: "Halifax, Nova Scotia",
     period: "Jan 2026 — Apr 2027",
     detail: "GPA 3.88 / 4.30",
   },
@@ -431,8 +430,94 @@ export type Photo = {
  */
 export const photos: Photo[] = [];
 
+export type JourneyKind = "education" | "work" | "now" | "next";
+
+export type JourneyStop = {
+  year: string;
+  kind: JourneyKind;
+  /** Short label above the title, e.g. "Started here". */
+  marker: string;
+  title: string;
+  org: string;
+  period: string;
+  summary: string;
+  /** Optional honest qualifier, rendered small. */
+  note?: string;
+};
+
+/**
+ * The whole arc in one list, oldest first: where it started, where it is,
+ * where it is going. Every stop maps to a verified entry above. The final
+ * stop is a TARGET, not a secured role — the copy says "seeking", and the
+ * component renders it outlined rather than filled so it reads as future.
+ */
+export const journey: JourneyStop[] = [
+  {
+    year: "2015",
+    kind: "education",
+    marker: "Started here",
+    title: "Bachelor of Electrical and Electronics Engineering",
+    org: "National Institute of Engineering, Mysuru",
+    period: "Aug 2015 — Jul 2019",
+    summary:
+      "Four years on a full tuition scholarship. Not a computer science degree — the move into software came next, through certifications and shipped work.",
+  },
+  {
+    year: "2020",
+    kind: "work",
+    marker: "First role",
+    title: "Transaction Risk Investigator",
+    org: "Amazon",
+    period: "Sep 2020 — Apr 2022 · 1 yr 8 mo",
+    summary:
+      "SQL-driven fraud pattern analysis on the A to Z Claims programme, contributing to a 30% improvement in detection accuracy.",
+    note: "An analytical role, not an engineering one.",
+  },
+  {
+    year: "2022",
+    kind: "work",
+    marker: "Into engineering",
+    title: "Software Engineer",
+    org: "Wipro · Oracle Cerner",
+    period: "Apr 2022 — Jul 2024 · 2 yr 3 mo",
+    summary:
+      "First software engineering role. Moved a real-time healthcare claims platform off legacy IBM BPM onto containerized Spring Boot services, cutting infrastructure cost 20%.",
+  },
+  {
+    year: "2025",
+    kind: "work",
+    marker: "Deeper into backend",
+    title: "Software Engineer",
+    org: "Acuver Consulting · BJ's Wholesale, Titan",
+    period: "Jan 2025 — Dec 2025 · 1 yr",
+    summary:
+      "Order rerouting between DoorDash and Roadie that cut affected orders from ~10% to under 1%; carrier integrations and an ETL pipeline across eight logistics providers.",
+  },
+  {
+    year: "2026",
+    kind: "now",
+    marker: "Now",
+    title: "Master of Applied Computer Science",
+    org: "Dalhousie University",
+    period: "Jan 2026 — Apr 2027 · GPA 3.88 / 4.30",
+    summary:
+      "Going deeper on cloud architecture, distributed systems, and applied AI. Earned AWS AI Practitioner and Cloud Practitioner along the way; Solutions Architect in progress.",
+  },
+  {
+    year: "2027",
+    kind: "next",
+    marker: "Next",
+    title: "Software Engineering Co-op",
+    org: "Seeking · Winter 2027",
+    period: "Jan 2027 start · 4 or 8 month terms",
+    summary:
+      "Looking for a team where three years of production backend work and a fresh graduate degree both count.",
+  },
+];
+
 export const navItems = [
   { id: "about", label: "About" },
+  { id: "journey", label: "Journey" },
   { id: "experience", label: "Experience" },
   { id: "projects", label: "Projects" },
   { id: "gallery", label: "Photos" },

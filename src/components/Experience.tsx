@@ -6,7 +6,7 @@ export default function Experience() {
   return (
     <Section
       id="experience"
-      eyebrow="02 — Experience"
+      eyebrow="03 — Experience"
       title="Where I've worked"
       intro="Three years of software engineering across enterprise retail and healthcare platforms, preceded by two years in transaction risk analysis at Amazon."
     >

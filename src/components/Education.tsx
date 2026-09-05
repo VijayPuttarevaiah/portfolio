@@ -6,7 +6,7 @@ export default function Education() {
   return (
     <Section
       id="education"
-      eyebrow="05 — Credentials"
+      eyebrow="06 — Credentials"
       title="Education & certifications"
       tinted
     >
