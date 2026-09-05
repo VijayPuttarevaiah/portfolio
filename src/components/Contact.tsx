@@ -111,7 +111,7 @@ export default function Contact() {
       <div className="mx-auto w-full max-w-5xl px-6 py-20 sm:px-8 sm:py-28">
         <Reveal>
           <p className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--fg-subtle)]">
-            07 — Contact
+            08 — Contact
           </p>
           <h2
             id="contact-heading"
