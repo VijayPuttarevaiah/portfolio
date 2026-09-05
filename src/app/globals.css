@@ -326,3 +326,45 @@ h1, h2, h3, .font-display {
   background: var(--bg);
   border: 3px solid var(--dot, var(--accent));
 }
+
+/* Scroll-drawn timeline rail. The dim track is always visible; the lit
+   track scales up from the top as the reader scrolls, so the arc draws
+   itself. Transform-only, so it stays on the compositor. */
+.tl-rail {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+}
+
+.tl-rail-dim,
+.tl-rail-lit {
+  position: absolute;
+  inset: 0;
+  border-radius: 2px;
+}
+
+.tl-rail-dim {
+  background: var(--border-strong);
+  opacity: 0.55;
+}
+
+.tl-rail-lit {
+  background: linear-gradient(
+    to bottom,
+    var(--h1),
+    var(--h2) 40%,
+    var(--h3) 75%,
+    var(--accent)
+  );
+  transform-origin: top;
+  transform: scaleY(0);
+  will-change: transform;
+  box-shadow: 0 0 12px color-mix(in srgb, var(--h1) 45%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tl-rail-lit {
+    transform: scaleY(1) !important;
+  }
+}
