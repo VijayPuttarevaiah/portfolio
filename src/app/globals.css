@@ -7,99 +7,100 @@
    rather than sprinkled at random. Colour carries meaning here.
    --------------------------------------------------------------- */
 :root {
-  --bg: #ffffff;
-  --bg-elevated: #faf9ff;
-  --bg-sunken: #f4f2fd;
-  --fg: #14121f;
-  --fg-muted: #55516b;
-  --fg-subtle: #837e9c;
-  --border: #e8e5f5;
-  --border-strong: #d5d0ec;
+  --bg: #0c0b10;
+  --bg-elevated: #14121f;
+  --bg-sunken: #100e1a;
+  --fg: #f4f2fb;
+  --fg-muted: #b3aecb;
+  --fg-subtle: #8a84a6;
+  --border: #272138;
+  --border-strong: #3b3454;
 
-  --accent: #6d28d9;
-  --accent-fg: #ffffff;
-  --accent-soft: #f1ebfe;
+  --accent: #a075ff;
+  --accent-fg: #14121f;
+  --accent-soft: #1d1435;
 
-  /* Supporting hues — index 1..5 */
-  --h1: #6d28d9; /* violet  */
-  --h2: #2563eb; /* blue    */
-  --h3: #0d9488; /* teal    */
-  --h4: #d97706; /* amber   */
-  --h5: #db2777; /* rose    */
+  --h1: #a075ff;
+  --h2: #91ceff;
+  --h3: #5ddb9c;
+  --h4: #fe7a4d;
+  --h5: #fc7cfa;
 
-  --h1-soft: #f1ebfe;
-  --h2-soft: #e8f0fe;
-  --h3-soft: #e2f6f3;
-  --h4-soft: #fdf2e2;
-  --h5-soft: #fdeaf3;
+  --h1-soft: #1d1435;
+  --h2-soft: #10243a;
+  --h3-soft: #0d2a1e;
+  --h4-soft: #331708;
+  --h5-soft: #2f1030;
 
-  --hero-glow-a: #ede4ff;
-  --hero-glow-b: #dff0fb;
-  --hero-glow-c: #ffeef6;
+  --hero-glow-a: #2a1a55;
+  --hero-glow-b: #3a1240;
+  --hero-glow-c: #33122b;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0b0a12;
-    --bg-elevated: #14121f;
-    --bg-sunken: #100e1a;
-    --fg: #f0eef8;
-    --fg-muted: #a49fbd;
-    --fg-subtle: #7b7597;
-    --border: #241f36;
-    --border-strong: #362f4d;
+/* Light is opt-in: an explicit choice, or an OS preference for light when
+   the visitor has not chosen. Dark is the default look of this site. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+  --bg: #fffaee;
+  --bg-elevated: #ffffff;
+  --bg-sunken: #f8f2ea;
+  --fg: #0d0c0b;
+  --fg-muted: #4f4b66;
+  --fg-subtle: #726d8e;
+  --border: #eadfd0;
+  --border-strong: #d8c9b4;
 
-    --accent: #a78bfa;
-    --accent-fg: #14121f;
-    --accent-soft: #1e1733;
+  --accent: #5124c1;
+  --accent-fg: #ffffff;
+  --accent-soft: #efe7ff;
 
-    --h1: #a78bfa;
-    --h2: #60a5fa;
-    --h3: #2dd4bf;
-    --h4: #fbbf24;
-    --h5: #f472b6;
+  --h1: #5124c1;
+  --h2: #1f74c4;
+  --h3: #3f6d52;
+  --h4: #d1451c;
+  --h5: #c2338f;
 
-    --h1-soft: #1e1733;
-    --h2-soft: #14203a;
-    --h3-soft: #0d2723;
-    --h4-soft: #2a1f0c;
-    --h5-soft: #2c1121;
+  --h1-soft: #efe7ff;
+  --h2-soft: #e4f0fb;
+  --h3-soft: #e6f0e9;
+  --h4-soft: #ffeadf;
+  --h5-soft: #fbe7f4;
 
-    --hero-glow-a: #1e1440;
-    --hero-glow-b: #10233d;
-    --hero-glow-c: #2a1024;
+  --hero-glow-a: #ece0ff;
+  --hero-glow-b: #ffe6dc;
+  --hero-glow-c: #ffeef6;
   }
 }
 
-:root[data-theme="dark"] {
-  --bg: #0b0a12;
-  --bg-elevated: #14121f;
-  --bg-sunken: #100e1a;
-  --fg: #f0eef8;
-  --fg-muted: #a49fbd;
-  --fg-subtle: #7b7597;
-  --border: #241f36;
-  --border-strong: #362f4d;
+:root[data-theme="light"] {
+  --bg: #fffaee;
+  --bg-elevated: #ffffff;
+  --bg-sunken: #f8f2ea;
+  --fg: #0d0c0b;
+  --fg-muted: #4f4b66;
+  --fg-subtle: #726d8e;
+  --border: #eadfd0;
+  --border-strong: #d8c9b4;
 
-  --accent: #a78bfa;
-  --accent-fg: #14121f;
-  --accent-soft: #1e1733;
+  --accent: #5124c1;
+  --accent-fg: #ffffff;
+  --accent-soft: #efe7ff;
 
-  --h1: #a78bfa;
-  --h2: #60a5fa;
-  --h3: #2dd4bf;
-  --h4: #fbbf24;
-  --h5: #f472b6;
+  --h1: #5124c1;
+  --h2: #1f74c4;
+  --h3: #3f6d52;
+  --h4: #d1451c;
+  --h5: #c2338f;
 
-  --h1-soft: #1e1733;
-  --h2-soft: #14203a;
-  --h3-soft: #0d2723;
-  --h4-soft: #2a1f0c;
-  --h5-soft: #2c1121;
+  --h1-soft: #efe7ff;
+  --h2-soft: #e4f0fb;
+  --h3-soft: #e6f0e9;
+  --h4-soft: #ffeadf;
+  --h5-soft: #fbe7f4;
 
-  --hero-glow-a: #1e1440;
-  --hero-glow-b: #10233d;
-  --hero-glow-c: #2a1024;
+  --hero-glow-a: #ece0ff;
+  --hero-glow-b: #ffe6dc;
+  --hero-glow-c: #ffeef6;
 }
 
 @theme inline {
@@ -108,6 +109,7 @@
   --color-fg: var(--fg);
   --color-fg-muted: var(--fg-muted);
   --color-accent: var(--accent);
+  --font-display: var(--font-funnel), var(--font-inter), sans-serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono-jb), ui-monospace, SFMono-Regular, monospace;
 }
@@ -124,6 +126,8 @@ html {
 
 body {
   background: var(--bg);
+  font-size: 17px;
+  line-height: 1.65;
   color: var(--fg);
   font-synthesis-weight: none;
   text-rendering: optimizeLegibility;
@@ -183,6 +187,11 @@ body {
   );
 }
 
+h1, h2, h3, .font-display {
+  font-family: var(--font-funnel), var(--font-inter), ui-sans-serif, sans-serif;
+  letter-spacing: -0.015em;
+}
+
 /* Gradient text for the headline accent. */
 .gradient-text {
   background: linear-gradient(
@@ -210,6 +219,11 @@ body {
 .js .reveal[data-visible="true"] {
   opacity: 1;
   transform: none;
+}
+
+/* Later-style generous corner radius on cards. */
+.card-r {
+  border-radius: 1.5rem;
 }
 
 /* Carousel track — transform-driven, one slide at a time. */

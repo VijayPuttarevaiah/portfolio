@@ -19,7 +19,7 @@ export default function Expertise() {
         {primary.map((group, index) => (
           <Reveal key={group.title} delay={index * 50}>
             <div
-              className="h-full rounded-2xl border-2 p-6"
+              className="card-r h-full border-2 p-6"
               style={{
                 borderColor: `var(${HUES[index % HUES.length]})`,
                 background: `var(${HUES[index % HUES.length]}-soft)`,

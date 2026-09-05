@@ -36,7 +36,7 @@ export default function Projects() {
         {projects.map((project, index) => (
           <Reveal key={project.name} delay={index * 60}>
             <article
-              className="rounded-2xl border-2 bg-[var(--bg)] p-6 transition-shadow hover:shadow-lg sm:p-8"
+              className="card-r border-2 bg-[var(--bg-elevated)] p-6 transition-shadow hover:shadow-xl sm:p-9"
               style={{ borderColor: `var(${HUES[index % HUES.length]})` }}
             >
               <header className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">

@@ -1,10 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Funnel_Display, Inter, JetBrains_Mono } from "next/font/google";
 import { person } from "@/content/resume";
 import "./globals.css";
 
 const inter = Inter({
   variable: "--font-inter",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const funnelDisplay = Funnel_Display({
+  variable: "--font-funnel",
   subsets: ["latin"],
   display: "swap",
 });
@@ -23,7 +29,7 @@ const siteUrl =
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://vijayputtarevaiah.vercel.app";
 
 const description =
-  "Backend software engineer with 3+ years building Java and Spring Boot services, event-driven systems, and AWS infrastructure. Currently completing a Master of Applied Computer Science at Dalhousie University.";
+  "Software engineer with 3+ years building Java and Spring Boot services, event-driven systems, and AWS infrastructure. Currently completing a Master of Applied Computer Science at Dalhousie University.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -69,8 +75,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fbfbfa" },
-    { media: "(prefers-color-scheme: dark)", color: "#0d0f12" },
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0a12" },
   ],
 };
 
@@ -85,6 +91,10 @@ const themeScript = `
     var stored = localStorage.getItem('theme');
     if (stored === 'dark' || stored === 'light') {
       document.documentElement.dataset.theme = stored;
+    } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
+      // No stored choice: honour an explicit OS light preference,
+      // otherwise stay on the site's dark default.
+      document.documentElement.dataset.theme = 'light';
     }
   } catch (e) {}
 })();
@@ -124,14 +134,14 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{ __html: themeScript }}
           suppressHydrationWarning
         />
       </head>
-      <body className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}>
+      <body className={`${inter.variable} ${funnelDisplay.variable} ${jetbrainsMono.variable} antialiased`}>
         <a
           href="#main"
           className="sr-only rounded-full bg-[var(--accent)] px-4 py-2 text-sm text-[var(--accent-fg)] focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60]"

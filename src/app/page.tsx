@@ -2,6 +2,7 @@ import About from "@/components/About";
 import Contact from "@/components/Contact";
 import Education from "@/components/Education";
 import Experience from "@/components/Experience";
+import Gallery from "@/components/Gallery";
 import Expertise from "@/components/Expertise";
 import Hero from "@/components/Hero";
 import Nav from "@/components/Nav";
@@ -20,6 +21,7 @@ export default function Home() {
         <About />
         <Experience />
         <Projects />
+        <Gallery />
         <Recommendations />
         <Expertise />
         <Education />

@@ -19,9 +19,10 @@
 
 export const person = {
   name: "Vijay Puttarevaiah",
-  headline: "Backend Software Engineer",
+  headline: "Software Engineer",
   tagline:
-    "I build and operate backend systems — Java and Spring Boot services, event-driven architectures, and the AWS infrastructure that keeps them running.",
+    "I build software that has to keep running — services, APIs, and the infrastructure around them. Three years of that in production, at Wipro and Acuver Consulting.",
+  /** Not displayed on the page — retained for structured data only. */
   location: "Halifax, Nova Scotia",
   email: "vijayputtarevaiah@gmail.com",
   phone: "902-452-2085",
@@ -36,23 +37,24 @@ export const person = {
 
 /** Hero stat strip. Each figure is verified in CONTEXT.md. */
 export const stats = [
-  { value: "3+", label: "years in software engineering" },
-  { value: "5", label: "years of industry experience" },
+  { value: "3+", label: "years as a software engineer" },
+  { value: "5", label: "years in industry overall" },
   { value: "2", label: "AWS certifications" },
-  { value: "3.88", label: "GPA at Dalhousie (of 4.30)" },
+  { value: "3.88", label: "GPA at Dalhousie, out of 4.30" },
 ] as const;
 
 export const about = {
   paragraphs: [
-    "I spent three years building enterprise backend systems before returning to school — Spring Boot services handling order routing for a US wholesale retailer, a claims-scrubbing platform modernization for a healthcare technology company, and carrier integrations processing shipment data across eight logistics providers.",
-    "My degree is in Electrical and Electronics Engineering, not computer science. I moved into software through certifications and shipped work, which is probably why I care more about whether a system holds up in production than about which framework is fashionable. Most of what I am proud of is unglamorous: test coverage that catches regressions, retry logic that survives a flaky vendor API, infrastructure defined in code so it can be rebuilt.",
-    "I am currently completing a Master of Applied Computer Science at Dalhousie University in Halifax, where my coursework and personal projects have pushed me further into cloud architecture, distributed systems, and applied AI integration.",
+    "I spent three years building backend systems before coming back to school. Order routing for a US wholesale retailer, a claims platform for a healthcare technology company, and carrier integrations moving shipment data across eight logistics providers.",
+    "My undergraduate degree is in Electrical and Electronics Engineering, not computer science. I moved into software through certifications and work I actually shipped. That route probably explains what I care about: whether a system holds up in production, not which framework is fashionable this year.",
+    "Most of what I am proud of is quiet. Test coverage that catches a regression before a customer does. Retry logic that survives a vendor API having a bad afternoon. Infrastructure written as code so anyone can rebuild it.",
+    "I am finishing a Master of Applied Computer Science at Dalhousie University, which has pushed me further into cloud architecture, distributed systems, and building with LLMs responsibly.",
   ],
   interests: [
-    "Distributed systems and event-driven architecture",
+    "Distributed systems and event-driven design",
     "Cloud infrastructure as code",
     "Production reliability and observability",
-    "Applied LLM integration with real safety boundaries",
+    "Building with LLMs, with real safety limits",
   ],
 } as const;
 
@@ -61,6 +63,8 @@ export type Role = {
   companyUrl?: string;
   title: string;
   period: string;
+  /** Human-readable tenure, e.g. "1 year 8 months". */
+  duration: string;
   location: string;
   /** Honest framing note rendered as a small qualifier. */
   note?: string;
@@ -75,62 +79,49 @@ export const experience: Role[] = [
     companyUrl: "https://acuverconsulting.com",
     title: "Software Engineer",
     period: "Jan 2025 — Dec 2025",
+    duration: "1 year",
     location: "Bengaluru, India",
     context:
-      "Built order-management and logistics integrations for enterprise retail clients, working directly against live production systems.",
+      "Built order management and logistics integrations for enterprise retail clients, working against live production systems.",
     highlights: [
-      "Designed and implemented a Smart Order Rerouting solution in Java and Spring Boot that automatically rerouted orders between DoorDash and Roadie after last-minute vendor cancellations, cutting affected orders from roughly 10% to under 1% and preventing customer refunds.",
-      "Raised branch coverage to 85% and line coverage above 90% with JUnit 5 suites wired into Jenkins CI/CD, alongside per-club kill-switch logic that made phased production rollouts safe to reverse.",
-      "Led the DoorDash Full Service integration, wiring Serviceability APIs to validate delivery coverage and automating reservation creation for direct pickup from club locations.",
-      "Reduced new-carrier onboarding effort by 75% by refactoring carrier-specific logic behind a Strategy pattern, and built Turnaround Time APIs across BlueDart, Criticalog, and Delhivery.",
-      "Engineered an ETL pipeline on the Aekyam iPaaS platform that extracted, validated, mapped, and transformed order data across eight carrier integrations.",
+      "Built a Smart Order Rerouting system in Java and Spring Boot that moves an order to another courier when a vendor cancels at the last minute. Orders affected by cancellations fell from around 10% to under 1%, which meant fewer refunds going out.",
+      "Took branch coverage to 85% and line coverage past 90% with JUnit 5 suites running in Jenkins. Added a per-club kill switch so a rollout could be turned off for one location without touching the rest.",
+      "Led the DoorDash Full Service integration, checking delivery coverage through their Serviceability APIs and automating the reservation step so orders could be picked up straight from a club.",
+      "Cut the work of onboarding a new carrier by 75% by moving carrier-specific logic behind a Strategy pattern, then built Turnaround Time APIs for BlueDart, Criticalog, and Delhivery.",
+      "Built an ETL pipeline on Aekyam that pulls order data through validation, mapping, and transformation across eight carrier integrations.",
     ],
-    stack: [
-      "Java",
-      "Spring Boot",
-      "REST APIs",
-      "JUnit 5",
-      "Jenkins",
-      "React.js",
-      "ETL",
-    ],
+    stack: ["Java", "Spring Boot", "REST APIs", "JUnit 5", "Jenkins", "React.js", "ETL"],
   },
   {
     company: "Wipro",
     companyUrl: "https://www.wipro.com",
     title: "Software Engineer",
     period: "Apr 2022 — Jul 2024",
+    duration: "2 years 3 months",
     location: "Bengaluru, India",
     context:
-      "Modernized a real-time healthcare claims-scrubbing platform for Oracle Cerner, moving it off a legacy engine and onto containerized services.",
+      "Modernized a real-time healthcare claims platform for Oracle Cerner, moving it off a legacy engine onto containerized services.",
     highlights: [
-      "Cut infrastructure costs by 20% by migrating real-time healthcare claims scrubbing from legacy IBM BPM to the Edifecs platform, refactoring scrubbing profiles and containerizing the Spring Boot services with Docker.",
-      "Designed a configurable health-check service monitoring 36+ services across Dockerized and non-Dockerized environments, with property-driven thresholds for service health, filesystem mounts, and disk capacity.",
-      "Delivered four releases on schedule across Development and Cert environments, leading Jenkins and Kubernetes deployments and providing third-level support for UAT and production issues.",
-      "Cut post-release defects by 25% by raising code coverage to 85% with JUnit 5, leading code reviews, and running root cause analysis on production incidents.",
-      "Secured platform-to-Edifecs integration endpoints with OAuth 2.0.",
+      "Moved real-time healthcare claims scrubbing from legacy IBM BPM onto Edifecs, reworking the scrubbing profiles and containerizing the Spring Boot services with Docker. Infrastructure costs came down 20%.",
+      "Built a health-check service that watches 36+ services across Dockerized and non-Dockerized environments, with thresholds for service health, filesystem mounts, and disk capacity set through configuration rather than code.",
+      "Shipped four releases on schedule across Development and Cert, running the Jenkins and Kubernetes deployments and handling third-level support when UAT or production issues came in.",
+      "Brought post-release defects down 25% by raising coverage to 85% with JUnit 5, running code reviews, and digging into the root cause of production incidents rather than patching symptoms.",
+      "Secured the platform's integration endpoints to Edifecs with OAuth 2.0.",
     ],
-    stack: [
-      "Java",
-      "Spring Boot",
-      "Docker",
-      "Kubernetes",
-      "Jenkins",
-      "OAuth 2.0",
-      "Splunk",
-    ],
+    stack: ["Java", "Spring Boot", "Docker", "Kubernetes", "Jenkins", "OAuth 2.0", "Splunk"],
   },
   {
     company: "Amazon",
     title: "Transaction Risk Investigator",
     period: "Sep 2020 — Apr 2022",
+    duration: "1 year 8 months",
     location: "Bengaluru, India",
-    note: "An analytical role rather than an engineering one — included here for a complete timeline.",
+    note: "An analytical role rather than an engineering one, included here so the timeline is complete.",
     context:
-      "Investigated fraudulent transaction patterns on the A to Z Claims programme and worked with stakeholders on investigation process.",
+      "Investigated fraudulent transaction patterns on the A to Z Claims programme and worked with stakeholders on how investigations were run.",
     highlights: [
-      "Analyzed fraudulent transaction patterns with SQL and communicated data-driven insights to stakeholders, contributing to a 30% improvement in fraud detection accuracy.",
-      "Participated in Amazon's ATLAS technical upskilling programme and collaborated with senior managers, project managers, and subject-matter experts to improve investigation SOPs.",
+      "Used SQL to find patterns in fraudulent transactions and turned them into insights the team could act on, contributing to a 30% improvement in fraud detection accuracy.",
+      "Took part in Amazon's ATLAS technical upskilling programme, and worked with senior managers, project managers, and subject-matter experts to improve investigation SOPs.",
     ],
     stack: ["SQL", "Data analysis"],
   },
@@ -354,7 +345,8 @@ export const education = [
   {
     credential: "Master of Applied Computer Science",
     institution: "Dalhousie University",
-    location: "Halifax, Nova Scotia",
+    /** Not displayed on the page — retained for structured data only. */
+  location: "Halifax, Nova Scotia",
     period: "Jan 2026 — Apr 2027",
     detail: "GPA 3.88 / 4.30",
   },
@@ -417,10 +409,33 @@ export type Recommendation = {
  */
 export const recommendations: Recommendation[] = [];
 
+export type Photo = {
+  /** Path under /public, e.g. "/photos/acuver-team.jpg". */
+  src: string;
+  /** Required. Describes the image for screen readers and when it fails to load. */
+  alt: string;
+  caption?: string;
+};
+
+/**
+ * Photos of Vijay at work.
+ *
+ * EMPTY ON PURPOSE — awaiting real images from Vijay.
+ *
+ * To add: drop files in public/photos/ and list them here. Only use photos
+ * he actually supplies. Never a stock photo, never a generated image: a
+ * picture captioned "me at work" that isn't him is a fabrication in exactly
+ * the way an invented metric would be.
+ *
+ * The Gallery section renders nothing while this array is empty.
+ */
+export const photos: Photo[] = [];
+
 export const navItems = [
   { id: "about", label: "About" },
   { id: "experience", label: "Experience" },
   { id: "projects", label: "Projects" },
+  { id: "gallery", label: "Photos" },
   { id: "recommendations", label: "Recommendations" },
   { id: "expertise", label: "Expertise" },
   { id: "education", label: "Education" },
