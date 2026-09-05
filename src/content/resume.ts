@@ -32,7 +32,6 @@ export const person = {
   githubHandle: "VijayPuttarevaiah",
   linkedin: "https://linkedin.com/in/vijayputtarevaiah",
   linkedinHandle: "in/vijayputtarevaiah",
-  resumeHref: "/resume.pdf",
   portfolio: "https://vijayputtarevaiah.vercel.app",
   workAuth: "Eligible to work in Canada",
   availability: "Available for Winter 2027 co-op — 4 and 8 month terms",
