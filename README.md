@@ -1,20 +1,10 @@
 # Vijay Puttarevaiah — Portfolio
 
+**Live: https://vijayputtarevaiah.vercel.app**
+
 Personal portfolio site. Next.js 16 (App Router) · TypeScript · Tailwind CSS v4.
 
-## One thing to do before deploying
-
-The **Resume** button in the hero links to `/resume.pdf`, which is not in the
-repo yet. Compile the current base resume and drop the PDF in:
-
-```
-portfolio/public/resume.pdf
-```
-
-The base resume lives at
-`../MyResumes/Vijay Puttarevaiah Master Resume (Software Developer Co-op).tex`.
-Every PDF already in `../MyResumes/` predates the 2026-09-04 rework, so don't
-reuse one of those — export a fresh copy.
+Every push to `main` deploys automatically.
 
 ## Run locally
 
@@ -89,8 +79,10 @@ copy, edit that file.
 
 That file also documents the accuracy rules the content follows:
 
-- **"3+ years"** of software engineering (Wipro 2yr3mo + Acuver 1yr = 3yr3mo).
-  Never write 3.5 — 3.25 does not clear 3.5.
+- **"3.5 years"** of software engineering, measured as elapsed time in the
+  field: Apr 2022 (Wipro start) to Dec 2025 (Acuver end) is 3yr8mo, so 3.5 is
+  accurate and slightly conservative. Do not recompute it as summed
+  employment months (3yr3mo) and reduce it back to "3+".
 - **"5 years"** is *total industry* experience, not engineering experience.
 - **Amazon was not a software engineering role.** It's rendered with an
   explicit qualifier so the timeline reads honestly.
@@ -112,20 +104,28 @@ src/
   components/
     Nav.tsx                sticky nav, scroll-spy, mobile menu
     Hero.tsx  About.tsx  Experience.tsx  Projects.tsx
-    Expertise.tsx  Education.tsx  Contact.tsx
+    ProjectDeck.tsx        drag-to-swipe card stack
+    Journey.tsx            education + professional timelines
+    TimelineSpine.tsx      scroll-drawn rail
+    BrandMark.tsx          company / university logos
+    Gallery.tsx  Marquee.tsx  CountUp.tsx
+    Expertise.tsx  Education.tsx  Certifications.tsx  Contact.tsx
     Section.tsx            shared section shell
     Reveal.tsx             fade-up on scroll (IntersectionObserver)
-    ThemeToggle.tsx        light/dark switch
   content/
     resume.ts              ← all content
 ```
 
 ## Design notes
 
-- **One accent colour** (`#14508f`, carried over from the LaTeX resume) against
-  a neutral base. No gradients, no glassmorphism.
-- **Motion is one effect**: a short fade-and-lift on first scroll into view,
-  fired once. Fully disabled under `prefers-reduced-motion`.
+- **Dark theme, unconditionally.** Not tied to the OS setting.
+- **Five accent hues** (`--h1`…`--h5`) cycled across sections, stat figures,
+  timeline tracks and project cards.
+- **Condensed display face** (Bebas Neue) at fluid `clamp()` sizes for the
+  poster-scale headings; Inter for body copy.
+- **Motion**: scroll reveals, a scroll-drawn timeline spine, counting stats,
+  marquee tickers, and a drag-to-swipe project deck. All of it is disabled or
+  reduced under `prefers-reduced-motion`.
 - **Skills are weighted, not exhaustive** — four primary groups render as
   filled cards, the rest as quiet supporting text.
 - **Accessibility**: skip link, semantic landmarks, one `h1`, labelled
