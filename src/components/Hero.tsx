@@ -58,9 +58,14 @@ export default function Hero() {
         </Reveal>
 
         <Reveal delay={60}>
-          <h1 className="display t-hero mt-7 text-[var(--fg)]">
-            <span className="block">{first}</span>
-            <span className="gradient-text block">{last}</span>
+          <h1 className="mt-6 text-[var(--fg)]">
+            <span className="serif-accent block text-2xl text-[var(--fg-muted)] sm:text-3xl">
+              Hey, I&rsquo;m
+            </span>
+            <span className="display t-hero mt-1 block">
+              <span className="block">{first}</span>
+              <span className="gradient-text block">{last}</span>
+            </span>
           </h1>
         </Reveal>
 
