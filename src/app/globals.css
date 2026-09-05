@@ -169,7 +169,7 @@ body {
 }
 
 /* Fluid display sizes — big on desktop, still sane on a phone. */
-.t-hero    { font-size: clamp(3.5rem, 13vw, 11rem); }
+.t-hero    { font-size: clamp(2.25rem, 10vw, 8.5rem); }
 .t-section { font-size: clamp(2.5rem, 7vw, 5.5rem); }
 .t-year    { font-size: clamp(2.75rem, 6vw, 4.5rem); }
 
