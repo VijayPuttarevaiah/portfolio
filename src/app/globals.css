@@ -7,9 +7,9 @@
    rather than sprinkled at random. Colour carries meaning here.
    --------------------------------------------------------------- */
 :root {
-  --bg: #0c0b10;
-  --bg-elevated: #14121f;
-  --bg-sunken: #100e1a;
+  --bg: #0a0a0c;
+  --bg-elevated: #121218;
+  --bg-sunken: #0d0d11;
   --fg: #f4f2fb;
   --fg-muted: #b3aecb;
   --fg-subtle: #8a84a6;
@@ -74,7 +74,8 @@
   --color-fg: var(--fg);
   --color-fg-muted: var(--fg-muted);
   --color-accent: var(--accent);
-  --font-display: var(--font-funnel), var(--font-inter), sans-serif;
+  --font-display: var(--font-display-face), sans-serif;
+  --font-serif: var(--font-playfair), Georgia, serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono-jb), ui-monospace, SFMono-Regular, monospace;
 }
@@ -152,10 +153,25 @@ body {
   );
 }
 
-h1, h2, h3, .font-display {
-  font-family: var(--font-funnel), var(--font-inter), ui-sans-serif, sans-serif;
-  letter-spacing: -0.015em;
+/* Display face is condensed and uppercase-only — that is what makes the
+   headings read as a poster instead of a document. */
+.display {
+  font-family: var(--font-display), ui-sans-serif, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+  line-height: 0.88;
+  text-transform: uppercase;
 }
+
+.serif-accent {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+}
+
+/* Fluid display sizes — big on desktop, still sane on a phone. */
+.t-hero    { font-size: clamp(3.5rem, 13vw, 11rem); }
+.t-section { font-size: clamp(2.5rem, 7vw, 5.5rem); }
+.t-year    { font-size: clamp(2.75rem, 6vw, 4.5rem); }
 
 /* Gradient text for the headline accent. */
 .gradient-text {
@@ -415,4 +431,79 @@ h1, h2, h3, .font-display {
   .tl-live::after {
     animation: none;
   }
+}
+
+/* ---------------------------------------------------------------
+   Marquee ticker
+   --------------------------------------------------------------- */
+.marquee {
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 1.1rem 0;
+  background: var(--bg-sunken);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 38s linear infinite;
+}
+
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.75rem;
+  padding-right: 1.75rem;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  white-space: nowrap;
+}
+
+.marquee-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+
+@keyframes marquee-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+}
+
+/* ---------------------------------------------------------------
+   Scroll cue on the landing screen
+   --------------------------------------------------------------- */
+.scroll-cue-line {
+  display: block;
+  width: 46px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-strong), transparent);
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-cue-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--h1), transparent);
+  animation: cue-sweep 2.4s ease-in-out infinite;
+}
+
+@keyframes cue-sweep {
+  from { transform: translate3d(-100%, 0, 0); }
+  to   { transform: translate3d(100%, 0, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue-line::after { animation: none; opacity: 0.5; }
 }

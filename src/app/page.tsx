@@ -7,6 +7,7 @@ import Gallery from "@/components/Gallery";
 import Expertise from "@/components/Expertise";
 import Hero from "@/components/Hero";
 import Journey from "@/components/Journey";
+import Marquee from "@/components/Marquee";
 import Nav from "@/components/Nav";
 import Projects from "@/components/Projects";
 import Recommendations from "@/components/Recommendations";
@@ -20,9 +21,11 @@ export default function Home() {
       <Nav />
       <main id="main">
         <Hero />
+        <Marquee text="Backend · Cloud · Platform" />
         <Journey />
         <About />
         <Experience />
+        <Marquee text="Selected Work" hue="--h4" />
         <Projects />
         <Gallery />
         <Recommendations />

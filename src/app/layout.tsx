@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Funnel_Display, Inter, JetBrains_Mono } from "next/font/google";
+import { Bebas_Neue, Inter, JetBrains_Mono, Playfair_Display } from "next/font/google";
 import { person } from "@/content/resume";
 import "./globals.css";
 
@@ -9,9 +9,20 @@ const inter = Inter({
   display: "swap",
 });
 
-const funnelDisplay = Funnel_Display({
-  variable: "--font-funnel",
+// Condensed display face for the huge type. Bebas has no lowercase, which
+// is why it reads as a poster rather than a document.
+const bebas = Bebas_Neue({
+  variable: "--font-display-face",
+  weight: "400",
   subsets: ["latin"],
+  display: "swap",
+});
+
+// Serif, used sparingly for emphasis inside otherwise sans copy.
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  style: ["italic"],
   display: "swap",
 });
 
@@ -136,7 +147,7 @@ export default function RootLayout({
           suppressHydrationWarning
         />
       </head>
-      <body className={`${inter.variable} ${funnelDisplay.variable} ${jetbrainsMono.variable} antialiased`}>
+      <body className={`${inter.variable} ${bebas.variable} ${playfair.variable} ${jetbrainsMono.variable} antialiased`}>
         <a
           href="#main"
           className="sr-only rounded-full bg-[var(--accent)] px-4 py-2 text-sm text-[var(--accent-fg)] focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60]"

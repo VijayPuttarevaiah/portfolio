@@ -51,7 +51,7 @@ function Track({
                 <div className="pt-1">
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
                     <span
-                      className="font-display text-3xl font-bold leading-none tracking-tight sm:text-4xl"
+                      className="display t-year"
                       style={{ color: `var(${hue})` }}
                     >
                       {stop.year}
@@ -71,7 +71,7 @@ function Track({
                     {isNow ? <span className="tl-live" aria-hidden="true" /> : null}
                   </div>
 
-                  <h4 className="mt-3 text-xl font-semibold leading-snug text-[var(--fg)] sm:text-2xl">
+                  <h4 className="display mt-2 text-2xl leading-tight text-[var(--fg)] sm:text-3xl">
                     {stop.title}
                   </h4>
                   <p className="mt-1.5 text-[0.95rem] font-medium text-[var(--fg-muted)]">

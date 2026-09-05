@@ -113,7 +113,7 @@ export default function Recommendations() {
           </p>
           <h2
             id="recommendations-heading"
-            className="mt-3 text-3xl font-semibold tracking-tight text-[var(--fg)] sm:text-4xl"
+            className="display t-section mt-4 text-[var(--fg)]"
           >
             What colleagues say
           </h2>
