@@ -28,13 +28,34 @@ export default function Home() {
         <Contact />
       </main>
       <footer className="border-t border-[var(--border)]">
-        <div className="mx-auto flex w-full max-w-5xl flex-col gap-2 px-6 py-10 text-sm text-[var(--fg-subtle)] sm:flex-row sm:items-center sm:justify-between sm:px-8">
+        <div className="mx-auto flex w-full max-w-5xl flex-col gap-3 px-6 py-10 text-sm text-[var(--fg-subtle)] sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <p>
             © {year} {person.name}
           </p>
-          <p className="font-mono text-[0.72rem] uppercase tracking-[0.12em]">
-            Built with Next.js &amp; Tailwind CSS
-          </p>
+          <div className="flex gap-6">
+            <a
+              href={person.linkedin}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="transition-colors hover:text-[var(--fg)]"
+            >
+              LinkedIn
+            </a>
+            <a
+              href={person.github}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="transition-colors hover:text-[var(--fg)]"
+            >
+              GitHub
+            </a>
+            <a
+              href={`mailto:${person.email}`}
+              className="transition-colors hover:text-[var(--fg)]"
+            >
+              Email
+            </a>
+          </div>
         </div>
       </footer>
     </>

@@ -24,7 +24,7 @@ export default function Contact() {
             id="contact-heading"
             className="mt-3 max-w-2xl text-3xl font-semibold leading-tight tracking-tight text-[var(--fg)] sm:text-4xl"
           >
-            Open to backend and platform engineering roles.
+            Open to software engineering roles.
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--fg-muted)]">
             {person.availability}, and {person.workAuth.toLowerCase()}. The
