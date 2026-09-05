@@ -1,4 +1,5 @@
 import { person, stats } from "@/content/resume";
+import CountUp from "./CountUp";
 import Reveal from "./Reveal";
 
 function ArrowIcon() {
@@ -90,12 +91,11 @@ export default function Hero() {
               <div key={stat.label}>
                 <dt className="sr-only">{stat.label}</dt>
                 <dd>
-                  <span
-                    className="block text-3xl font-semibold tracking-tight"
+                  <CountUp
+                    value={stat.value}
+                    className="block font-display text-4xl font-bold tracking-tight sm:text-5xl"
                     style={{ color: `var(--h${(i % 5) + 1})` }}
-                  >
-                    {stat.value}
-                  </span>
+                  />
                   <span className="mt-1.5 block text-sm leading-snug text-[var(--fg-muted)]">
                     {stat.label}
                   </span>

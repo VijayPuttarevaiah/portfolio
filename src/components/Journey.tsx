@@ -1,5 +1,6 @@
 import { journey, type JourneyKind } from "@/content/resume";
 import Reveal from "./Reveal";
+import TimelineSpine from "./TimelineSpine";
 import Section from "./Section";
 
 /** One hue per stop, cycling; "now" and "next" override to the accent. */
@@ -30,11 +31,8 @@ export default function Journey() {
       tinted
     >
       <ol className="relative">
-        {/* spine: left on mobile, centred on md+ */}
-        <div
-          aria-hidden="true"
-          className="tl-spine left-[7px] md:left-1/2 md:-translate-x-1/2"
-        />
+        {/* spine draws itself as the reader scrolls */}
+        <TimelineSpine className="left-[7px] md:left-1/2 md:-translate-x-1/2" />
 
         {/* START cap */}
         <li className="relative mb-10 list-none">
