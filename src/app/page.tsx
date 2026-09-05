@@ -5,6 +5,7 @@ import Experience from "@/components/Experience";
 import Gallery from "@/components/Gallery";
 import Expertise from "@/components/Expertise";
 import Hero from "@/components/Hero";
+import Journey from "@/components/Journey";
 import Nav from "@/components/Nav";
 import Projects from "@/components/Projects";
 import Recommendations from "@/components/Recommendations";
@@ -19,6 +20,7 @@ export default function Home() {
       <main id="main">
         <Hero />
         <About />
+        <Journey />
         <Experience />
         <Projects />
         <Gallery />

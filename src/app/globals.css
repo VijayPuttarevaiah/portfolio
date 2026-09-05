@@ -249,10 +249,61 @@ h1, h2, h3, .font-display {
   .carousel-track {
     transition: none;
   }
+  .tl-now::after {
+    animation: none;
+  }
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ---------------------------------------------------------------
+   Journey timeline
+   --------------------------------------------------------------- */
+.tl-spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    var(--h1),
+    var(--h2) 35%,
+    var(--h3) 65%,
+    var(--border-strong)
+  );
+  opacity: 0.9;
+}
+
+.tl-dot {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  background: var(--dot, var(--accent));
+  box-shadow: 0 0 0 4px var(--bg);
+  z-index: 1;
+}
+
+/* "Now" pulses gently; "Next" is hollow so it reads as a target. */
+.tl-now::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border-radius: 9999px;
+  border: 2px solid var(--dot, var(--accent));
+  animation: tl-pulse 2.2s ease-out infinite;
+}
+
+.tl-next {
+  background: var(--bg);
+  border: 2px dashed var(--dot, var(--accent));
+}
+
+@keyframes tl-pulse {
+  0%   { transform: scale(0.8); opacity: 0.9; }
+  100% { transform: scale(1.9); opacity: 0; }
 }
