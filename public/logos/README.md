@@ -1,10 +1,17 @@
 # Logos
 
-`wipro.svg` comes from simple-icons (CC0). Every other organisation is drawn
-as a monogram badge in `BrandMark.tsx` — no icon set carries Acuver or NIE,
-and Amazon's mark is not in simple-icons.
+| File | Source | Licence |
+|---|---|---|
+| `amazon.svg` | Wikimedia Commons | Public domain |
+| `dalhousie.svg` | Wikimedia Commons | Public domain |
+| `wipro.svg` | Wikimedia Commons | Public domain |
 
-To upgrade any of them to a real logo: drop an SVG here named after the
-organisation (`amazon.svg`, `acuver.svg`, `dalhousie.svg`, `nie.svg`) and add
-the filename to the `LOGO_FILES` set in `src/components/BrandMark.tsx`. The
+**Acuver and NIE have no freely-licensed file available.** They render as
+monogram badges instead (`AC`, `NIE`) in their brand colours.
+
+To add either as a real logo: save an SVG here as `acuver.svg` or `nie.svg`,
+then add the filename to `LOGO_FILES` in `src/components/BrandMark.tsx`. The
 component prefers a file when one exists and falls back to the monogram.
+
+Logos render on a white tile rather than colour-inverted, so brand colour
+(Amazon's swoosh, Wipro's spectrum) survives against the dark page.
