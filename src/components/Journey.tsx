@@ -24,7 +24,7 @@ export default function Journey() {
   return (
     <Section
       id="journey"
-      eyebrow="02 — The arc"
+      eyebrow="01 — The arc"
       title="Where it started, where it is, where it's going"
       intro="Electrical engineering degree to enterprise backend systems to a graduate degree in computer science — and what comes next."
       tinted
@@ -35,6 +35,18 @@ export default function Journey() {
           aria-hidden="true"
           className="tl-spine left-[7px] md:left-1/2 md:-translate-x-1/2"
         />
+
+        {/* START cap */}
+        <li className="relative mb-10 list-none">
+          <span
+            aria-hidden="true"
+            className="tl-cap left-0 md:left-1/2 md:-translate-x-1/2"
+            style={{ ["--dot" as string]: "var(--h1)" }}
+          />
+          <p className="ml-8 font-mono text-[0.68rem] uppercase tracking-[0.2em] text-[var(--fg-subtle)] md:ml-0 md:text-center">
+            Start · 2015
+          </p>
+        </li>
 
         {journey.map((stop, i) => {
           const hue =
@@ -130,6 +142,25 @@ export default function Journey() {
             </Reveal>
           );
         })}
+
+        {/* END cap — the arc terminates here, deliberately open-ended */}
+        <li className="relative mt-2 list-none">
+          <span
+            aria-hidden="true"
+            className="tl-cap tl-cap-end left-0 md:left-1/2 md:-translate-x-1/2"
+            style={{ ["--dot" as string]: "var(--accent)" }}
+          />
+          <div className="ml-8 md:ml-0 md:text-center">
+            <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-[var(--fg-subtle)]">
+              End of the road so far
+            </p>
+            <p className="mx-auto mt-2 max-w-md text-sm leading-relaxed text-[var(--fg-muted)]">
+              Ten years from an engineering degree to production backend work
+              to a graduate degree. The next stop is open — that is what the
+              dashed marker above is for.
+            </p>
+          </div>
+        </li>
       </ol>
     </Section>
   );

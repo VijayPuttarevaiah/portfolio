@@ -4,7 +4,7 @@ import Section from "./Section";
 
 export default function About() {
   return (
-    <Section id="about" eyebrow="01 — About" title="Background" tinted>
+    <Section id="about" eyebrow="02 — About" title="Background" tinted>
       <div className="grid gap-12 md:grid-cols-[1.6fr_1fr] md:gap-16">
         <Reveal className="space-y-5">
           {about.paragraphs.map((paragraph) => (
