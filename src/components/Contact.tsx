@@ -27,9 +27,8 @@ export default function Contact() {
             Open to backend and platform engineering roles.
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--fg-muted)]">
-            {person.availability}. Based in {person.location} and{" "}
-            {person.workAuth.toLowerCase()}. The fastest way to reach me is
-            email.
+            {person.availability}, and {person.workAuth.toLowerCase()}. The
+            fastest way to reach me is email.
           </p>
         </Reveal>
 
