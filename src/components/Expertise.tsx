@@ -2,6 +2,8 @@ import { skillGroups } from "@/content/resume";
 import Reveal from "./Reveal";
 import Section from "./Section";
 
+const HUES = ["--h1", "--h2", "--h3", "--h4"] as const;
+
 export default function Expertise() {
   const primary = skillGroups.filter((g) => g.emphasis === "primary");
   const secondary = skillGroups.filter((g) => g.emphasis === "secondary");
@@ -16,15 +18,25 @@ export default function Expertise() {
       <div className="grid gap-6 sm:grid-cols-2">
         {primary.map((group, index) => (
           <Reveal key={group.title} delay={index * 50}>
-            <div className="h-full rounded-xl border border-[var(--border-strong)] bg-[var(--bg-elevated)] p-6">
-              <h3 className="text-sm font-semibold tracking-tight text-[var(--fg)]">
+            <div
+              className="h-full rounded-2xl border-2 p-6"
+              style={{
+                borderColor: `var(${HUES[index % HUES.length]})`,
+                background: `var(${HUES[index % HUES.length]}-soft)`,
+              }}
+            >
+              <h3
+                className="text-sm font-bold uppercase tracking-[0.08em]"
+                style={{ color: `var(${HUES[index % HUES.length]})` }}
+              >
                 {group.title}
               </h3>
               <ul className="mt-4 flex flex-wrap gap-x-2 gap-y-2">
                 {group.skills.map((skill) => (
                   <li
                     key={skill}
-                    className="rounded-md bg-[var(--accent-soft)] px-2.5 py-1 text-[0.78rem] font-medium text-[var(--accent)]"
+                    className="rounded-full border bg-[var(--bg)] px-2.5 py-1 text-[0.78rem] font-medium text-[var(--fg)]"
+                    style={{ borderColor: `var(${HUES[index % HUES.length]})` }}
                   >
                     {skill}
                   </li>

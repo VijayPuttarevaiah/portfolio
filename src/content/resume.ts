@@ -392,10 +392,36 @@ export const leadership = {
     "Authored end-to-end planning documentation for a Machine Learning Hackathon, and partnered with other student societies to organize supporting workshops.",
 } as const;
 
+export type Recommendation = {
+  /** Full name of the person who wrote it. */
+  name: string;
+  /** Their role/company at the time of writing. */
+  title: string;
+  /** e.g. "Managed Vijay directly at Acuver Consulting". Optional. */
+  relationship?: string;
+  /** The recommendation text, verbatim. */
+  quote: string;
+};
+
+/**
+ * LinkedIn recommendations.
+ *
+ * EMPTY ON PURPOSE. LinkedIn blocks automated access (HTTP 999), so these
+ * cannot be fetched — they must be pasted in from the profile by hand.
+ *
+ * NEVER put invented, paraphrased, or placeholder text here. Every entry is
+ * a quote attributed to a real, named person; anything not written by that
+ * person is a fabricated endorsement. Copy them verbatim or leave this empty.
+ *
+ * The Recommendations section renders nothing while this array is empty.
+ */
+export const recommendations: Recommendation[] = [];
+
 export const navItems = [
   { id: "about", label: "About" },
   { id: "experience", label: "Experience" },
   { id: "projects", label: "Projects" },
+  { id: "recommendations", label: "Recommendations" },
   { id: "expertise", label: "Expertise" },
   { id: "education", label: "Education" },
   { id: "contact", label: "Contact" },

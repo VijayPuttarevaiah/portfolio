@@ -6,6 +6,7 @@ import Expertise from "@/components/Expertise";
 import Hero from "@/components/Hero";
 import Nav from "@/components/Nav";
 import Projects from "@/components/Projects";
+import Recommendations from "@/components/Recommendations";
 import { person } from "@/content/resume";
 
 export default function Home() {
@@ -19,6 +20,7 @@ export default function Home() {
         <About />
         <Experience />
         <Projects />
+        <Recommendations />
         <Expertise />
         <Education />
         <Contact />
