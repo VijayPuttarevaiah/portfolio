@@ -23,6 +23,14 @@ function ArrowIcon() {
   );
 }
 
+/**
+ * The landing screen.
+ *
+ * Deliberately full-viewport and type-led: the name is set in the condensed
+ * display face at poster scale, so the first thing on screen is a statement
+ * rather than a paragraph. Everything below the fold is reached by scrolling,
+ * and the scroll cue says so explicitly.
+ */
 export default function Hero() {
   // Only render the Resume button if the PDF is actually present. A dead
   // primary CTA is worse than no CTA; this makes the button appear on its
@@ -31,36 +39,44 @@ export default function Hero() {
     path.join(process.cwd(), "public", "resume.pdf"),
   );
 
+  const [first, ...rest] = person.name.split(" ");
+  const last = rest.join(" ");
+
   return (
-    <section id="top" className="relative isolate">
+    <section
+      id="top"
+      className="relative isolate flex min-h-[100svh] flex-col justify-center overflow-hidden"
+    >
       <div className="hero-glow" aria-hidden="true" />
-      <div className="mx-auto w-full max-w-5xl px-6 pb-20 pt-16 sm:px-8 sm:pb-28 sm:pt-24">
+
+      <div className="mx-auto w-full max-w-6xl px-6 pb-16 pt-28 sm:px-8">
         <Reveal>
-          <p className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--fg-subtle)]">
+          <p className="flex items-center gap-3 font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--fg-subtle)]">
+            <span className="tl-live" aria-hidden="true" />
             {person.availability}
           </p>
         </Reveal>
 
         <Reveal delay={60}>
-          <h1 className="mt-6 text-4xl font-semibold leading-[1.08] tracking-tight text-[var(--fg)] sm:text-6xl">
-            {person.name}
+          <h1 className="display t-hero mt-7 text-[var(--fg)]">
+            <span className="block">{first}</span>
+            <span className="gradient-text block">{last}</span>
           </h1>
         </Reveal>
 
-        <Reveal delay={110}>
-          <p className="gradient-text mt-4 text-xl font-semibold sm:text-2xl">
-            {person.headline}
-          </p>
+        <Reveal delay={130}>
+          <div className="mt-8 grid gap-8 border-t border-[var(--border)] pt-8 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] md:gap-14">
+            <p className="display text-[1.6rem] leading-tight text-[var(--fg-muted)] sm:text-[2rem]">
+              {person.headline}
+            </p>
+            <p className="max-w-xl text-lg leading-relaxed text-[var(--fg-muted)]">
+              {person.tagline}
+            </p>
+          </div>
         </Reveal>
 
-        <Reveal delay={160}>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--fg-muted)]">
-            {person.tagline}
-          </p>
-        </Reveal>
-
-        <Reveal delay={210}>
-          <div className="mt-9 flex flex-wrap items-center gap-3">
+        <Reveal delay={190}>
+          <div className="mt-10 flex flex-wrap items-center gap-3">
             {resumeReady ? (
               <a
                 href={person.resumeHref}
@@ -97,7 +113,7 @@ export default function Hero() {
               LinkedIn
             </a>
             <a
-              href={`mailto:${person.email}`}
+              href="#contact"
               className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
             >
               Contact
@@ -105,18 +121,18 @@ export default function Hero() {
           </div>
         </Reveal>
 
-        <Reveal delay={260}>
-          <dl className="mt-16 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-[var(--border)] pt-10 sm:grid-cols-4">
+        <Reveal delay={250}>
+          <dl className="mt-14 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-[var(--border)] pt-9 sm:grid-cols-4">
             {stats.map((stat, i) => (
               <div key={stat.label}>
                 <dt className="sr-only">{stat.label}</dt>
                 <dd>
                   <CountUp
                     value={stat.value}
-                    className="block font-display text-4xl font-bold tracking-tight sm:text-5xl"
+                    className="display block text-5xl sm:text-6xl"
                     style={{ color: `var(--h${(i % 5) + 1})` }}
                   />
-                  <span className="mt-1.5 block text-sm leading-snug text-[var(--fg-muted)]">
+                  <span className="mt-2 block text-sm leading-snug text-[var(--fg-muted)]">
                     {stat.label}
                   </span>
                 </dd>
@@ -125,6 +141,14 @@ export default function Hero() {
           </dl>
         </Reveal>
       </div>
+
+      <a
+        href="#journey"
+        className="scroll-cue group mx-auto mb-8 flex w-fit items-center gap-2 font-mono text-[0.65rem] uppercase tracking-[0.2em] text-[var(--fg-subtle)] transition-colors hover:text-[var(--fg)]"
+      >
+        Scroll to follow the journey
+        <span className="scroll-cue-line" aria-hidden="true" />
+      </a>
     </section>
   );
 }

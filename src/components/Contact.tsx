@@ -115,7 +115,7 @@ export default function Contact() {
           </p>
           <h2
             id="contact-heading"
-            className="mt-3 max-w-2xl text-3xl font-semibold leading-tight tracking-tight text-[var(--fg)] sm:text-4xl"
+            className="display t-section mt-4 max-w-3xl text-[var(--fg)]"
           >
             Open to software engineering roles.
           </h2>
