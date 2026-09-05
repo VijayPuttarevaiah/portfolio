@@ -22,7 +22,8 @@ function ArrowIcon() {
 
 export default function Hero() {
   return (
-    <section id="top" className="relative">
+    <section id="top" className="relative isolate">
+      <div className="hero-glow" aria-hidden="true" />
       <div className="mx-auto w-full max-w-5xl px-6 pb-20 pt-16 sm:px-8 sm:pb-28 sm:pt-24">
         <Reveal>
           <p className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--fg-subtle)]">
@@ -37,7 +38,7 @@ export default function Hero() {
         </Reveal>
 
         <Reveal delay={110}>
-          <p className="mt-4 text-xl font-medium text-[var(--accent)] sm:text-2xl">
+          <p className="gradient-text mt-4 text-xl font-semibold sm:text-2xl">
             {person.headline}
           </p>
         </Reveal>
@@ -52,7 +53,8 @@ export default function Hero() {
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <a
               href={person.resumeHref}
-              className="group inline-flex items-center gap-2 rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm font-medium text-[var(--accent-fg)] transition-opacity hover:opacity-90"
+              className="group inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+              style={{ background: "linear-gradient(100deg, var(--h1), var(--h2))" }}
             >
               Resume
               <ArrowIcon />
@@ -84,11 +86,14 @@ export default function Hero() {
 
         <Reveal delay={260}>
           <dl className="mt-16 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-[var(--border)] pt-10 sm:grid-cols-4">
-            {stats.map((stat) => (
+            {stats.map((stat, i) => (
               <div key={stat.label}>
                 <dt className="sr-only">{stat.label}</dt>
                 <dd>
-                  <span className="block text-3xl font-semibold tracking-tight text-[var(--fg)]">
+                  <span
+                    className="block text-3xl font-semibold tracking-tight"
+                    style={{ color: `var(--h${(i % 5) + 1})` }}
+                  >
                     {stat.value}
                   </span>
                   <span className="mt-1.5 block text-sm leading-snug text-[var(--fg-muted)]">

@@ -1,50 +1,105 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------
-   Design tokens. Restrained palette: a neutral base plus ONE accent
-   (the navy carried over from the LaTeX resume, for continuity).
-   Light is the default; dark is opt-in via [data-theme="dark"] and
-   also honours the OS setting when no explicit choice is stored.
+   Palette. Vibrant SaaS-brand direction (Later / Dash Social feel):
+   a violet→blue primary plus a small, fixed set of supporting hues
+   used SYSTEMATICALLY — one hue per project, one per skill group —
+   rather than sprinkled at random. Colour carries meaning here.
    --------------------------------------------------------------- */
 :root {
-  --bg: #fbfbfa;
-  --bg-elevated: #ffffff;
-  --fg: #16181d;
-  --fg-muted: #5a6170;
-  --fg-subtle: #858c99;
-  --border: #e4e4e2;
-  --border-strong: #d2d2cf;
-  --accent: #14508f;
+  --bg: #ffffff;
+  --bg-elevated: #faf9ff;
+  --bg-sunken: #f4f2fd;
+  --fg: #14121f;
+  --fg-muted: #55516b;
+  --fg-subtle: #837e9c;
+  --border: #e8e5f5;
+  --border-strong: #d5d0ec;
+
+  --accent: #6d28d9;
   --accent-fg: #ffffff;
-  --accent-soft: #eef3f9;
+  --accent-soft: #f1ebfe;
+
+  /* Supporting hues — index 1..5 */
+  --h1: #6d28d9; /* violet  */
+  --h2: #2563eb; /* blue    */
+  --h3: #0d9488; /* teal    */
+  --h4: #d97706; /* amber   */
+  --h5: #db2777; /* rose    */
+
+  --h1-soft: #f1ebfe;
+  --h2-soft: #e8f0fe;
+  --h3-soft: #e2f6f3;
+  --h4-soft: #fdf2e2;
+  --h5-soft: #fdeaf3;
+
+  --hero-glow-a: #ede4ff;
+  --hero-glow-b: #dff0fb;
+  --hero-glow-c: #ffeef6;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0d0f12;
-    --bg-elevated: #14171c;
-    --fg: #eceef1;
-    --fg-muted: #9aa1ad;
-    --fg-subtle: #6f7783;
-    --border: #23272e;
-    --border-strong: #333941;
-    --accent: #6ea8e8;
-    --accent-fg: #0d0f12;
-    --accent-soft: #16202c;
+    --bg: #0b0a12;
+    --bg-elevated: #14121f;
+    --bg-sunken: #100e1a;
+    --fg: #f0eef8;
+    --fg-muted: #a49fbd;
+    --fg-subtle: #7b7597;
+    --border: #241f36;
+    --border-strong: #362f4d;
+
+    --accent: #a78bfa;
+    --accent-fg: #14121f;
+    --accent-soft: #1e1733;
+
+    --h1: #a78bfa;
+    --h2: #60a5fa;
+    --h3: #2dd4bf;
+    --h4: #fbbf24;
+    --h5: #f472b6;
+
+    --h1-soft: #1e1733;
+    --h2-soft: #14203a;
+    --h3-soft: #0d2723;
+    --h4-soft: #2a1f0c;
+    --h5-soft: #2c1121;
+
+    --hero-glow-a: #1e1440;
+    --hero-glow-b: #10233d;
+    --hero-glow-c: #2a1024;
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #0d0f12;
-  --bg-elevated: #14171c;
-  --fg: #eceef1;
-  --fg-muted: #9aa1ad;
-  --fg-subtle: #6f7783;
-  --border: #23272e;
-  --border-strong: #333941;
-  --accent: #6ea8e8;
-  --accent-fg: #0d0f12;
-  --accent-soft: #16202c;
+  --bg: #0b0a12;
+  --bg-elevated: #14121f;
+  --bg-sunken: #100e1a;
+  --fg: #f0eef8;
+  --fg-muted: #a49fbd;
+  --fg-subtle: #7b7597;
+  --border: #241f36;
+  --border-strong: #362f4d;
+
+  --accent: #a78bfa;
+  --accent-fg: #14121f;
+  --accent-soft: #1e1733;
+
+  --h1: #a78bfa;
+  --h2: #60a5fa;
+  --h3: #2dd4bf;
+  --h4: #fbbf24;
+  --h5: #f472b6;
+
+  --h1-soft: #1e1733;
+  --h2-soft: #14203a;
+  --h3-soft: #0d2723;
+  --h4-soft: #2a1f0c;
+  --h5-soft: #2c1121;
+
+  --hero-glow-a: #1e1440;
+  --hero-glow-b: #10233d;
+  --hero-glow-c: #2a1024;
 }
 
 @theme inline {
@@ -52,12 +107,7 @@
   --color-bg-elevated: var(--bg-elevated);
   --color-fg: var(--fg);
   --color-fg-muted: var(--fg-muted);
-  --color-fg-subtle: var(--fg-subtle);
-  --color-border-hair: var(--border);
-  --color-border-strong: var(--border-strong);
   --color-accent: var(--accent);
-  --color-accent-fg: var(--accent-fg);
-  --color-accent-soft: var(--accent-soft);
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-mono-jb), ui-monospace, SFMono-Regular, monospace;
 }
@@ -80,11 +130,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Visible, consistent focus ring for keyboard users. */
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 ::selection {
@@ -92,9 +141,63 @@ body {
   color: var(--accent-fg);
 }
 
-/* Scroll-reveal. Starts hidden only when JS will animate it in — the
-   .reveal class is applied by the Reveal component after mount, so a
-   no-JS visitor still sees everything. */
+/* Soft aurora behind the hero — the one decorative flourish on the page. */
+.hero-glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-glow::before,
+.hero-glow::after {
+  content: "";
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(72px);
+  opacity: 0.85;
+}
+
+.hero-glow::before {
+  width: 46rem;
+  height: 30rem;
+  top: -12rem;
+  left: -10rem;
+  background: radial-gradient(
+    circle at 30% 30%,
+    var(--hero-glow-a),
+    transparent 70%
+  );
+}
+
+.hero-glow::after {
+  width: 40rem;
+  height: 28rem;
+  top: -6rem;
+  right: -12rem;
+  background: radial-gradient(
+    circle at 70% 30%,
+    var(--hero-glow-b),
+    transparent 70%
+  );
+}
+
+/* Gradient text for the headline accent. */
+.gradient-text {
+  background: linear-gradient(
+    100deg,
+    var(--h1) 0%,
+    var(--h2) 45%,
+    var(--h3) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Scroll-reveal. Hidden state is scoped to .js (added pre-paint in
+   layout.tsx) so a no-JS visitor sees all content at full opacity. */
 .js .reveal {
   opacity: 0;
   transform: translateY(14px);
@@ -109,6 +212,17 @@ body {
   transform: none;
 }
 
+/* Carousel track — transform-driven, one slide at a time. */
+.carousel-track {
+  display: flex;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.carousel-track[data-dragging="true"] {
+  transition: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -116,6 +230,9 @@ body {
   .js .reveal {
     opacity: 1;
     transform: none;
+    transition: none;
+  }
+  .carousel-track {
     transition: none;
   }
   *,

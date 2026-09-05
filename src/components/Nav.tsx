@@ -1,17 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { navItems, person } from "@/content/resume";
+import { useEffect, useMemo, useState } from "react";
+import { navItems, person, recommendations } from "@/content/resume";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Nav() {
+  // The Recommendations section renders nothing while the array is empty,
+  // so hide its nav link rather than offering a link that scrolls nowhere.
+  const items = useMemo(
+    () =>
+      navItems.filter(
+        (i) => i.id !== "recommendations" || recommendations.length > 0,
+      ),
+    [],
+  );
+
   const [active, setActive] = useState<string>("");
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
   // Scroll-spy: highlight whichever section owns the upper third of the viewport.
   useEffect(() => {
-    const sections = navItems
+    const sections = items
       .map((item) => document.getElementById(item.id))
       .filter((el): el is HTMLElement => el !== null);
 
@@ -29,7 +39,7 @@ export default function Nav() {
 
     sections.forEach((s) => observer.observe(s));
     return () => observer.disconnect();
-  }, []);
+  }, [items]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -59,7 +69,7 @@ export default function Nav() {
 
         <div className="flex items-center gap-2">
           <ul className="hidden items-center gap-1 md:flex">
-            {navItems.map((item) => (
+            {items.map((item) => (
               <li key={item.id}>
                 <a
                   href={`#${item.id}`}
@@ -112,7 +122,7 @@ export default function Nav() {
           className="border-t border-[var(--border)] bg-[var(--bg)] md:hidden"
         >
           <ul className="mx-auto max-w-5xl px-6 py-3 sm:px-8">
-            {navItems.map((item) => (
+            {items.map((item) => (
               <li key={item.id}>
                 <a
                   href={`#${item.id}`}

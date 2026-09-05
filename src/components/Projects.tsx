@@ -21,6 +21,8 @@ function ExternalIcon() {
   );
 }
 
+const HUES = ["--h1", "--h2", "--h3", "--h5"] as const;
+
 export default function Projects() {
   return (
     <Section
@@ -33,10 +35,16 @@ export default function Projects() {
       <div className="space-y-6">
         {projects.map((project, index) => (
           <Reveal key={project.name} delay={index * 60}>
-            <article className="rounded-xl border border-[var(--border)] bg-[var(--bg)] p-6 transition-colors hover:border-[var(--border-strong)] sm:p-8">
+            <article
+              className="rounded-2xl border-2 bg-[var(--bg)] p-6 transition-shadow hover:shadow-lg sm:p-8"
+              style={{ borderColor: `var(${HUES[index % HUES.length]})` }}
+            >
               <header className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
                 <div>
-                  <h3 className="text-xl font-semibold tracking-tight text-[var(--fg)]">
+                  <h3
+                    className="text-xl font-bold tracking-tight"
+                    style={{ color: `var(${HUES[index % HUES.length]})` }}
+                  >
                     {project.name}
                   </h3>
                   <p className="mt-1 text-sm text-[var(--fg-muted)]">
@@ -48,7 +56,8 @@ export default function Projects() {
                     href={project.href}
                     target="_blank"
                     rel="noreferrer noopener"
-                    className="group inline-flex shrink-0 items-center gap-1.5 text-sm font-medium text-[var(--accent)] transition-opacity hover:opacity-80"
+                    className="group inline-flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-semibold text-white transition-opacity hover:opacity-85"
+                    style={{ background: `var(${HUES[index % HUES.length]})` }}
                   >
                     {project.hrefLabel ?? "View"}
                     <ExternalIcon />
@@ -89,7 +98,11 @@ export default function Projects() {
                 {project.concepts.map((concept) => (
                   <span
                     key={concept}
-                    className="rounded-md bg-[var(--accent-soft)] px-2.5 py-1 text-[0.72rem] font-medium text-[var(--accent)]"
+                    className="rounded-full px-3 py-1 text-[0.72rem] font-semibold"
+                    style={{
+                      background: `var(${HUES[index % HUES.length]}-soft)`,
+                      color: `var(${HUES[index % HUES.length]})`,
+                    }}
                   >
                     {concept}
                   </span>
