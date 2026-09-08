@@ -482,24 +482,6 @@ export type Photo = {
  */
 export const photos: Photo[] = [
   {
-    src: "/photos/vijay-cinematic-seated.webp",
-    alt: "Vijay seated on a bench, wearing a white shirt and sunglasses, with a dark cinematic background.",
-    caption: "Away from the keyboard",
-    portrait: true,
-  },
-  {
-    src: "/photos/vijay-cinematic-hero.webp",
-    alt: "Vijay smiling in a three-quarter portrait with warm amber rim lighting.",
-    caption: "A different perspective",
-    portrait: true,
-  },
-  {
-    src: "/photos/vijay-cinematic-closeup.webp",
-    alt: "A front-facing portrait of Vijay smiling in black sunglasses against a dark background.",
-    caption: "The person behind the work",
-    portrait: true,
-  },
-  {
     src: "/photos/wipro-campus.jpg",
     alt: "Wipro's Kodathi campus in Bengaluru, seen from the central courtyard between two office towers.",
     caption: "Wipro Kodathi campus, Bengaluru",

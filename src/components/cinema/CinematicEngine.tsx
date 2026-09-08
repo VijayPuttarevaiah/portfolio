@@ -1,0 +1,157 @@
+"use client";
+import dynamic from "next/dynamic";
+import { Component, useEffect, useState, type ReactNode } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Lenis from "lenis";
+import { motionState } from "./motionState";
+import "lenis/dist/lenis.css";
+const FilmScene = dynamic(() => import("./FilmScene"), { ssr: false });
+class SceneBoundary extends Component<
+  { children: ReactNode },
+  { failed: boolean }
+> {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  render() {
+    return this.state.failed ? null : this.props.children;
+  }
+}
+export default function CinematicEngine() {
+  const [webgl, setWebgl] = useState(false);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    const media = gsap.matchMedia();
+    let disposed = false;
+    const asset = new Image();
+    asset.src = "/photos/vijay-cinematic-closeup.webp";
+    // Only critical hero assets block the title; timeout always releases the page.
+    let releaseShader = () => {};
+    const shaderReady = new Promise<void>((resolve) => {
+      releaseShader = resolve;
+    });
+    const shaderLoaded = () => releaseShader();
+    window.addEventListener("cinema-webgl-ready", shaderLoaded, { once: true });
+    if (
+      motionState.ready ||
+      !window.matchMedia(
+        "(min-width: 900px) and (pointer: fine) and (prefers-reduced-motion: no-preference)",
+      ).matches
+    )
+      releaseShader();
+    const finish = () => {
+      if (!disposed) {
+        setLoading(false);
+        document.documentElement.dataset.cinemaReady = "true";
+        window.dispatchEvent(new Event("cinema-intro-ready"));
+      }
+    };
+    const timeout = window.setTimeout(finish, 2000);
+    Promise.all([
+      asset.decode().catch(() => {}),
+      document.fonts.ready,
+      shaderReady,
+    ]).then(() => setTimeout(finish, 450));
+    const lost = () => setWebgl(false);
+    window.addEventListener("cinema-webgl-lost", lost);
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      const lenis = new Lenis({
+        lerp: 0.085,
+        smoothWheel: true,
+        syncTouch: false,
+        anchors: { offset: -80 },
+        prevent: (node) => node.tagName === "TEXTAREA",
+      });
+      const tick = (time: number) => {
+        lenis.raf(time * 1000);
+        motionState.speed *= 0.92;
+        document.documentElement.style.setProperty(
+          "--scroll-chroma",
+          `${Math.min(motionState.speed, 3) * 1.5}px`,
+        );
+      };
+      lenis.on("scroll", (event: Lenis) => {
+        motionState.speed = Math.min(Math.abs(event.velocity) / 18, 3);
+        ScrollTrigger.update();
+      });
+      gsap.ticker.add(tick);
+      gsap.ticker.lagSmoothing(0);
+      document.documentElement.classList.add("cinema-motion");
+      return () => {
+        lenis.destroy();
+        gsap.ticker.remove(tick);
+        document.documentElement.classList.remove("cinema-motion");
+        document.documentElement.style.removeProperty("--scroll-chroma");
+      };
+    });
+    media.add(
+      "(min-width: 900px) and (pointer: fine) and (prefers-reduced-motion: no-preference)",
+      () => {
+        const probe = document.createElement("canvas");
+        const context = probe.getContext("webgl2");
+        const enabled = !!context;
+        if (!enabled) releaseShader();
+        context?.getExtension("WEBGL_lose_context")?.loseContext();
+        const id = setTimeout(() => {
+          setWebgl(enabled);
+        }, 0);
+        const pointer = (event: PointerEvent) => {
+          motionState.x = event.clientX / window.innerWidth;
+          motionState.y = event.clientY / window.innerHeight;
+        };
+        window.addEventListener("pointermove", pointer, { passive: true });
+        const hero = ScrollTrigger.create({
+          trigger: "#top",
+          start: "top bottom",
+          end: "bottom top",
+          onToggle: (self) => {
+            motionState.hero = self.isActive ? 1 : 0;
+          },
+        });
+        const about = ScrollTrigger.create({
+          trigger: "#about",
+          start: "top bottom",
+          end: "bottom top",
+          onUpdate: (self) => {
+            motionState.about = Math.sin(self.progress * Math.PI);
+          },
+        });
+        return () => {
+          clearTimeout(id);
+          setWebgl(false);
+          window.removeEventListener("pointermove", pointer);
+          hero.kill();
+          about.kill();
+        };
+      },
+    );
+    return () => {
+      disposed = true;
+      window.removeEventListener("cinema-webgl-ready", shaderLoaded);
+      clearTimeout(timeout);
+      media.revert();
+      window.removeEventListener("cinema-webgl-lost", lost);
+    };
+  }, []);
+  return (
+    <>
+      <div className="film-vignette" aria-hidden="true" />
+      {webgl && (
+        <div className="film-canvas" aria-hidden="true">
+          <SceneBoundary>
+            <FilmScene />
+          </SceneBoundary>
+        </div>
+      )}
+      {loading && (
+        <div className="film-loader" aria-hidden="true">
+          <span className="film-pulse" />
+          <span>VIJAY / A PORTFOLIO IN MOTION</span>
+        </div>
+      )}
+    </>
+  );
+}

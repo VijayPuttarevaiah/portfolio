@@ -1,0 +1,62 @@
+"use client";
+import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+export default function TitleSequence() {
+  const reduced = useReducedMotion();
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const start = () => setReady(true);
+    window.addEventListener("cinema-intro-ready", start, { once: true });
+    const timeout = setTimeout(start, 2200);
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener("cinema-intro-ready", start);
+    };
+  }, []);
+  return (
+    <h1 id="hero-title" className="cinema-name" aria-label="Vijay Puttarevaiah">
+      <span className="kinetic-first" aria-hidden="true">
+        {[..."VIJAY"].map((letter, i) => (
+          <motion.span
+            key={i}
+            initial={false}
+            animate={
+              reduced || !ready
+                ? {}
+                : {
+                    clipPath: ["inset(100% 0 0)", "inset(0% 0 0)"],
+                    y: [80, 0],
+                    scaleY: [1.7, 1],
+                    filter: ["blur(12px)", "blur(0px)"],
+                  }
+            }
+            transition={{
+              duration: 1.1,
+              delay: i * 0.085,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+          >
+            {letter}
+          </motion.span>
+        ))}
+      </span>
+      <motion.span
+        aria-hidden="true"
+        className="cinema-surname"
+        initial={false}
+        animate={
+          reduced || !ready
+            ? {}
+            : {
+                opacity: [0, 1],
+                letterSpacing: [".16em", ".035em"],
+                filter: ["blur(8px)", "blur(0px)"],
+              }
+        }
+        transition={{ duration: 1.2, delay: 0.3 }}
+      >
+        PUTTAREVAIAH
+      </motion.span>
+    </h1>
+  );
+}

@@ -12,9 +12,9 @@ export default function Gallery() {
   return (
     <Section
       id="gallery"
-      eyebrow="Beyond the screen"
-      title="The person behind the code"
-      intro="Portraits, places, and a little of life beyond the work."
+      eyebrow="In practice"
+      title="On the job"
+      intro="Places behind the work — Wipro and Acuver Consulting."
       tinted
     >
       <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -24,7 +24,9 @@ export default function Gallery() {
               className="card-r h-full overflow-hidden border-2 bg-[var(--bg)]"
               style={{ borderColor: `var(${HUES[i % HUES.length]})` }}
             >
-              <div className={`relative w-full ${photo.portrait ? "aspect-[2/3]" : "aspect-[4/3]"}`}>
+              <div
+                className={`relative w-full ${photo.portrait ? "aspect-[2/3]" : "aspect-[4/3]"}`}
+              >
                 <Image
                   src={photo.src}
                   alt={photo.alt}

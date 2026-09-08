@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { educationJourney, professionalJourney, type JourneyStop } from "@/content/resume";
+import {
+  educationJourney,
+  professionalJourney,
+  type JourneyStop,
+} from "@/content/resume";
 import BrandMark from "./BrandMark";
 
 export type ArcStop = JourneyStop & { track: "education" | "professional" };
@@ -21,14 +25,18 @@ const SPAN = 0.84;
 /** The sweep finishes before the runway ends so the last stop holds on screen. */
 const SWEEP_END = 0.82;
 
-const clamp = (n: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, n));
+const clamp = (n: number, lo: number, hi: number) =>
+  Math.min(hi, Math.max(lo, n));
 const rad = (deg: number) => (deg * Math.PI) / 180;
 
 export default function JourneyArc({ reduced }: { reduced: boolean }) {
   const stops = useMemo(() => {
     const all: ArcStop[] = [
       ...educationJourney.map((s) => ({ ...s, track: "education" as const })),
-      ...professionalJourney.map((s) => ({ ...s, track: "professional" as const })),
+      ...professionalJourney.map((s) => ({
+        ...s,
+        track: "professional" as const,
+      })),
     ];
     return all.sort((a, b) => Number(a.year) - Number(b.year));
   }, []);
@@ -40,13 +48,20 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
   const sweepRef = useRef<SVGCircleElement>(null);
   const compassRef = useRef<SVGGElement>(null);
   const flareRef = useRef<SVGGElement>(null);
+  const needleRef = useRef<SVGGElement>(null);
   const markRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const [points, setPoints] = useState<{ x: number; y: number }[]>([]);
-  const [activeIndex, setActiveIndex] = useState(reduced ? stops.length - 1 : -1);
+  const [activeIndex, setActiveIndex] = useState(
+    reduced ? stops.length - 1 : -1,
+  );
 
   const stopT = useMemo(
-    () => stops.map((_, i) => LEAD_IN + (stops.length === 1 ? 0 : i / (stops.length - 1)) * SPAN),
+    () =>
+      stops.map(
+        (_, i) =>
+          LEAD_IN + (stops.length === 1 ? 0 : i / (stops.length - 1)) * SPAN,
+      ),
     [stops],
   );
 
@@ -87,7 +102,8 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
 
       const pt = path.getPointAtLength(progress * total);
 
-      if (litRef.current) litRef.current.style.strokeDashoffset = String(1 - progress);
+      if (litRef.current)
+        litRef.current.style.strokeDashoffset = String(1 - progress);
 
       if (drawLegRef.current) {
         drawLegRef.current.setAttribute("x2", String(pt.x));
@@ -98,10 +114,21 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
         sweepRef.current.setAttribute("r", String(r));
       }
       if (compassRef.current) {
-        compassRef.current.style.opacity = progress > 0.015 && progress < 0.995 ? "1" : "0";
+        compassRef.current.style.opacity = "1";
+      }
+      if (needleRef.current) {
+        const angle =
+          (Math.atan2(pt.y - HINGE.y, pt.x - HINGE.x) * 180) / Math.PI + 90;
+        needleRef.current.setAttribute(
+          "transform",
+          `rotate(${angle} ${HINGE.x} ${HINGE.y})`,
+        );
       }
       if (flareRef.current) {
-        flareRef.current.setAttribute("transform", `translate(${pt.x} ${pt.y})`);
+        flareRef.current.setAttribute(
+          "transform",
+          `translate(${pt.x} ${pt.y})`,
+        );
       }
 
       let idx = -1;
@@ -142,10 +169,17 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
   };
 
   return (
-    <div ref={runwayRef} className={reduced ? "" : "h-[340vh]"}>
+    <div
+      ref={runwayRef}
+      className={
+        reduced ? "journey-instrument" : "journey-instrument h-[340vh]"
+      }
+    >
       <div
         className={
-          reduced ? "" : "sticky top-0 flex h-screen flex-col justify-center overflow-hidden pt-16"
+          reduced
+            ? ""
+            : "sticky top-0 flex h-screen flex-col justify-center overflow-hidden pt-16"
         }
       >
         <div className="mx-auto w-full max-w-6xl px-6 sm:px-8">
@@ -159,27 +193,61 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
             </p>
 
             <div>
-              <div className="relative w-full" style={{ aspectRatio: `${VIEW.w} / ${VIEW.h}` }}>
+              <div
+                className="relative w-full"
+                style={{ aspectRatio: `${VIEW.w} / ${VIEW.h}` }}
+              >
                 <svg
+                  style={{ overflow: "visible" }}
                   viewBox={`0 0 ${VIEW.w} ${VIEW.h}`}
                   className="absolute inset-0 h-full w-full"
                   role="img"
-                  aria-label="Timeline of education and work from 2015 to 2026"
+                  aria-label="Vintage compass tracing education and work from 2015 to 2027"
                 >
                   <defs>
-                    <linearGradient id="arc-lit" x1="0" y1="0" x2="1" y2="0">
-                      <stop offset="0%" stopColor="var(--h4)" stopOpacity="0.3" />
-                      <stop offset="55%" stopColor="var(--h4)" stopOpacity="0.9" />
-                      <stop offset="100%" stopColor="var(--fg)" stopOpacity="0.95" />
+                    <linearGradient id="compass-brass">
+                      <stop stopColor="#8c7050" />
+                      <stop offset="45%" stopColor="#e7d5b0" />
+                      <stop offset="65%" stopColor="#a48a60" />
+                      <stop offset="100%" stopColor="#ded0b6" />
                     </linearGradient>
-                    <filter id="arc-glow" x="-70%" y="-70%" width="240%" height="240%">
+                    <linearGradient id="arc-lit" x1="0" y1="0" x2="1" y2="0">
+                      <stop
+                        offset="0%"
+                        stopColor="var(--h4)"
+                        stopOpacity="0.3"
+                      />
+                      <stop
+                        offset="55%"
+                        stopColor="var(--h4)"
+                        stopOpacity="0.9"
+                      />
+                      <stop
+                        offset="100%"
+                        stopColor="var(--fg)"
+                        stopOpacity="0.95"
+                      />
+                    </linearGradient>
+                    <filter
+                      id="arc-glow"
+                      x="-70%"
+                      y="-70%"
+                      width="240%"
+                      height="240%"
+                    >
                       <feGaussianBlur stdDeviation="6" result="b" />
                       <feMerge>
                         <feMergeNode in="b" />
                         <feMergeNode in="SourceGraphic" />
                       </feMerge>
                     </filter>
-                    <filter id="beam-glow" x="-70%" y="-70%" width="240%" height="240%">
+                    <filter
+                      id="beam-glow"
+                      x="-70%"
+                      y="-70%"
+                      width="240%"
+                      height="240%"
+                    >
                       <feGaussianBlur stdDeviation="3.5" result="b" />
                       <feMerge>
                         <feMergeNode in="b" />
@@ -187,9 +255,21 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
                       </feMerge>
                     </filter>
                     <radialGradient id="flare">
-                      <stop offset="0%" stopColor="var(--fg)" stopOpacity="0.95" />
-                      <stop offset="35%" stopColor="var(--h4)" stopOpacity="0.6" />
-                      <stop offset="100%" stopColor="var(--h4)" stopOpacity="0" />
+                      <stop
+                        offset="0%"
+                        stopColor="var(--fg)"
+                        stopOpacity="0.95"
+                      />
+                      <stop
+                        offset="35%"
+                        stopColor="var(--h4)"
+                        stopOpacity="0.6"
+                      />
+                      <stop
+                        offset="100%"
+                        stopColor="var(--h4)"
+                        stopOpacity="0"
+                      />
                     </radialGradient>
                   </defs>
 
@@ -197,7 +277,7 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
                   <path
                     d={PATH_D}
                     fill="none"
-                    stroke="var(--h4)"
+                    stroke="var(--compass-ink)"
                     strokeOpacity="0.34"
                     strokeWidth="2.5"
                     strokeLinecap="round"
@@ -224,7 +304,10 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
                   {/* The compass: a resting leg, a drawing leg, and the circle it sweeps. */}
                   <g
                     ref={compassRef}
-                    style={{ opacity: reduced ? 0 : 0, transition: "opacity .5s ease" }}
+                    style={{
+                      opacity: reduced ? 0 : 0,
+                      transition: "opacity .5s ease",
+                    }}
                   >
                     <circle
                       ref={sweepRef}
@@ -232,7 +315,7 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
                       cy={HINGE.y}
                       r="0"
                       fill="none"
-                      stroke="var(--h4)"
+                      stroke="var(--compass-ink)"
                       strokeOpacity="0.28"
                       strokeWidth="1"
                       strokeDasharray="3 10"
@@ -242,9 +325,9 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
                       y1={HINGE.y}
                       x2={restEnd.x}
                       y2={restEnd.y}
-                      stroke="var(--fg)"
-                      strokeOpacity="0.4"
-                      strokeWidth="1.4"
+                      stroke="url(#compass-brass)"
+                      strokeOpacity="0.85"
+                      strokeWidth="4"
                       strokeLinecap="round"
                     />
                     <line
@@ -253,19 +336,122 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
                       y1={HINGE.y}
                       x2={HINGE.x}
                       y2={HINGE.y}
-                      stroke="var(--h4)"
-                      strokeOpacity="0.8"
-                      strokeWidth="1.7"
+                      stroke="url(#compass-brass)"
+                      strokeOpacity="1"
+                      strokeWidth="4"
                       strokeLinecap="round"
-                      filter="url(#beam-glow)"
                     />
-                    <circle cx={HINGE.x} cy={HINGE.y} r="4" fill="var(--fg)" fillOpacity="0.75" />
+                    <g aria-hidden="true">
+                      <circle
+                        cx={HINGE.x}
+                        cy={HINGE.y}
+                        r="58"
+                        fill="var(--bg)"
+                        stroke="url(#compass-brass)"
+                        strokeWidth="3"
+                      />
+                      <circle
+                        cx={HINGE.x}
+                        cy={HINGE.y}
+                        r="51"
+                        fill="none"
+                        stroke="var(--compass-ink)"
+                        strokeWidth=".7"
+                      />
+                      {Array.from({ length: 48 }, (_, i) => (
+                        <line
+                          key={i}
+                          x1={HINGE.x}
+                          y1={HINGE.y - 49}
+                          x2={HINGE.x}
+                          y2={HINGE.y - (i % 4 === 0 ? 41 : 45)}
+                          stroke="var(--compass-ink)"
+                          strokeWidth={i % 4 === 0 ? 1.5 : 0.6}
+                          transform={`rotate(${i * 7.5} ${HINGE.x} ${HINGE.y})`}
+                        />
+                      ))}
+                      <text
+                        x={HINGE.x}
+                        y={HINGE.y - 29}
+                        textAnchor="middle"
+                        fill="var(--compass-ink)"
+                        fontSize="10"
+                        fontFamily="Georgia"
+                      >
+                        N
+                      </text>
+                      <text
+                        x={HINGE.x}
+                        y={HINGE.y + 37}
+                        textAnchor="middle"
+                        fill="var(--compass-ink)"
+                        fontSize="10"
+                        fontFamily="Georgia"
+                      >
+                        S
+                      </text>
+                      <text
+                        x={HINGE.x - 33}
+                        y={HINGE.y + 4}
+                        textAnchor="middle"
+                        fill="var(--compass-ink)"
+                        fontSize="10"
+                        fontFamily="Georgia"
+                      >
+                        W
+                      </text>
+                      <text
+                        x={HINGE.x + 33}
+                        y={HINGE.y + 4}
+                        textAnchor="middle"
+                        fill="var(--compass-ink)"
+                        fontSize="10"
+                        fontFamily="Georgia"
+                      >
+                        E
+                      </text>
+                      <g ref={needleRef}>
+                        <path
+                          d={`M ${HINGE.x} ${HINGE.y - 27} L ${HINGE.x + 6} ${HINGE.y} L ${HINGE.x} ${HINGE.y + 27} L ${HINGE.x - 6} ${HINGE.y} Z`}
+                          fill="url(#compass-brass)"
+                        />
+                        <path
+                          d={`M ${HINGE.x} ${HINGE.y - 27} L ${HINGE.x + 6} ${HINGE.y} L ${HINGE.x} ${HINGE.y} Z`}
+                          fill="var(--accent)"
+                        />
+                      </g>
+                      <circle
+                        cx={HINGE.x}
+                        cy={HINGE.y}
+                        r="4"
+                        fill="var(--bg)"
+                        stroke="var(--compass-ink)"
+                        strokeWidth="2"
+                      />
+                    </g>
                   </g>
 
                   {/* The point being drawn. */}
-                  <g ref={flareRef} transform={`translate(${HINGE.x} ${HINGE.y})`}>
-                    <circle r="42" fill="url(#flare)" />
-                    <circle r="4" fill="var(--fg)" filter="url(#arc-glow)" />
+                  <g
+                    ref={flareRef}
+                    transform={`translate(${HINGE.x} ${HINGE.y})`}
+                  >
+                    <circle
+                      r="17"
+                      fill="none"
+                      stroke="var(--compass-ink)"
+                      strokeWidth="1"
+                    />
+                    <path
+                      d="M 0 -24 L 6 -5 L 0 0 L -6 -5 Z"
+                      fill="url(#compass-brass)"
+                    />
+                    <path
+                      d="M -24 0 H -9 M 9 0 H 24 M 0 9 V 24"
+                      stroke="var(--compass-ink)"
+                      strokeWidth="1"
+                    />
+                    <circle r="3" fill="var(--accent)" />
                   </g>
                 </svg>
 
@@ -291,8 +477,15 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
                       >
                         <span className="arc-mark-logo relative block">
                           <span className="arc-pulse" aria-hidden="true" />
-                          <span className="arc-pulse arc-pulse-late" aria-hidden="true" />
-                          <BrandMark brand={stop.brand} label={stop.org} size={44} />
+                          <span
+                            className="arc-pulse arc-pulse-late"
+                            aria-hidden="true"
+                          />
+                          <BrandMark
+                            brand={stop.brand}
+                            label={stop.org}
+                            size={44}
+                          />
                         </span>
                         <span className="arc-mark-year font-display text-lg font-bold sm:text-xl">
                           {stop.year}
@@ -311,7 +504,10 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
                       <span
                         className="rounded-full px-2.5 py-0.5 text-[0.68rem] font-semibold uppercase tracking-[0.12em]"
                         style={{
-                          background: active.track === "education" ? "var(--h3)" : "var(--h1)",
+                          background:
+                            active.track === "education"
+                              ? "var(--h3)"
+                              : "var(--h1)",
                           color: "var(--bg)",
                         }}
                       >
@@ -331,11 +527,15 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
                       {active.summary}
                     </p>
                     {active.note ? (
-                      <p className="mt-2 text-xs italic text-[var(--fg-subtle)]">{active.note}</p>
+                      <p className="mt-2 text-xs italic text-[var(--fg-subtle)]">
+                        {active.note}
+                      </p>
                     ) : null}
                   </div>
                 ) : (
-                  <p className="text-sm text-[var(--fg-subtle)]">Scroll to walk the years.</p>
+                  <p className="text-sm text-[var(--fg-subtle)]">
+                    Scroll to walk the years.
+                  </p>
                 )}
               </div>
             </div>
@@ -346,7 +546,8 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
       <ol className="sr-only">
         {stops.map((stop) => (
           <li key={`sr-${stop.year}-${stop.title}`}>
-            {stop.year} — {stop.title}, {stop.org}. {stop.period}. {stop.summary}
+            {stop.year} — {stop.title}, {stop.org}. {stop.period}.{" "}
+            {stop.summary}
           </li>
         ))}
       </ol>

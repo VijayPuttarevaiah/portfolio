@@ -1,7 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { educationJourney, professionalJourney, type JourneyStop } from "@/content/resume";
+import {
+  educationJourney,
+  professionalJourney,
+  type JourneyStop,
+} from "@/content/resume";
 import JourneyArc from "./JourneyArc";
 import BrandMark from "./BrandMark";
 import Reveal from "./Reveal";
@@ -43,7 +47,16 @@ function Track({
                 <span className="absolute -left-10 top-0 z-10">
                   {isNext ? (
                     <span className="tl-next-mark" aria-hidden="true">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <svg
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
                         <path d="M12 5v14M5 12h14" />
                       </svg>
                     </span>
@@ -72,7 +85,9 @@ function Track({
                     >
                       {stop.marker}
                     </span>
-                    {isNow ? <span className="tl-live" aria-hidden="true" /> : null}
+                    {isNow ? (
+                      <span className="tl-live" aria-hidden="true" />
+                    ) : null}
                   </div>
 
                   <h4 className="display mt-2 text-2xl leading-tight text-[var(--fg)] sm:text-3xl">
@@ -143,8 +158,8 @@ export default function Journey() {
       <Section
         id="journey"
         eyebrow="01 — The arc"
-        title="Software engineer, five years in"
-        intro="Three of those years writing Java and Spring Boot services in production — healthcare claims at Wipro, retail order and logistics systems at Acuver. Now a computer science master's at Dalhousie."
+        title="Five years. A path of my own."
+        intro="Three and a half years writing Java and Spring Boot services in production — healthcare claims at Wipro, retail order and logistics systems at Acuver. Now a computer science master's at Dalhousie."
         tinted
       >
         <div className="grid gap-16 lg:grid-cols-2 lg:gap-12">
@@ -157,18 +172,21 @@ export default function Journey() {
   }
 
   return (
-    <section id="journey" className="relative bg-[var(--bg-elevated)] py-16 sm:py-20">
+    <section
+      id="journey"
+      className="relative bg-[var(--bg-elevated)] py-16 sm:py-20"
+    >
       <div className="mx-auto w-full max-w-6xl px-6 sm:px-8">
         <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-[var(--fg-subtle)]">
           01 — The arc
         </p>
         <h2 className="display mt-3 text-3xl leading-tight text-[var(--fg)] sm:text-4xl">
-          Software engineer, five years in
+          Five years. A path of my own.
         </h2>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--fg-muted)]">
-          Three of those years writing Java and Spring Boot services in production —
-          healthcare claims at Wipro, retail order and logistics systems at Acuver. Now a
-          computer science master&apos;s at Dalhousie.
+          Three and a half years writing Java and Spring Boot services in
+          production — healthcare claims at Wipro, retail order and logistics
+          systems at Acuver. Now a computer science master&apos;s at Dalhousie.
         </p>
       </div>
 

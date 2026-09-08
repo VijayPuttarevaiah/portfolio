@@ -6,11 +6,11 @@ import Experience from "@/components/Experience";
 import Gallery from "@/components/Gallery";
 import Expertise from "@/components/Expertise";
 import Hero from "@/components/Hero";
-import EngineeringUniverse from "@/components/EngineeringUniverse";
+import CinematicEngine from "@/components/cinema/CinematicEngine";
 import Journey from "@/components/Journey";
 import Marquee from "@/components/Marquee";
 import Nav from "@/components/Nav";
-import Projects from "@/components/Projects";
+import HorizontalWork from "@/components/cinema/HorizontalWork";
 import Recommendations from "@/components/Recommendations";
 import { person } from "@/content/resume";
 
@@ -19,15 +19,15 @@ export default function Home() {
 
   return (
     <>
+      <CinematicEngine />
       <Nav />
       <main id="main">
         <Hero />
         <Marquee text="Backend · Cloud · Platform" />
-        <EngineeringUniverse />
         <Journey />
         <About />
         <Experience />
-        <Projects />
+        <HorizontalWork />
         <Gallery />
         <Recommendations />
         <Expertise />
@@ -35,10 +35,10 @@ export default function Home() {
         <Certifications />
         <Contact />
       </main>
-      <footer className="border-t border-[var(--border)]">
+      <footer className="film-credits border-t border-[var(--border)]">
         <div className="mx-auto flex w-full max-w-5xl flex-col gap-3 px-6 py-10 text-sm text-[var(--fg-subtle)] sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <p>
-            © {year} {person.name}
+            © {year} {person.name} · Designed to keep running.
           </p>
           <div className="flex gap-6">
             <a
