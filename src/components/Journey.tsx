@@ -1,4 +1,8 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { educationJourney, professionalJourney, type JourneyStop } from "@/content/resume";
+import JourneyArc from "./JourneyArc";
 import BrandMark from "./BrandMark";
 import Reveal from "./Reveal";
 import Section from "./Section";
@@ -98,36 +102,79 @@ function Track({
   );
 }
 
+/** True once we know the visitor asked for less motion. */
+function useReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReduced(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+  return reduced;
+}
+
+function Availability() {
+  return (
+    <div className="mx-auto w-full max-w-6xl px-6 sm:px-8">
+      <div className="mt-14 border-t border-[var(--border)] pt-8 text-center">
+        <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-[var(--fg-subtle)]">
+          Available from January 2027
+        </p>
+        <p className="mx-auto mt-3 max-w-xl text-base leading-relaxed text-[var(--fg-muted)]">
+          Open to a Winter 2027 co-op on either a 4 month or an 8 month term.
+        </p>
+      </div>
+    </div>
+  );
+}
+
 /**
- * Two separate arcs, side by side on desktop.
- *
- * Education and work are deliberately not merged: the five-year gap between
- * the degrees is the shape of the story, and interleaving them buries it.
+ * The arc is scroll-scrubbed: a sweep runs the years from 2015 to 2027 and
+ * lights each one as it passes. Anyone who asked for reduced motion gets the
+ * two static tracks instead — education and work are kept apart there because
+ * the five-year gap between the degrees is the shape of the story.
  */
 export default function Journey() {
+  const reduced = useReducedMotion();
+
+  if (reduced) {
+    return (
+      <Section
+        id="journey"
+        eyebrow="01 — The arc"
+        title="Two tracks, one direction"
+        intro="An electrical engineering degree, five years in industry, then back for a computer science master's. The education and the work run on separate clocks."
+        tinted
+      >
+        <div className="grid gap-16 lg:grid-cols-2 lg:gap-12">
+          <Track stops={educationJourney} label="Education" hue="--h3" />
+          <Track stops={professionalJourney} label="Professional" hue="--h1" />
+        </div>
+        <Availability />
+      </Section>
+    );
+  }
+
   return (
-    <Section
-      id="journey"
-      eyebrow="01 — The arc"
-      title="Two tracks, one direction"
-      intro="An electrical engineering degree, five years in industry, then back for a computer science master's. The education and the work run on separate clocks."
-      tinted
-    >
-      <div className="grid gap-16 lg:grid-cols-2 lg:gap-12">
-        <Track stops={educationJourney} label="Education" hue="--h3" />
-        <Track stops={professionalJourney} label="Professional" hue="--h1" />
+    <section id="journey" className="relative bg-[var(--bg-elevated)] py-16 sm:py-20">
+      <div className="mx-auto w-full max-w-6xl px-6 sm:px-8">
+        <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-[var(--fg-subtle)]">
+          01 — The arc
+        </p>
+        <h2 className="display mt-3 text-3xl leading-tight text-[var(--fg)] sm:text-4xl">
+          Two tracks, one direction
+        </h2>
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--fg-muted)]">
+          An electrical engineering degree, five years in industry, then back for a
+          computer science master&apos;s. The education and the work run on separate
+          clocks.
+        </p>
       </div>
 
-      <Reveal delay={140}>
-        <div className="mt-14 border-t border-[var(--border)] pt-8 text-center">
-          <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-[var(--fg-subtle)]">
-            Available from January 2027
-          </p>
-          <p className="mx-auto mt-3 max-w-xl text-base leading-relaxed text-[var(--fg-muted)]">
-            Open to a Winter 2027 co-op on either a 4 month or an 8 month term.
-          </p>
-        </div>
-      </Reveal>
-    </Section>
+      <JourneyArc reduced={false} />
+      <Availability />
+    </section>
   );
 }

@@ -696,3 +696,37 @@ body {
   }
   .deck-btn { transition: none; }
 }
+
+/* --- Journey arc -------------------------------------------------------- */
+/* The sweep flips data-lit on each node; everything visual is CSS from there,
+   so the scroll loop never has to re-render React to light a year. */
+.arc-node {
+  opacity: 0.3;
+  transition: opacity 0.5s ease;
+}
+.arc-node[data-lit="true"] {
+  opacity: 1;
+}
+.arc-node circle {
+  fill: var(--border-strong);
+  transition: fill 0.5s ease;
+}
+.arc-node[data-lit="true"] circle {
+  fill: var(--node-hue);
+  filter: url(#arc-glow);
+}
+.arc-node text {
+  fill: var(--fg-subtle);
+  transition: fill 0.5s ease;
+}
+.arc-node[data-lit="true"] text {
+  fill: var(--fg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arc-node,
+  .arc-node circle,
+  .arc-node text {
+    transition: none;
+  }
+}
