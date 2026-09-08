@@ -9,7 +9,7 @@ import CinematicEngine from "@/components/cinema/CinematicEngine";
 import Journey from "@/components/Journey";
 import Marquee from "@/components/Marquee";
 import Nav from "@/components/Nav";
-import HorizontalWork from "@/components/cinema/HorizontalWork";
+import WorkRing from "@/components/cinema/WorkRing";
 import Recommendations from "@/components/Recommendations";
 import { person } from "@/content/resume";
 
@@ -26,7 +26,7 @@ export default function Home() {
         <Journey />
         <About />
         <Experience />
-        <HorizontalWork />
+        <WorkRing />
         <Recommendations />
         <Expertise />
         <Education />
