@@ -108,8 +108,12 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
       stopT.forEach((t, i) => {
         if (progress >= t - 0.02) idx = i;
       });
+      // Three states, not two: the stop being reached takes the stage, the ones
+      // already walked settle back, the ones ahead wait desaturated.
       markRefs.current.forEach((mark, i) => {
-        if (mark) mark.dataset.lit = progress >= stopT[i] - 0.02 ? "true" : "false";
+        if (!mark) return;
+        const reached = progress >= stopT[i] - 0.02;
+        mark.dataset.state = !reached ? "ahead" : i === idx ? "active" : "past";
       });
       if (idx !== lastIndex) {
         lastIndex = idx;
@@ -276,16 +280,18 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
                         markRefs.current[i] = el;
                       }}
                       className="arc-mark absolute -translate-x-1/2 -translate-y-1/2"
-                      data-lit={reduced ? "true" : "false"}
+                      data-state={reduced ? "past" : "ahead"}
                       style={{
                         left: `${(pt.x / VIEW.w) * 100}%`,
                         top: `${(pt.y / VIEW.h) * 100}%`,
                       }}
                     >
                       <div
-                        className={`flex flex-col items-center gap-1.5 ${above ? "flex-col-reverse" : ""}`}
+                        className={`arc-mark-stack flex flex-col items-center ${above ? "flex-col-reverse" : ""}`}
                       >
-                        <span className="arc-mark-logo">
+                        <span className="arc-mark-logo relative block">
+                          <span className="arc-pulse" aria-hidden="true" />
+                          <span className="arc-pulse arc-pulse-late" aria-hidden="true" />
                           <BrandMark brand={stop.brand} label={stop.org} size={44} />
                         </span>
                         <span className="arc-mark-year font-display text-lg font-bold sm:text-xl">
