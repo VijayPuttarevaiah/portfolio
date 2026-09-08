@@ -1,8 +1,8 @@
-import Image from "next/image";
 import { person, stats } from "@/content/resume";
 import CountUp from "./CountUp";
 import Reveal from "./Reveal";
 import CinemaMotion from "./CinemaMotion";
+import EngineeringBackdrop from "./cinema/EngineeringBackdrop";
 import TitleSequence from "./cinema/TitleSequence";
 
 export default function Hero() {
@@ -10,6 +10,7 @@ export default function Hero() {
     <>
       <section id="top" className="cinema-hero" aria-labelledby="hero-title">
         <CinemaMotion />
+        <EngineeringBackdrop />
         <div className="cinema-grid" aria-hidden="true" />
         <div className="cinema-kicker">
           <span className="tl-live" /> {person.availability}
@@ -21,18 +22,6 @@ export default function Hero() {
             BACKEND / CLOUD / PLATFORM
           </div>
           <TitleSequence />
-          <div className="cinema-portrait">
-            <Image
-              src="/photos/vijay-cinematic-closeup.webp"
-              alt="Vijay Puttarevaiah wearing black sunglasses"
-              fill
-              sizes="(max-width: 640px) 180px, 260px"
-              preload
-              fetchPriority="high"
-              className="cinema-photo"
-            />
-          </div>
-          <div className="cinema-orbit" aria-hidden="true" />
           <p className="cinema-role">
             {person.headline}
             <span>Built to keep running.</span>

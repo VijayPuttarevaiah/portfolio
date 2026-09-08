@@ -1,556 +1,303 @@
 "use client";
-
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  educationJourney,
-  professionalJourney,
-  type JourneyStop,
-} from "@/content/resume";
+import { educationJourney, professionalJourney } from "@/content/resume";
 import BrandMark from "./BrandMark";
-
-export type ArcStop = JourneyStop & { track: "education" | "professional" };
-
-/** The arc the years sit on — upper-left down to lower-right, the way time reads. */
-const PATH_D = "M 55 105 C 290 205 430 335 660 350 C 800 359 905 322 965 258";
-
-/** Where the compass is hinged. Both legs swing from here. */
-const HINGE = { x: 726, y: 26 };
-
-/** The resting leg: fixed angle and length, the one that does not draw. */
-const REST_LEG = { angle: 62, length: 210 };
-
-const VIEW = { w: 1020, h: 430 };
-const LEAD_IN = 0.08;
-const SPAN = 0.84;
-/** The sweep finishes before the runway ends so the last stop holds on screen. */
-const SWEEP_END = 0.82;
-
-const clamp = (n: number, lo: number, hi: number) =>
-  Math.min(hi, Math.max(lo, n));
-const rad = (deg: number) => (deg * Math.PI) / 180;
-
+const W = 1200,
+  H = 610;
+const pivot = { x: 880, y: 35 };
+const curve = "M 105 140 Q 520 360 1090 290";
+const point = (t: number) => ({
+  x: (1 - t) ** 2 * 105 + 2 * (1 - t) * t * 520 + t * t * 1090,
+  y: (1 - t) ** 2 * 140 + 2 * (1 - t) * t * 360 + t * t * 290,
+});
 export default function JourneyArc({ reduced }: { reduced: boolean }) {
-  const stops = useMemo(() => {
-    const all: ArcStop[] = [
-      ...educationJourney.map((s) => ({ ...s, track: "education" as const })),
-      ...professionalJourney.map((s) => ({
-        ...s,
-        track: "professional" as const,
-      })),
-    ];
-    return all.sort((a, b) => Number(a.year) - Number(b.year));
-  }, []);
-
-  const runwayRef = useRef<HTMLDivElement>(null);
-  const pathRef = useRef<SVGPathElement>(null);
-  const litRef = useRef<SVGPathElement>(null);
-  const drawLegRef = useRef<SVGLineElement>(null);
-  const sweepRef = useRef<SVGCircleElement>(null);
-  const compassRef = useRef<SVGGElement>(null);
-  const flareRef = useRef<SVGGElement>(null);
-  const needleRef = useRef<SVGGElement>(null);
-  const markRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  const [points, setPoints] = useState<{ x: number; y: number }[]>([]);
-  const [activeIndex, setActiveIndex] = useState(
-    reduced ? stops.length - 1 : -1,
-  );
-
-  const stopT = useMemo(
+  const stops = useMemo(
     () =>
-      stops.map(
-        (_, i) =>
-          LEAD_IN + (stops.length === 1 ? 0 : i / (stops.length - 1)) * SPAN,
+      [...educationJourney, ...professionalJourney].sort(
+        (a, b) => Number(a.year) - Number(b.year),
       ),
+    [],
+  );
+  const times = useMemo(
+    () => stops.map((_, i) => 0.04 + (i * 0.92) / (stops.length - 1)),
     [stops],
   );
-
-  useEffect(() => {
-    const path = pathRef.current;
-    if (!path) return;
-    const len = path.getTotalLength();
-    setPoints(
-      stopT.map((t) => {
-        const p = path.getPointAtLength(t * len);
-        return { x: p.x, y: p.y };
-      }),
-    );
-  }, [stopT]);
-
-  /**
-   * Scroll drives the compass. The drawing leg, the sweep circle, the trail and
-   * the flare are written straight to the DOM — re-rendering this SVG sixty
-   * times a second is what makes a section like this stutter on a phone. React
-   * only hears about it when the active stop changes.
-   */
+  const runway = useRef<HTMLDivElement>(null),
+    stage = useRef<HTMLDivElement>(null);
+  const trail = useRef<SVGPathElement>(null),
+    arm = useRef<SVGLineElement>(null),
+    rest = useRef<SVGLineElement>(null),
+    nib = useRef<SVGGElement>(null),
+    progressLine = useRef<HTMLElement>(null);
+  const [active, setActive] = useState(0);
   useEffect(() => {
     if (reduced) return;
-    const path = pathRef.current;
-    if (!path) return;
-    const total = path.getTotalLength();
-    let frame = 0;
-    let lastIndex = -1;
-
+    const pathLength = trail.current?.getTotalLength() || 1;
+    let frame = 0,
+      last = -1;
     const paint = () => {
       frame = 0;
-      const el = runwayRef.current;
+      const el = runway.current;
       if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const travel = rect.height - window.innerHeight;
-      const raw = travel <= 0 ? 1 : -rect.top / travel;
-      const progress = clamp(raw / SWEEP_END, 0, 1);
-
-      const pt = path.getPointAtLength(progress * total);
-
-      if (litRef.current)
-        litRef.current.style.strokeDashoffset = String(1 - progress);
-
-      if (drawLegRef.current) {
-        drawLegRef.current.setAttribute("x2", String(pt.x));
-        drawLegRef.current.setAttribute("y2", String(pt.y));
-      }
-      if (sweepRef.current) {
-        const r = Math.hypot(pt.x - HINGE.x, pt.y - HINGE.y);
-        sweepRef.current.setAttribute("r", String(r));
-      }
-      if (compassRef.current) {
-        compassRef.current.style.opacity = "1";
-      }
-      if (needleRef.current) {
-        const angle =
-          (Math.atan2(pt.y - HINGE.y, pt.x - HINGE.x) * 180) / Math.PI + 90;
-        needleRef.current.setAttribute(
-          "transform",
-          `rotate(${angle} ${HINGE.x} ${HINGE.y})`,
-        );
-      }
-      if (flareRef.current) {
-        flareRef.current.setAttribute(
-          "transform",
-          `translate(${pt.x} ${pt.y})`,
-        );
-      }
-
-      let idx = -1;
-      stopT.forEach((t, i) => {
-        if (progress >= t - 0.02) idx = i;
-      });
-      // Three states, not two: the stop being reached takes the stage, the ones
-      // already walked settle back, the ones ahead wait desaturated.
-      markRefs.current.forEach((mark, i) => {
-        if (!mark) return;
-        const reached = progress >= stopT[i] - 0.02;
-        mark.dataset.state = !reached ? "ahead" : i === idx ? "active" : "past";
-      });
-      if (idx !== lastIndex) {
-        lastIndex = idx;
-        setActiveIndex(idx);
-      }
-    };
-
-    const onScroll = () => {
-      if (frame) return;
-      frame = window.requestAnimationFrame(paint);
-    };
-    paint();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => {
-      if (frame) window.cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, [reduced, stopT]);
-
-  const active = activeIndex >= 0 ? stops[activeIndex] : null;
-  const restEnd = {
-    x: HINGE.x + Math.cos(rad(REST_LEG.angle)) * REST_LEG.length,
-    y: HINGE.y + Math.sin(rad(REST_LEG.angle)) * REST_LEG.length,
-  };
-
-  return (
-    <div
-      ref={runwayRef}
-      className={
-        reduced ? "journey-instrument" : "journey-instrument h-[340vh]"
-      }
-    >
-      <div
-        className={
-          reduced
-            ? ""
-            : "sticky top-0 flex h-screen flex-col justify-center overflow-hidden pt-16"
+      const t = Math.max(
+        0,
+        Math.min(
+          1,
+          -el.getBoundingClientRect().top /
+            (Math.max(1, el.offsetHeight - window.innerHeight) * 0.88),
+        ),
+      );
+      const p = point(t),
+        r = point(Math.max(0.02, t - 0.24));
+      // Arc-length fraction keeps the glowing trail attached to the compass tip.
+      if (trail.current) {
+        let length = 0,
+          previous = point(0);
+        for (let j = 1; j <= 40; j++) {
+          const next = point((t * j) / 40);
+          length += Math.hypot(next.x - previous.x, next.y - previous.y);
+          previous = next;
         }
-      >
-        <div className="mx-auto w-full max-w-6xl px-6 sm:px-8">
-          <div className="grid gap-8 lg:grid-cols-[12rem_1fr] lg:gap-10">
-            <p className="font-display text-[0.7rem] font-bold uppercase leading-[2] tracking-[0.4em] text-[var(--fg-subtle)] lg:pt-8">
-              A journey
-              <br />
-              through
-              <br />
-              time
-            </p>
-
-            <div>
-              <div
-                className="relative w-full"
-                style={{ aspectRatio: `${VIEW.w} / ${VIEW.h}` }}
-              >
-                <svg
-                  style={{ overflow: "visible" }}
-                  viewBox={`0 0 ${VIEW.w} ${VIEW.h}`}
-                  className="absolute inset-0 h-full w-full"
-                  role="img"
-                  aria-label="Vintage compass tracing education and work from 2015 to 2027"
+        trail.current.style.strokeDashoffset = String(
+          1 - length / pathLength,
+        );
+      }
+      arm.current?.setAttribute("x2", String(p.x));
+      arm.current?.setAttribute("y2", String(p.y));
+      rest.current?.setAttribute("x2", String(r.x));
+      rest.current?.setAttribute("y2", String(r.y));
+      nib.current?.setAttribute("transform", `translate(${p.x} ${p.y})`);
+      let index = 0;
+      times.forEach((time, i) => {
+        if (t >= time - 0.035) index = i;
+      });
+      stage.current?.style.setProperty(
+        "--camera",
+        String(index / (stops.length - 1)),
+      );
+      progressLine.current?.style.setProperty("transform", `scaleX(${t})`);
+      if (index !== last) {
+        last = index;
+        setActive(index);
+      }
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(paint);
+    };
+    schedule();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+    };
+  }, [reduced, stops.length, times]);
+  const select = (index: number) => {
+    const el = runway.current;
+    if (el)
+      window.scrollTo({
+        top:
+          window.scrollY +
+          el.getBoundingClientRect().top +
+          times[index] *
+            Math.max(1, el.offsetHeight - window.innerHeight) *
+            0.88,
+        behavior: reduced ? "instant" : "smooth",
+      });
+  };
+  return (
+    <div ref={runway} className="drafting-runway">
+      <div className="drafting-sticky">
+        <div className="drafting-heading">
+          <p>
+            A JOURNEY
+            <br />
+            THROUGH TIME
+          </p>
+          <span>
+            {stops[0].year} — {stops[stops.length - 1].year}
+            <br />
+            EDUCATION / EXPERIENCE
+          </span>
+        </div>
+        <div className="drafting-viewport">
+          <div ref={stage} className="drafting-stage">
+            <svg
+              viewBox={`0 0 ${W} ${H}`}
+              className="drafting-svg"
+              aria-hidden="true"
+            >
+              <defs>
+                <linearGradient id="draft-metal">
+                  <stop stopColor="#7a603b" />
+                  <stop offset=".42" stopColor="#f4e3bc" />
+                  <stop offset=".65" stopColor="#b89a62" />
+                  <stop offset="1" stopColor="#6f552e" />
+                </linearGradient>
+                <linearGradient id="draft-gold">
+                  <stop stopColor="#c59a46" />
+                  <stop offset="1" stopColor="#ffdf8d" />
+                </linearGradient>
+                <radialGradient id="draft-flare">
+                  <stop stopColor="#fff5cd" />
+                  <stop offset=".18" stopColor="#ffc553" stopOpacity=".7" />
+                  <stop offset="1" stopColor="#ff7e18" stopOpacity="0" />
+                </radialGradient>
+                <filter id="draft-glow">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+              </defs>
+              <g opacity=".3" fill="none" stroke="var(--compass-ink)">
+                <circle cx={pivot.x} cy={pivot.y} r="320" />
+                <circle cx={pivot.x} cy={pivot.y} r="331" strokeWidth=".6" />
+                {Array.from({ length: 90 }, (_, i) => (
+                  <line
+                    key={i}
+                    x1={pivot.x}
+                    y1={pivot.y + 320}
+                    x2={pivot.x}
+                    y2={pivot.y + (i % 5 === 0 ? 309 : 315)}
+                    transform={`rotate(${i * 4} ${pivot.x} ${pivot.y})`}
+                    strokeWidth={i % 5 === 0 ? 1 : 0.5}
+                  />
+                ))}
+              </g>
+              <path d={curve} stroke="#9c7a39" fill="none" opacity=".6" />
+              {Array.from({ length: 111 }, (_, i) => {
+                const p = point(i / 110);
+                return (
+                  <line
+                    key={i}
+                    x1={p.x}
+                    y1={p.y + 4}
+                    x2={p.x - 2}
+                    y2={p.y + (i % 5 === 0 ? 16 : 10)}
+                    stroke="#af8b49"
+                    strokeWidth={i % 5 === 0 ? 1.4 : 0.7}
+                    opacity=".65"
+                  />
+                );
+              })}
+              <path
+                ref={trail}
+                d={curve}
+                stroke="url(#draft-gold)"
+                strokeWidth="3"
+                fill="none"
+                pathLength={1}
+                strokeDasharray="1 1"
+                strokeDashoffset={1}
+                filter="url(#draft-glow)"
+              />
+              <g strokeLinecap="round">
+                <line
+                  ref={rest}
+                  x1={pivot.x}
+                  y1={pivot.y}
+                  x2="105"
+                  y2="140"
+                  stroke="url(#draft-metal)"
+                  strokeWidth="3"
+                  opacity=".55"
+                />
+                <line
+                  ref={arm}
+                  x1={pivot.x}
+                  y1={pivot.y}
+                  x2="105"
+                  y2="140"
+                  stroke="url(#draft-metal)"
+                  strokeWidth="4"
+                />
+                <circle
+                  cx={pivot.x}
+                  cy={pivot.y}
+                  r="15"
+                  fill="url(#draft-flare)"
+                />
+                <circle cx={pivot.x} cy={pivot.y} r="5" fill="#fff3cb" />
+                <path
+                  d={`M ${pivot.x} ${pivot.y - 9} V ${pivot.y - 26}`}
+                  stroke="url(#draft-metal)"
+                  strokeWidth="7"
+                />
+              </g>
+              <g ref={nib} transform="translate(105 140)">
+                <circle r="28" fill="url(#draft-flare)" />
+                <path d="M -3 -16 L 3 -16 L 0 0 Z" fill="#fff0c1" />
+                <circle r="3" fill="#fff4cf" filter="url(#draft-glow)" />
+              </g>
+            </svg>
+            {stops.map((stop, i) => {
+              const p = point(times[i]);
+              return (
+                <button
+                  key={`${stop.year}-${stop.org}`}
+                  type="button"
+                  className="drafting-card"
+                  data-state={
+                    i === active ? "active" : i < active ? "past" : "ahead"
+                  }
+                  style={{
+                    left: `${(p.x / W) * 100}%`,
+                    top: `${(p.y / H) * 100}%`,
+                  }}
+                  aria-label={`${stop.year}: ${stop.org}`}
+                  aria-current={i === active ? "step" : undefined}
+                  onClick={() => select(i)}
                 >
-                  <defs>
-                    <linearGradient id="compass-brass">
-                      <stop stopColor="#8c7050" />
-                      <stop offset="45%" stopColor="#e7d5b0" />
-                      <stop offset="65%" stopColor="#a48a60" />
-                      <stop offset="100%" stopColor="#ded0b6" />
-                    </linearGradient>
-                    <linearGradient id="arc-lit" x1="0" y1="0" x2="1" y2="0">
-                      <stop
-                        offset="0%"
-                        stopColor="var(--h4)"
-                        stopOpacity="0.3"
+                  <span className="drafting-year">{stop.year}</span>
+                  <span className="drafting-dot" />
+                  <span className="drafting-card-body">
+                    <span className="drafting-brand">
+                      <BrandMark
+                        brand={stop.brand}
+                        label={stop.org}
+                        size={44}
                       />
-                      <stop
-                        offset="55%"
-                        stopColor="var(--h4)"
-                        stopOpacity="0.9"
-                      />
-                      <stop
-                        offset="100%"
-                        stopColor="var(--fg)"
-                        stopOpacity="0.95"
-                      />
-                    </linearGradient>
-                    <filter
-                      id="arc-glow"
-                      x="-70%"
-                      y="-70%"
-                      width="240%"
-                      height="240%"
-                    >
-                      <feGaussianBlur stdDeviation="6" result="b" />
-                      <feMerge>
-                        <feMergeNode in="b" />
-                        <feMergeNode in="SourceGraphic" />
-                      </feMerge>
-                    </filter>
-                    <filter
-                      id="beam-glow"
-                      x="-70%"
-                      y="-70%"
-                      width="240%"
-                      height="240%"
-                    >
-                      <feGaussianBlur stdDeviation="3.5" result="b" />
-                      <feMerge>
-                        <feMergeNode in="b" />
-                        <feMergeNode in="SourceGraphic" />
-                      </feMerge>
-                    </filter>
-                    <radialGradient id="flare">
-                      <stop
-                        offset="0%"
-                        stopColor="var(--fg)"
-                        stopOpacity="0.95"
-                      />
-                      <stop
-                        offset="35%"
-                        stopColor="var(--h4)"
-                        stopOpacity="0.6"
-                      />
-                      <stop
-                        offset="100%"
-                        stopColor="var(--h4)"
-                        stopOpacity="0"
-                      />
-                    </radialGradient>
-                  </defs>
-
-                  {/* Unwalked years: a dotted gold line waiting to be drawn. */}
-                  <path
-                    d={PATH_D}
-                    fill="none"
-                    stroke="var(--compass-ink)"
-                    strokeOpacity="0.34"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeDasharray="1 9"
-                  />
-
-                  {/* The drawn trail. pathLength=1 keeps the reveal maths in 0..1. */}
-                  <path
-                    ref={(el) => {
-                      pathRef.current = el;
-                      litRef.current = el;
-                    }}
-                    d={PATH_D}
-                    fill="none"
-                    stroke="url(#arc-lit)"
-                    strokeWidth="3.5"
-                    strokeLinecap="round"
-                    pathLength={1}
-                    strokeDasharray="1 1"
-                    strokeDashoffset={reduced ? 0 : 1}
-                    filter="url(#arc-glow)"
-                  />
-
-                  {/* The compass: a resting leg, a drawing leg, and the circle it sweeps. */}
-                  <g
-                    ref={compassRef}
-                    style={{
-                      opacity: reduced ? 0 : 0,
-                      transition: "opacity .5s ease",
-                    }}
-                  >
-                    <circle
-                      ref={sweepRef}
-                      cx={HINGE.x}
-                      cy={HINGE.y}
-                      r="0"
-                      fill="none"
-                      stroke="var(--compass-ink)"
-                      strokeOpacity="0.28"
-                      strokeWidth="1"
-                      strokeDasharray="3 10"
-                    />
-                    <line
-                      x1={HINGE.x}
-                      y1={HINGE.y}
-                      x2={restEnd.x}
-                      y2={restEnd.y}
-                      stroke="url(#compass-brass)"
-                      strokeOpacity="0.85"
-                      strokeWidth="4"
-                      strokeLinecap="round"
-                    />
-                    <line
-                      ref={drawLegRef}
-                      x1={HINGE.x}
-                      y1={HINGE.y}
-                      x2={HINGE.x}
-                      y2={HINGE.y}
-                      stroke="url(#compass-brass)"
-                      strokeOpacity="1"
-                      strokeWidth="4"
-                      strokeLinecap="round"
-                    />
-                    <g aria-hidden="true">
-                      <circle
-                        cx={HINGE.x}
-                        cy={HINGE.y}
-                        r="58"
-                        fill="var(--bg)"
-                        stroke="url(#compass-brass)"
-                        strokeWidth="3"
-                      />
-                      <circle
-                        cx={HINGE.x}
-                        cy={HINGE.y}
-                        r="51"
-                        fill="none"
-                        stroke="var(--compass-ink)"
-                        strokeWidth=".7"
-                      />
-                      {Array.from({ length: 48 }, (_, i) => (
-                        <line
-                          key={i}
-                          x1={HINGE.x}
-                          y1={HINGE.y - 49}
-                          x2={HINGE.x}
-                          y2={HINGE.y - (i % 4 === 0 ? 41 : 45)}
-                          stroke="var(--compass-ink)"
-                          strokeWidth={i % 4 === 0 ? 1.5 : 0.6}
-                          transform={`rotate(${i * 7.5} ${HINGE.x} ${HINGE.y})`}
-                        />
-                      ))}
-                      <text
-                        x={HINGE.x}
-                        y={HINGE.y - 29}
-                        textAnchor="middle"
-                        fill="var(--compass-ink)"
-                        fontSize="10"
-                        fontFamily="Georgia"
-                      >
-                        N
-                      </text>
-                      <text
-                        x={HINGE.x}
-                        y={HINGE.y + 37}
-                        textAnchor="middle"
-                        fill="var(--compass-ink)"
-                        fontSize="10"
-                        fontFamily="Georgia"
-                      >
-                        S
-                      </text>
-                      <text
-                        x={HINGE.x - 33}
-                        y={HINGE.y + 4}
-                        textAnchor="middle"
-                        fill="var(--compass-ink)"
-                        fontSize="10"
-                        fontFamily="Georgia"
-                      >
-                        W
-                      </text>
-                      <text
-                        x={HINGE.x + 33}
-                        y={HINGE.y + 4}
-                        textAnchor="middle"
-                        fill="var(--compass-ink)"
-                        fontSize="10"
-                        fontFamily="Georgia"
-                      >
-                        E
-                      </text>
-                      <g ref={needleRef}>
-                        <path
-                          d={`M ${HINGE.x} ${HINGE.y - 27} L ${HINGE.x + 6} ${HINGE.y} L ${HINGE.x} ${HINGE.y + 27} L ${HINGE.x - 6} ${HINGE.y} Z`}
-                          fill="url(#compass-brass)"
-                        />
-                        <path
-                          d={`M ${HINGE.x} ${HINGE.y - 27} L ${HINGE.x + 6} ${HINGE.y} L ${HINGE.x} ${HINGE.y} Z`}
-                          fill="var(--accent)"
-                        />
-                      </g>
-                      <circle
-                        cx={HINGE.x}
-                        cy={HINGE.y}
-                        r="4"
-                        fill="var(--bg)"
-                        stroke="var(--compass-ink)"
-                        strokeWidth="2"
-                      />
-                    </g>
-                  </g>
-
-                  {/* The point being drawn. */}
-                  <g
-                    ref={flareRef}
-                    transform={`translate(${HINGE.x} ${HINGE.y})`}
-                  >
-                    <circle
-                      r="17"
-                      fill="none"
-                      stroke="var(--compass-ink)"
-                      strokeWidth="1"
-                    />
-                    <path
-                      d="M 0 -24 L 6 -5 L 0 0 L -6 -5 Z"
-                      fill="url(#compass-brass)"
-                    />
-                    <path
-                      d="M -24 0 H -9 M 9 0 H 24 M 0 9 V 24"
-                      stroke="var(--compass-ink)"
-                      strokeWidth="1"
-                    />
-                    <circle r="3" fill="var(--accent)" />
-                  </g>
-                </svg>
-
-                {/* Logos and years ride on top, positioned off the measured path. */}
-                {points.map((pt, i) => {
-                  const stop = stops[i];
-                  const above = stop.track === "education";
-                  return (
-                    <div
-                      key={`${stop.year}-${stop.title}`}
-                      ref={(el) => {
-                        markRefs.current[i] = el;
-                      }}
-                      className="arc-mark absolute -translate-x-1/2 -translate-y-1/2"
-                      data-state={reduced ? "past" : "ahead"}
-                      style={{
-                        left: `${(pt.x / VIEW.w) * 100}%`,
-                        top: `${(pt.y / VIEW.h) * 100}%`,
-                      }}
-                    >
-                      <div
-                        className={`arc-mark-stack flex flex-col items-center ${above ? "flex-col-reverse" : ""}`}
-                      >
-                        <span className="arc-mark-logo relative block">
-                          <span className="arc-pulse" aria-hidden="true" />
-                          <span
-                            className="arc-pulse arc-pulse-late"
-                            aria-hidden="true"
-                          />
-                          <BrandMark
-                            brand={stop.brand}
-                            label={stop.org}
-                            size={44}
-                          />
-                        </span>
-                        <span className="arc-mark-year font-display text-lg font-bold sm:text-xl">
-                          {stop.year}
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* The stop the compass is currently on. */}
-              <div className="mt-4 min-h-[9.5rem] border-t border-[var(--border)] pt-5">
-                {active ? (
-                  <div key={active.title} className="arc-card">
-                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-                      <span
-                        className="rounded-full px-2.5 py-0.5 text-[0.68rem] font-semibold uppercase tracking-[0.12em]"
-                        style={{
-                          background:
-                            active.track === "education"
-                              ? "var(--h3)"
-                              : "var(--h1)",
-                          color: "var(--bg)",
-                        }}
-                      >
-                        {active.marker}
+                      <span>
+                        {String(i + 1).padStart(2, "0")} /{" "}
+                        {stop.kind === "education" || stop.kind === "now"
+                          ? "LEARN"
+                          : "BUILD"}
                       </span>
-                      <span className="font-mono text-[0.72rem] uppercase tracking-[0.1em] text-[var(--fg-subtle)]">
-                        {active.period}
-                      </span>
-                    </div>
-                    <h3 className="display mt-2.5 text-2xl leading-tight text-[var(--fg)] sm:text-3xl">
-                      {active.title}
-                    </h3>
-                    <p className="mt-1.5 text-[0.95rem] font-medium text-[var(--fg-muted)]">
-                      {active.org}
-                    </p>
-                    <p className="mt-2.5 max-w-2xl text-[0.95rem] leading-relaxed text-[var(--fg-muted)]">
-                      {active.summary}
-                    </p>
-                    {active.note ? (
-                      <p className="mt-2 text-xs italic text-[var(--fg-subtle)]">
-                        {active.note}
-                      </p>
-                    ) : null}
-                  </div>
-                ) : (
-                  <p className="text-sm text-[var(--fg-subtle)]">
-                    Scroll to walk the years.
-                  </p>
-                )}
-              </div>
+                    </span>
+                    <span className="drafting-org">
+                      {stop.org.split(" ·")[0].split(",")[0]}
+                    </span>
+                    <span className="drafting-title">{stop.title}</span>
+                    <span className="drafting-period">
+                      {stop.period.split(" ·")[0]}
+                    </span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+        <div className="drafting-detail">
+          <div>
+            <span className="cinema-label">{stops[active].marker}</span>
+            <h3>{stops[active].org}</h3>
+            <p>{stops[active].summary}</p>
+          </div>
+          <div className="drafting-index">
+            <span>
+              {String(active + 1).padStart(2, "0")} /{" "}
+              {String(stops.length).padStart(2, "0")}
+            </span>
+            <div>
+              <i ref={progressLine} />
             </div>
+            <small>SCROLL TO TRACE THE YEARS</small>
           </div>
         </div>
       </div>
-
-      <ol className="sr-only">
-        {stops.map((stop) => (
-          <li key={`sr-${stop.year}-${stop.title}`}>
-            {stop.year} — {stop.title}, {stop.org}. {stop.period}.{" "}
-            {stop.summary}
-          </li>
-        ))}
-      </ol>
     </div>
   );
 }

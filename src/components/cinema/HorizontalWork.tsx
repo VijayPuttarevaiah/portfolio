@@ -1,15 +1,8 @@
 "use client";
-import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { projects } from "@/content/resume";
-const covers = [
-  "/photos/wipro-campus.jpg",
-  "/photos/acuver-office.jpg",
-  "/photos/wipro-entrance.jpg",
-  "/photos/wipro-campus.jpg",
-];
 export default function HorizontalWork() {
   const runway = useRef<HTMLElement>(null),
     track = useRef<HTMLDivElement>(null);
@@ -38,25 +31,6 @@ export default function HorizontalWork() {
             invalidateOnRefresh: true,
           },
         });
-        gsap.utils
-          .toArray<HTMLElement>(".work-cover", rail)
-          .forEach((cover) => {
-            gsap.fromTo(
-              cover,
-              { xPercent: -5 },
-              {
-                xPercent: 5,
-                ease: "none",
-                scrollTrigger: {
-                  trigger: cover,
-                  containerAnimation: tween,
-                  start: "left right",
-                  end: "right left",
-                  scrub: true,
-                },
-              },
-            );
-          });
         const focused = (event: FocusEvent) => {
           const card = (event.target as HTMLElement).closest<HTMLElement>(
             ".work-shot",
@@ -94,24 +68,14 @@ export default function HorizontalWork() {
       <div className="work-track" ref={track}>
         {projects.map((project, i) => (
           <article className="work-shot" key={project.name}>
-            <div
-              className="work-visual"
-              style={{ "--cover": `url(${covers[i]})` } as React.CSSProperties}
-            >
-              <Image
-                src={covers[i]}
-                alt=""
-                fill
-                sizes="(min-width: 1000px) 75vw, 100vw"
-                className="work-cover"
-              />
-              <div className="work-rgb" aria-hidden="true" />
+            <div className="work-visual work-poster">
+              <div className="work-poster-grid" aria-hidden="true" />
               <span className="work-number" aria-hidden="true">
                 0{i + 1}
               </span>
               <h3 className="display">{project.name}</h3>
               <span className="work-image-caption">
-                ARCHITECTURAL STUDY / {String(i + 1).padStart(2, "0")}
+                ENGINEERING / {String(i + 1).padStart(2, "0")}
               </span>
             </div>
             <div className="work-summary">

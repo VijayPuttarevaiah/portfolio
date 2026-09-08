@@ -26,8 +26,6 @@ export default function CinematicEngine() {
     gsap.registerPlugin(ScrollTrigger);
     const media = gsap.matchMedia();
     let disposed = false;
-    const asset = new Image();
-    asset.src = "/photos/vijay-cinematic-closeup.webp";
     // Only critical hero assets block the title; timeout always releases the page.
     let releaseShader = () => {};
     const shaderReady = new Promise<void>((resolve) => {
@@ -50,11 +48,9 @@ export default function CinematicEngine() {
       }
     };
     const timeout = window.setTimeout(finish, 2000);
-    Promise.all([
-      asset.decode().catch(() => {}),
-      document.fonts.ready,
-      shaderReady,
-    ]).then(() => setTimeout(finish, 450));
+    Promise.all([document.fonts.ready, shaderReady]).then(() =>
+      setTimeout(finish, 450),
+    );
     const lost = () => setWebgl(false);
     window.addEventListener("cinema-webgl-lost", lost);
     media.add("(prefers-reduced-motion: no-preference)", () => {

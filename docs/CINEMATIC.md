@@ -1,6 +1,6 @@
 # Cinematic portfolio implementation
 
-The site keeps Next.js App Router, React, Tailwind CSS, the existing resume content, and the working contact API. Its visual system is charcoal, white and crimson, with muted brass reserved for the vintage compass instrument. Only the black-sunglasses portrait appears in the opening. The gallery contains the original workplace photographs.
+The site keeps Next.js App Router, React, Tailwind CSS, the existing resume content, and the working contact API. Its visual system is charcoal, white and crimson, with muted brass reserved for the vintage compass instrument. The opening has no personal portrait. An anonymous laptop silhouette forms a quiet animated background, with a pulsing screen glow and moving data packets. Wipro and Acuver photographs appear only in their corresponding Experience entries; the gallery section is removed. Projects use typography and abstract grids.
 
 ## Run it
 
@@ -20,12 +20,13 @@ Copy `.env.example` locally if configuring contact delivery. Supply your own Res
 src/app/page.tsx                     Section composition
 src/app/globals.css                  Tailwind import, theme and film styling
 src/content/resume.ts                Existing factual content and photo list
-src/components/Hero.tsx              Name-led opening and one portrait
+src/components/Hero.tsx              Name-led opening and animated engineering backdrop
 src/components/Journey.tsx           Journey heading and reduced-motion fallback
 src/components/JourneyArc.tsx        SVG compass, years, pointer, active milestone
 src/components/About.tsx             Monologue and background information
 src/components/Contact.tsx           Credits link and existing contact controls
 src/components/cinema/
+  EngineeringBackdrop.tsx           Laptop atmosphere, screen pulse and SVG data trails
   CinematicEngine.tsx                Lenis, loading gate, capability checks
   FilmScene.tsx                      Single React Three Fiber canvas and frame loop
   shaders.ts                        Complete GLSL vertex/fragment programs
@@ -79,7 +80,7 @@ const tween = gsap.to(rail, {
 });
 ```
 
-Background cover parallax is independently scrubbed from -5 to +5 percent using `containerAnimation: tween`. This uses [ScrollTrigger's container animation and pinning API](https://gsap.com/docs/v3/Plugins/ScrollTrigger/). Tab focus scrolls the owning project into view. Detailed project descriptions expand within a bounded native scrolling area in the pinned layout.
+The horizontal track uses [ScrollTrigger's pinning API](https://gsap.com/docs/v3/Plugins/ScrollTrigger/). Tab focus scrolls the owning project into view. Detailed project descriptions expand within a bounded native scrolling area in the pinned layout.
 
 The monologue targets `.monologue-word` and scrubs opacity from 0.18 to 1, with `stagger: 0.08`, from `top 85%` to `bottom 50%`. All words remain readable without JavaScript or under reduced motion.
 
@@ -95,33 +96,32 @@ The complete shaders are in `src/components/cinema/shaders.ts`, not pseudocode. 
 
 `useFrame` updates shader material refs directly. No per-frame React state updates are used. React Three Fiber owns the geometries/materials and disposes them on unmount.
 
-The particle field is a shader-driven swarm, not a computational fluid-dynamics simulation. Project hover uses a CSS RGB/glitch composite of the existing architectural photos; it does not create additional WebGL contexts or claim to be a liquid simulation. Images are labeled architectural studies, not screenshots of the backend projects.
+The particle field is a shader-driven swarm, not a computational fluid-dynamics simulation. Projects now use photograph-free typographic posters and a subtle grid. No employer photographs are used to illustrate unrelated projects.
 
 ## Kinetic title and loading
 
 Framer Motion treats VIJAY as five independent letter spans. Each animates its clipping rectangle, vertical offset, vertical stretch and blur over 1.1 seconds, staggered by 85 milliseconds. The surname uses a 1.2-second tracking and blur reveal. A static accessible full-name label remains on the heading.
 
-The black loading screen waits for the hero image decode, fonts, and the first WebGL frame where supported. A two-second deadline releases it even if an asset or GPU initialization fails. It does not prevent clicking or scrolling. A CSS deadline also releases the overlay without JavaScript. No audio autoplays; the opening uses a visual pulse.
+The black loading screen waits for the fonts and the first WebGL frame where supported. A two-second deadline releases it even if an asset or GPU initialization fails. It does not prevent clicking or scrolling. A CSS deadline also releases the overlay without JavaScript. No audio autoplays; the opening uses a visual pulse.
 
 ## Compass journey
 
-`JourneyArc.tsx` keeps the original chronological data and scroll runway. The drawing leg ends at `path.getPointAtLength(progress * totalLength)`. The engraved dial rotates its needle with:
+The supplied video was re-examined at 16–21 seconds. Its distinguishing structure is a drafting compass above a broad curved ruler, with milestone cards beneath the years. The previous navigation dial has been replaced.
 
-```ts
-const angle = Math.atan2(pt.y - HINGE.y, pt.x - HINGE.x) * 180 / Math.PI + 90;
-needleRef.current.setAttribute("transform", `rotate(${angle} ${HINGE.x} ${HINGE.y})`);
-```
+`JourneyArc.tsx` defines a quadratic path from (105, 140), through control point (520, 360), to (1090, 290). Two metal drawing arms hinge at (880, 35). The active arm follows the exact quadratic point for normalized scroll progress; the resting arm trails by 0.24 of that progress. A sampled arc-length fraction keeps the glowing trail attached to the drawing nib.
 
-The instrument includes 48 etched ticks, cardinal labels, a muted metal gradient, drafting legs, a crosshair nib, and an illuminated trail. As the pointer reaches each year, its milestone details and logo take focus. Reduced-motion visitors receive the existing static education/work tracks.
+The scene includes an oversized engraved construction circle, 111 ruler marks, a warm gold trail, and five milestone cards. Cards brighten and lift as the nib reaches their years. Mobile uses a wider scene and follows the active milestone with a horizontal camera movement. Reduced-motion visitors retain the static education and professional tracks.
+
+The background uses one optimized WebP asset and four SVG data routes. Their dash offsets animate from 100 to 0 over 7–10 seconds, while the image drifts slowly and the screen glow pulses. An IntersectionObserver pauses those animations when the hero leaves view; hidden tabs and reduced motion also pause or disable effects.
 
 ## Key styling
 
 - `.cinema-name`, `.kinetic-first`, `.cinema-surname`: massive name, letter animation and white surname.
-- `.cinema-portrait`: smaller black-sunglasses portrait underneath the name.
+- `.engineering-backdrop`: an anonymous laptop scene with slow drift, a pulsing glow and SVG packet trails.
 - `.film-canvas`: one fixed, pointer-transparent canvas.
 - `.film-loader`, `.film-pulse`: fail-open opening sequence.
 - `.work-active`, `.work-track`, `.work-shot`: desktop horizontal rail.
-- `.work-cover`, `.work-rgb`: image parallax and hover glitch.
+- `.work-poster`, `.work-poster-grid`: photograph-free project title cards.
 - `.monologue-word`: scroll-lit words.
 - `.credits-link`, `.credits-roll`: huge email link and hover marquee.
 - `.film-credits`: restrained uppercase credit typography.
@@ -138,6 +138,6 @@ Contact hover uses a single restrained exposure pulse, not a repeating strobe. T
 - Horizontal pinning only at 1000px+ width and 760px+ height with motion enabled.
 - Every project is a vertical card until the horizontal enhancement activates, including no-JS and reduced-motion cases.
 - GSAP contexts, listeners, timers and Lenis instances are cleaned up on unmount or media changes.
-- No new generated imagery; existing workplace assets supply the project visual studies.
+- One generated anonymous engineering-background image; original workplace photographs appear only under the correct employer.
 
 Validation: production compilation, TypeScript and ESLint passed during implementation. Browser interaction testing, device GPU performance profiling, and live email delivery were not performed; hardware-specific frame rates are not guaranteed.

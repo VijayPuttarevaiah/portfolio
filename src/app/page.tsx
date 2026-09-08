@@ -3,7 +3,6 @@ import Certifications from "@/components/Certifications";
 import Contact from "@/components/Contact";
 import Education from "@/components/Education";
 import Experience from "@/components/Experience";
-import Gallery from "@/components/Gallery";
 import Expertise from "@/components/Expertise";
 import Hero from "@/components/Hero";
 import CinematicEngine from "@/components/cinema/CinematicEngine";
@@ -28,7 +27,6 @@ export default function Home() {
         <About />
         <Experience />
         <HorizontalWork />
-        <Gallery />
         <Recommendations />
         <Expertise />
         <Education />

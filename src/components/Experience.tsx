@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { experience } from "@/content/resume";
 import Reveal from "./Reveal";
 import Section from "./Section";
@@ -8,7 +9,7 @@ export default function Experience() {
       id="experience"
       eyebrow="03 — Experience"
       title="Where I've worked"
-      intro="Three years of software engineering across enterprise retail and healthcare platforms, preceded by two years in transaction risk analysis at Amazon."
+      intro="Three and a half years of software engineering across enterprise retail and healthcare platforms, preceded by two years in transaction risk analysis at Amazon."
     >
       <ol className="space-y-14">
         {experience.map((role, index) => (
@@ -24,6 +25,33 @@ export default function Experience() {
               </div>
 
               <div>
+                {role.company === "Wipro" ||
+                role.company === "Acuver Consulting" ? (
+                  <figure className="experience-location">
+                    <div className="relative aspect-[16/7] overflow-hidden">
+                      <Image
+                        src={
+                          role.company === "Wipro"
+                            ? "/photos/wipro-campus.jpg"
+                            : "/photos/acuver-office.jpg"
+                        }
+                        alt={
+                          role.company === "Wipro"
+                            ? "Wipro Kodathi campus in Bengaluru"
+                            : "Acuver Consulting office in Bengaluru"
+                        }
+                        fill
+                        sizes="(max-width: 768px) 100vw, 700px"
+                        className="object-cover"
+                      />
+                    </div>
+                    <figcaption>
+                      {role.company === "Wipro"
+                        ? "Wipro · Kodathi campus, Bengaluru"
+                        : "Acuver Consulting · Bengaluru"}
+                    </figcaption>
+                  </figure>
+                ) : null}
                 <h3 className="text-xl font-semibold tracking-tight text-[var(--fg)]">
                   {role.title}
                 </h3>
