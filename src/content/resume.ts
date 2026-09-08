@@ -48,7 +48,7 @@ export const stats = [
 export const about = {
   paragraphs: [
     "I spent three and a half years building backend systems before coming back to school. Order routing for a US wholesale retailer, a claims platform for a healthcare technology company, and carrier integrations moving shipment data across eight logistics providers.",
-    "My undergraduate degree is in Electrical and Electronics Engineering, not computer science. I moved into software through certifications and work I actually shipped. That route probably explains what I care about: whether a system holds up in production, not which framework is fashionable this year.",
+    "I came into software through certifications and work I actually shipped, and that route probably explains what I care about: whether a system holds up in production, not which framework is fashionable this year.",
     "Most of what I am proud of is quiet. Test coverage that catches a regression before a customer does. Retry logic that survives a vendor API having a bad afternoon. Infrastructure written as code so anyone can rebuild it.",
     "I am finishing a Master of Applied Computer Science at Dalhousie University, which has pushed me further into cloud architecture, distributed systems, and building with LLMs responsibly.",
   ],
@@ -527,12 +527,12 @@ export const educationJourney: JourneyStop[] = [
     year: "2015",
     kind: "education",
     brand: "nie",
-    marker: "Where it began",
+    marker: "Undergraduate",
     title: "Bachelor of Electrical and Electronics Engineering",
     org: "National Institute of Engineering, Mysuru",
     period: "Aug 2015 — Jul 2019",
     summary:
-      "Four years on a full tuition scholarship from the Government of Karnataka. An electrical degree, not a computer science one — the move into software came afterwards, through certifications and shipped work.",
+      "Four years on a full tuition scholarship from the Government of Karnataka.",
   },
   {
     year: "2026",
