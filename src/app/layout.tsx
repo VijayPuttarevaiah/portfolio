@@ -86,7 +86,7 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   // Site is dark regardless of OS, so the browser chrome should match.
-  themeColor: "#0c0b10",
+  themeColor: "#090909",
 };
 
 /**

@@ -6,6 +6,7 @@ import Experience from "@/components/Experience";
 import Gallery from "@/components/Gallery";
 import Expertise from "@/components/Expertise";
 import Hero from "@/components/Hero";
+import EngineeringUniverse from "@/components/EngineeringUniverse";
 import Journey from "@/components/Journey";
 import Marquee from "@/components/Marquee";
 import Nav from "@/components/Nav";
@@ -22,6 +23,7 @@ export default function Home() {
       <main id="main">
         <Hero />
         <Marquee text="Backend · Cloud · Platform" />
+        <EngineeringUniverse />
         <Journey />
         <About />
         <Experience />

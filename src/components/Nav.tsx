@@ -52,7 +52,7 @@ export default function Nav() {
 
   return (
     <header
-      className={`sticky top-0 z-50 border-b transition-colors ${
+      className={`cinema-nav sticky top-0 z-50 border-b transition-colors ${
         scrolled
           ? "border-[var(--border)] bg-[var(--bg)]/85 backdrop-blur-md"
           : "border-transparent bg-transparent"
@@ -70,7 +70,7 @@ export default function Nav() {
         </a>
 
         <div className="flex items-center gap-2">
-          <ul className="hidden items-center gap-1 md:flex">
+          <ul className="hidden items-center gap-1 lg:flex">
             {items.map((item) => (
               <li key={item.id}>
                 <a
@@ -96,7 +96,7 @@ export default function Nav() {
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? "Close menu" : "Open menu"}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)] md:hidden"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-[var(--border)] text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)] lg:hidden"
           >
             <svg
               width="16"
@@ -121,7 +121,7 @@ export default function Nav() {
       {open ? (
         <div
           id="mobile-nav"
-          className="border-t border-[var(--border)] bg-[var(--bg)] md:hidden"
+          className="border-t border-[var(--border)] bg-[var(--bg)] lg:hidden"
         >
           <ul className="mx-auto max-w-5xl px-6 py-3 sm:px-8">
             {items.map((item) => (
