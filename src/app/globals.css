@@ -909,7 +909,7 @@ body {
   position: absolute;
   inset: 24px 0 auto;
   text-align: center;
-  line-height: 0.78;
+  line-height: 0.92;
   font-family: var(--font-display);
   font-weight: 400;
   color: #f1492e;
@@ -917,15 +917,15 @@ body {
 }
 .cinema-name > span:first-child {
   display: block;
-  font-size: clamp(160px, 28vw, 400px);
-  letter-spacing: -0.025em;
+  font-size: clamp(54px, 8.5vw, 124px);
+  letter-spacing: -0.02em;
   animation: cinema-title 1.3s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .cinema-surname {
   display: block;
-  font-size: clamp(35px, 7.3vw, 108px);
-  letter-spacing: 0.025em;
-  margin-top: 14px;
+  font-size: clamp(18px, 2.4vw, 32px);
+  letter-spacing: 0.14em;
+  margin-top: 10px;
   animation: cinema-title 1.3s 0.12s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .cinema-portrait {
@@ -1065,10 +1065,10 @@ body {
     top: 70px;
   }
   .cinema-name > span:first-child {
-    font-size: 49vw;
+    font-size: 15vw;
   }
   .cinema-surname {
-    font-size: 9vw;
+    font-size: 4vw;
   }
   .cinema-edition {
     top: 20px;
@@ -1525,7 +1525,7 @@ html.cinema-motion {
     calc(var(--scroll-chroma, 0px) * -1) 0 #ffffff44;
 }
 .cinema-name > span:first-child {
-  font-size: clamp(180px, 30vw, 440px);
+  font-size: clamp(52px, 8vw, 118px);
   color: #ff243c;
   animation: none;
 }
@@ -1538,7 +1538,8 @@ html.cinema-motion {
   transform-origin: bottom;
 }
 .cinema-surname {
-  font-size: clamp(35px, 7.8vw, 112px);
+  font-size: clamp(17px, 2.2vw, 30px);
+  letter-spacing: 0.16em;
   color: #f4f1eb;
   animation: none;
 }
@@ -1839,10 +1840,10 @@ html.cinema-motion {
     top: 70px;
   }
   .cinema-name > span:first-child {
-    font-size: 49vw;
+    font-size: 14vw;
   }
   .cinema-surname {
-    font-size: 9vw;
+    font-size: 3.6vw;
   }
   .cinema-portrait {
     width: 180px;

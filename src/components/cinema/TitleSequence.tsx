@@ -25,14 +25,14 @@ export default function TitleSequence() {
                 ? {}
                 : {
                     clipPath: ["inset(100% 0 0)", "inset(0% 0 0)"],
-                    y: [80, 0],
-                    scaleY: [1.7, 1],
-                    filter: ["blur(12px)", "blur(0px)"],
+                    y: [26, 0],
+                    scaleY: [1.18, 1],
+                    filter: ["blur(6px)", "blur(0px)"],
                   }
             }
             transition={{
-              duration: 1.1,
-              delay: i * 0.085,
+              duration: 0.8,
+              delay: i * 0.05,
               ease: [0.16, 1, 0.3, 1],
             }}
           >
@@ -49,7 +49,7 @@ export default function TitleSequence() {
             ? {}
             : {
                 opacity: [0, 1],
-                letterSpacing: [".16em", ".035em"],
+                letterSpacing: [".26em", ".14em"],
                 filter: ["blur(8px)", "blur(0px)"],
               }
         }
