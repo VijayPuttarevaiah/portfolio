@@ -698,46 +698,107 @@ body {
 }
 
 /* --- Journey arc -------------------------------------------------------- */
-/* The compass flips data-lit on each mark; everything visual is CSS from there,
-   so the scroll loop never re-renders React just to light a year. */
+/* The compass sets data-state on each mark — ahead, active, past — and every
+   visual beat below is CSS from there, so the scroll loop never re-renders
+   React just to stage a logo. */
 .arc-mark {
-  opacity: 0.38;
-  transition:
-    opacity 0.55s ease,
-    transform 0.55s cubic-bezier(0.2, 0.9, 0.25, 1);
+  z-index: 10;
+  transition: opacity 0.5s ease;
 }
-.arc-mark[data-lit="true"] {
+.arc-mark[data-state="ahead"] {
+  opacity: 0.38;
+}
+.arc-mark[data-state="past"],
+.arc-mark[data-state="active"] {
   opacity: 1;
 }
+/* The active mark sits above its neighbours, since it grows over them. */
+.arc-mark[data-state="active"] {
+  z-index: 30;
+}
+
+/* The active logo grows 1.85x, so the stack opens up to keep the year clear of
+   it. Using gap rather than a translate means this works for the education
+   marks, whose year sits above, and the work marks, whose year sits below. */
+.arc-mark-stack {
+  gap: 0.375rem;
+  transition: gap 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.arc-mark[data-state="active"] .arc-mark-stack {
+  gap: 1.65rem;
+}
+
 .arc-mark-logo {
-  display: block;
-  transform: scale(0.72);
+  transform: scale(0.7);
   filter: grayscale(1) brightness(0.85);
   transition:
-    transform 0.55s cubic-bezier(0.2, 0.9, 0.25, 1),
-    filter 0.55s ease;
+    transform 0.72s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.6s ease;
 }
-.arc-mark[data-lit="true"] .arc-mark-logo {
+.arc-mark[data-state="past"] .arc-mark-logo {
   transform: scale(1);
   filter: none;
 }
-.arc-mark-year {
-  color: var(--fg-subtle);
-  transition: color 0.55s ease;
-}
-.arc-mark[data-lit="true"] .arc-mark-year {
-  color: var(--fg);
+/* The moment the compass arrives: the logo takes the stage. */
+.arc-mark[data-state="active"] .arc-mark-logo {
+  transform: scale(1.85);
+  filter: drop-shadow(0 0 16px rgb(254 122 77 / 0.55))
+    drop-shadow(0 0 42px rgb(254 122 77 / 0.3));
 }
 
-/* The detail panel is remounted per stop, so a plain enter animation reads as
-   a cut between beats rather than text swapping in place. */
+.arc-mark-year {
+  color: var(--fg-subtle);
+  transition:
+    color 0.5s ease,
+    transform 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: scale(1);
+  display: inline-block;
+}
+.arc-mark[data-state="past"] .arc-mark-year,
+.arc-mark[data-state="active"] .arc-mark-year {
+  color: var(--fg);
+}
+.arc-mark[data-state="active"] .arc-mark-year {
+  transform: scale(1.35);
+  text-shadow: 0 0 18px rgb(254 122 77 / 0.5);
+}
+
+/* Shockwave on arrival. Two rings, the second trailing, so it reads as an
+   impact rather than a single expanding circle. */
+.arc-pulse {
+  position: absolute;
+  inset: -5px;
+  border-radius: 13px;
+  border: 1px solid var(--h4);
+  opacity: 0;
+  pointer-events: none;
+}
+.arc-mark[data-state="active"] .arc-pulse {
+  animation: arc-pulse 1.15s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.arc-mark[data-state="active"] .arc-pulse-late {
+  animation-delay: 0.16s;
+}
+@keyframes arc-pulse {
+  0% {
+    transform: scale(0.72);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+/* The detail panel is remounted per stop, so this reads as a cut between beats
+   rather than text swapping in place. */
 .arc-card {
-  animation: arc-card-in 0.5s cubic-bezier(0.2, 0.9, 0.25, 1) both;
+  animation: arc-card-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 @keyframes arc-card-in {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -747,11 +808,17 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .arc-mark,
+  .arc-mark-stack,
   .arc-mark-logo,
   .arc-mark-year {
     transition: none;
   }
+  .arc-pulse,
   .arc-card {
     animation: none;
+  }
+  .arc-mark[data-state="active"] .arc-mark-logo {
+    transform: scale(1);
+    filter: none;
   }
 }
