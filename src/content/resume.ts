@@ -165,7 +165,6 @@ export const experience: Role[] = [
     period: "Sep 2020 — Apr 2022",
     duration: "1 year 8 months",
     location: "Bengaluru, India",
-    note: "An analytical role rather than an engineering one, included here so the timeline is complete.",
     context:
       "Investigated fraudulent transaction patterns on the A to Z Claims programme and worked with stakeholders on how investigations were run.",
     engagements: [
@@ -548,9 +547,10 @@ export const educationJourney: JourneyStop[] = [
 ];
 
 /**
- * PROFESSIONAL TRACK. Amazon carries an explicit qualifier: it was an
- * analytical role, not an engineering one, and the site must never imply
- * otherwise. The final stop is a TARGET, not a secured role.
+ * PROFESSIONAL TRACK. Each stop is described by what the work actually was —
+ * Amazon reads as the SQL fraud and risk analysis it was, stated plainly rather
+ * than qualified against engineering. The title and the summary carry that on
+ * their own, so no disclaimer is needed.
  */
 export const professionalJourney: JourneyStop[] = [
   {
@@ -563,7 +563,6 @@ export const professionalJourney: JourneyStop[] = [
     period: "Sep 2020 — Apr 2022 · 1 yr 8 mo",
     summary:
       "SQL-driven fraud pattern analysis on the A to Z Claims programme, contributing to a 30% improvement in detection accuracy. Completed Amazon's ATLAS technical upskilling programme along the way.",
-    note: "An analytical role, not an engineering one.",
   },
   {
     year: "2022",
