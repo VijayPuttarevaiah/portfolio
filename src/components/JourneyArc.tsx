@@ -240,6 +240,7 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
                   key={`${stop.year}-${stop.org}`}
                   type="button"
                   className="drafting-card"
+                  data-track={stop.kind === "education" || stop.kind === "now" ? "education" : "work"}
                   data-state={
                     i === active ? "active" : i < active ? "past" : "ahead"
                   }
@@ -252,19 +253,19 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
                   onClick={() => select(i)}
                 >
                   <span className="drafting-year">{stop.year}</span>
-                  <span className="drafting-dot" />
                   <span className="journey-zoom-mark"><BrandMark brand={stop.brand} label={stop.org} size={58} /></span>
-                  <span className="journey-zoom-label">{stop.org.split(" ·")[0].split(",")[0]}</span>
                 </button>
               );
             })}
           </div>
         </div>
         <div className="drafting-detail">
-          <div>
-            <span className="cinema-label">{stops[active].marker}</span>
-            <h3>{stops[active].org}</h3>
-            <p>{stops[active].summary}</p>
+          <div key={`${stops[active].year}-${stops[active].org}`} className="journey-detail-content" data-lenis-prevent>
+            <div className="journey-detail-meta"><span className="journey-detail-badge">{stops[active].marker}</span><span>{stops[active].period}</span></div>
+            <h3>{stops[active].title}</h3>
+            <p className="journey-detail-org">{stops[active].org}</p>
+            <p className="journey-detail-summary">{stops[active].summary}</p>
+            {stops[active].note ? <p className="journey-detail-note">{stops[active].note}</p> : null}
           </div>
           <div className="drafting-index">
             <span>
