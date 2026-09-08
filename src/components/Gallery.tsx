@@ -5,23 +5,16 @@ import Section from "./Section";
 
 const HUES = ["--h1", "--h2", "--h3", "--h4", "--h5"] as const;
 
-/**
- * Photo strip.
- *
- * Renders nothing while `photos` is empty, so the section simply does not
- * exist until real images are added. Every photo must be one Vijay actually
- * supplies — never a stock image, never anything generated, since a picture
- * presented as "me at work" that isn't is a fabrication like any other.
- */
+/** User-supplied portraits and workplace photographs. */
 export default function Gallery() {
   if (photos.length === 0) return null;
 
   return (
     <Section
       id="gallery"
-      eyebrow="In practice"
-      title="On the job"
-      intro="A few moments from the teams and projects behind the work above."
+      eyebrow="Beyond the screen"
+      title="The person behind the code"
+      intro="Portraits, places, and a little of life beyond the work."
       tinted
     >
       <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -31,7 +24,7 @@ export default function Gallery() {
               className="card-r h-full overflow-hidden border-2 bg-[var(--bg)]"
               style={{ borderColor: `var(${HUES[i % HUES.length]})` }}
             >
-              <div className="relative aspect-[4/3] w-full">
+              <div className={`relative w-full ${photo.portrait ? "aspect-[2/3]" : "aspect-[4/3]"}`}>
                 <Image
                   src={photo.src}
                   alt={photo.alt}

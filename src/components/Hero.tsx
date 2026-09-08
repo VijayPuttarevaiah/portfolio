@@ -15,7 +15,7 @@ export default function Hero() {
           <div className="cinema-edition" aria-hidden="true">PORTFOLIO — 2026<br />BACKEND / CLOUD / PLATFORM</div>
           <h1 id="hero-title" className="cinema-name"><span>VIJAY</span><span className="cinema-surname">PUTTAREVAIAH</span></h1>
           <div className="cinema-portrait">
-            <Image src="/photos/vijay-office.jpg" alt="Vijay Puttarevaiah at the office" fill sizes="(max-width: 640px) 80vw, 480px" preload className="cinema-photo" />
+            <Image src="/photos/vijay-cinematic-hero.webp" alt="Vijay Puttarevaiah smiling, in a cinematic portrait with warm rim lighting" fill sizes="(max-width: 640px) 80vw, 480px" preload fetchPriority="high" className="cinema-photo" />
           </div>
           <div className="cinema-orbit" aria-hidden="true" />
           <p className="cinema-role">{person.headline}<span>Built to keep running.</span></p>

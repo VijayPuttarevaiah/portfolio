@@ -467,10 +467,12 @@ export type Photo = {
   /** Required. Describes the image for screen readers and when it fails to load. */
   alt: string;
   caption?: string;
+  portrait?: boolean;
 };
 
 /**
- * Photos of the places behind the work, all supplied by Vijay.
+ * Portraits and places supplied by Vijay. Portrait backgrounds and lighting
+ * were edited at his request; workplace photos retain their original context.
  *
  * Captions describe the location only. They never assert that a given
  * building is where a specific project shipped, because that is not
@@ -480,9 +482,22 @@ export type Photo = {
  */
 export const photos: Photo[] = [
   {
-    src: "/photos/vijay-office.jpg",
-    alt: "Vijay Puttarevaiah standing in an office atrium, wearing a work badge on a lanyard.",
-    caption: "On site at Wipro",
+    src: "/photos/vijay-cinematic-seated.webp",
+    alt: "Vijay seated on a bench, wearing a white shirt and sunglasses, with a dark cinematic background.",
+    caption: "Away from the keyboard",
+    portrait: true,
+  },
+  {
+    src: "/photos/vijay-cinematic-hero.webp",
+    alt: "Vijay smiling in a three-quarter portrait with warm amber rim lighting.",
+    caption: "A different perspective",
+    portrait: true,
+  },
+  {
+    src: "/photos/vijay-cinematic-closeup.webp",
+    alt: "A front-facing portrait of Vijay smiling in black sunglasses against a dark background.",
+    caption: "The person behind the work",
+    portrait: true,
   },
   {
     src: "/photos/wipro-campus.jpg",
