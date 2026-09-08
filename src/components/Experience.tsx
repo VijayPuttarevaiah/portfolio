@@ -52,20 +52,51 @@ export default function Experience() {
                   {role.context}
                 </p>
 
-                <ul className="mt-5 space-y-3">
-                  {role.highlights.map((highlight) => (
-                    <li
-                      key={highlight.slice(0, 40)}
-                      className="flex gap-3 text-[0.95rem] leading-relaxed text-[var(--fg-muted)]"
-                    >
-                      <span
-                        aria-hidden="true"
-                        className="mt-[0.6rem] h-1 w-1 shrink-0 rounded-full bg-[var(--accent)]"
-                      />
-                      {highlight}
-                    </li>
+                <div className="mt-6 space-y-7">
+                  {role.engagements.map((engagement) => (
+                    <div key={engagement.project}>
+                      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                        <h4 className="text-[0.95rem] font-semibold text-[var(--fg)]">
+                          {engagement.project}
+                        </h4>
+                        {engagement.client ? (
+                          <p className="text-sm text-[var(--fg-muted)]">
+                            {engagement.clientUrl ? (
+                              <a
+                                href={engagement.clientUrl}
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                className="underline decoration-[var(--border-strong)] underline-offset-4 transition-colors hover:text-[var(--fg)] hover:decoration-[var(--accent)]"
+                              >
+                                {engagement.client}
+                              </a>
+                            ) : (
+                              engagement.client
+                            )}
+                          </p>
+                        ) : null}
+                        <p className="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-[var(--fg-subtle)]">
+                          {engagement.period}
+                        </p>
+                      </div>
+
+                      <ul className="mt-3 space-y-3">
+                        {engagement.bullets.map((bullet) => (
+                          <li
+                            key={bullet.slice(0, 40)}
+                            className="flex gap-3 text-[0.95rem] leading-relaxed text-[var(--fg-muted)]"
+                          >
+                            <span
+                              aria-hidden="true"
+                              className="mt-[0.6rem] h-1 w-1 shrink-0 rounded-full bg-[var(--accent)]"
+                            />
+                            {bullet}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   ))}
-                </ul>
+                </div>
 
                 <ul className="mt-6 flex flex-wrap gap-x-2 gap-y-2">
                   {role.stack.map((tech) => (

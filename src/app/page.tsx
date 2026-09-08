@@ -25,7 +25,6 @@ export default function Home() {
         <Journey />
         <About />
         <Experience />
-        <Marquee text="Selected Work" hue="--h4" />
         <Projects />
         <Gallery />
         <Recommendations />
