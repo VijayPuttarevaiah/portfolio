@@ -39,3 +39,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Agent instruction files. Next regenerates these on dev even with
+# agentRules:false, and this repo is kept free of them.
+CLAUDE.md
+AGENTS.md
