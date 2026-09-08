@@ -257,7 +257,7 @@ export const projects: Project[] = [
       "Concurrency-tested against 150 parallel attendee connections. The full system — five Java services, one Python service, PostgreSQL, Redis, and Kafka — runs under Docker Compose. Backend only; there is no frontend.",
   },
   {
-    name: "LEDGR",
+    name: "Ledgr",
     blurb: "Personal finance and collaborative bill splitting",
     problem:
       "Splitting a shared expense usually means reconciling it by hand afterwards. And bolting an LLM onto a finance app raises an obvious question: what stops it running up a bill or leaking data when a feature is supposed to be off?",
