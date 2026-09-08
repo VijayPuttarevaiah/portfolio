@@ -224,7 +224,6 @@ export const projects: Project[] = [
       "Supabase",
       "PostgreSQL",
       "React Native",
-      "LLM API",
       "Google Cloud Vision",
       "Vitest",
       "Playwright",
