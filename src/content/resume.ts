@@ -60,6 +60,15 @@ export const about = {
   ],
 } as const;
 
+export type Engagement = {
+  /** Project or programme name as it was known internally. */
+  project: string;
+  client?: string;
+  clientUrl?: string;
+  period: string;
+  bullets: string[];
+};
+
 export type Role = {
   company: string;
   companyUrl?: string;
@@ -71,7 +80,7 @@ export type Role = {
   /** Honest framing note rendered as a small qualifier. */
   note?: string;
   context: string;
-  highlights: string[];
+  engagements: Engagement[];
   stack: string[];
 };
 
@@ -84,15 +93,45 @@ export const experience: Role[] = [
     duration: "1 year",
     location: "Bengaluru, India",
     context:
-      "Built order management and logistics integrations for enterprise retail clients, working against live production systems.",
-    highlights: [
-      "Built a Smart Order Rerouting system in Java and Spring Boot that moves an order to another courier when a vendor cancels at the last minute. Orders affected by cancellations fell from around 10% to under 1%, which meant fewer refunds going out.",
-      "Took branch coverage to 85% and line coverage past 90% with JUnit 5 suites running in Jenkins. Added a per-club kill switch so a rollout could be turned off for one location without touching the rest.",
-      "Led the DoorDash Full Service integration, checking delivery coverage through their Serviceability APIs and automating the reservation step so orders could be picked up straight from a club.",
-      "Cut the work of onboarding a new carrier by 75% by moving carrier-specific logic behind a Strategy pattern, then built Turnaround Time APIs for BlueDart, Criticalog, and Delhivery.",
-      "Built an ETL pipeline on Aekyam that pulls order data through validation, mapping, and transformation across eight carrier integrations.",
+      "Built order management and logistics integrations for enterprise retail clients, working against live production systems on two separate engagements.",
+    engagements: [
+      {
+        project: "Smart Order Rerouting",
+        client: "BJ's Wholesale Club",
+        clientUrl: "https://www.bjs.com",
+        period: "Jun 2025 — Dec 2025",
+        bullets: [
+          "Brought vendor-caused order cancellations from 10% down to under 1% by building a Java and Spring Boot rerouting service that detects a cancellation, checks delivery capacity through the DoorDash and Roadie APIs, and books the nearest same-day slot.",
+          "Raised branch coverage to 85% and line coverage past 90% with JUnit 5 suites, and added a configurable kill switch so a rollout could be paused one club at a time.",
+          "Opened same-day delivery from club locations by integrating the DoorDash Serviceability APIs to validate coverage and create reservations automatically, so agents could fulfil orders on site.",
+          "Added fallback paths, retry logic, and structured trace logging across both integrations, so a failed call surfaced with enough context to debug it.",
+          "Secured the DoorDash and Roadie integrations with Spring Security and JWT.",
+          "Wrote the design documents and UML for the rerouting workflow on Confluence, then walked engineers and stakeholders through it in review sessions and demos.",
+        ],
+      },
+      {
+        project: "Carrier Management Services + Aekyam (iPaaS)",
+        client: "Titan",
+        clientUrl: "https://www.titancompany.in/",
+        period: "Jan 2025 — May 2025",
+        bullets: [
+          "Cut the work of onboarding a new carrier by 75% by moving carrier-specific logic behind a Strategy pattern and extending the Spring Boot Turnaround Time APIs to BlueDart, Criticalog, and Delhivery.",
+          "Automated shipment creation across all eight carriers by building Waybill Generation API integrations and an Aekyam ETL pipeline that maps order data from the OMS into each carrier's own format.",
+          "Replaced scheduled polling with webhooks for Delhivery tracking and serviceability updates.",
+        ],
+      },
     ],
-    stack: ["Java", "Spring Boot", "REST APIs", "JUnit 5", "Jenkins", "React.js", "ETL"],
+    stack: [
+      "Java",
+      "Spring Boot",
+      "REST APIs",
+      "Spring Security",
+      "JWT",
+      "JUnit 5",
+      "Jenkins",
+      "React.js",
+      "ETL",
+    ],
   },
   {
     company: "Wipro",
@@ -103,12 +142,20 @@ export const experience: Role[] = [
     location: "Bengaluru, India",
     context:
       "Modernized a real-time healthcare claims platform for Oracle Cerner, moving it off a legacy engine onto containerized services.",
-    highlights: [
-      "Moved real-time healthcare claims scrubbing from legacy IBM BPM onto Edifecs, reworking the scrubbing profiles and containerizing the Spring Boot services with Docker. Infrastructure costs came down 20%.",
-      "Built a health-check service that watches 36+ services across Dockerized and non-Dockerized environments, with thresholds for service health, filesystem mounts, and disk capacity set through configuration rather than code.",
-      "Shipped four releases on schedule across Development and Cert, running the Jenkins and Kubernetes deployments and handling third-level support when UAT or production issues came in.",
-      "Brought post-release defects down 25% by raising coverage to 85% with JUnit 5, running code reviews, and digging into the root cause of production incidents rather than patching symptoms.",
-      "Secured the platform's integration endpoints to Edifecs with OAuth 2.0.",
+    engagements: [
+      {
+        project: "Integrated Scrubbing Modernization",
+        client: "Oracle Cerner Corporation",
+        clientUrl: "https://www.oracle.com/health/",
+        period: "May 2022 — Jul 2024",
+        bullets: [
+          "Took infrastructure costs down 20% by moving real-time claims scrubbing off legacy IBM BPM onto Edifecs, reworking the scrubbing profiles and containerizing the Spring Boot services with Docker.",
+          "Dropped post-release defects by 25% by raising coverage to 85% with JUnit 5, running code reviews, and tracing production incidents to a root cause instead of patching the symptom.",
+          "Built a health-check service watching 36+ services across Dockerized and non-Dockerized environments, with thresholds for service health, filesystem mounts, and disk capacity all set in properties files rather than in code.",
+          "Shipped four releases on schedule across Development and Cert, running the Jenkins and Kubernetes deployments and taking third-level support when UAT or production issues came in, tracing them in Splunk.",
+          "Put OAuth 2.0 in front of the Edifecs integrations.",
+        ],
+      },
     ],
     stack: ["Java", "Spring Boot", "Docker", "Kubernetes", "Jenkins", "OAuth 2.0", "Splunk"],
   },
@@ -121,9 +168,15 @@ export const experience: Role[] = [
     note: "An analytical role rather than an engineering one, included here so the timeline is complete.",
     context:
       "Investigated fraudulent transaction patterns on the A to Z Claims programme and worked with stakeholders on how investigations were run.",
-    highlights: [
-      "Used SQL to find patterns in fraudulent transactions and turned them into insights the team could act on, contributing to a 30% improvement in fraud detection accuracy.",
-      "Took part in Amazon's ATLAS technical upskilling programme, and worked with senior managers, project managers, and subject-matter experts to improve investigation SOPs.",
+    engagements: [
+      {
+        project: "A to Z Claims",
+        period: "Sep 2020 — Apr 2022",
+        bullets: [
+          "Contributed to a 30% improvement in fraud detection accuracy by analysing transaction patterns in SQL and turning them into signals investigators could act on.",
+          "Reworked investigation SOPs with stakeholders while completing Amazon's ATLAS upskilling programme.",
+        ],
+      },
     ],
     stack: ["SQL", "Data analysis"],
   },
