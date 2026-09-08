@@ -21,36 +21,11 @@ class SceneBoundary extends Component<
 }
 export default function CinematicEngine() {
   const [webgl, setWebgl] = useState(false);
-  const [loading, setLoading] = useState(true);
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
     const media = gsap.matchMedia();
-    let disposed = false;
-    // Only critical hero assets block the title; timeout always releases the page.
-    let releaseShader = () => {};
-    const shaderReady = new Promise<void>((resolve) => {
-      releaseShader = resolve;
-    });
-    const shaderLoaded = () => releaseShader();
-    window.addEventListener("cinema-webgl-ready", shaderLoaded, { once: true });
-    if (
-      motionState.ready ||
-      !window.matchMedia(
-        "(min-width: 900px) and (pointer: fine) and (prefers-reduced-motion: no-preference)",
-      ).matches
-    )
-      releaseShader();
-    const finish = () => {
-      if (!disposed) {
-        setLoading(false);
-        document.documentElement.dataset.cinemaReady = "true";
-        window.dispatchEvent(new Event("cinema-intro-ready"));
-      }
-    };
-    const timeout = window.setTimeout(finish, 2000);
-    Promise.all([document.fonts.ready, shaderReady]).then(() =>
-      setTimeout(finish, 450),
-    );
+    document.documentElement.dataset.cinemaReady = "true";
+    window.dispatchEvent(new Event("cinema-intro-ready"));
     const lost = () => setWebgl(false);
     window.addEventListener("cinema-webgl-lost", lost);
     media.add("(prefers-reduced-motion: no-preference)", () => {
@@ -89,11 +64,10 @@ export default function CinematicEngine() {
         const probe = document.createElement("canvas");
         const context = probe.getContext("webgl2");
         const enabled = !!context;
-        if (!enabled) releaseShader();
         context?.getExtension("WEBGL_lose_context")?.loseContext();
         const id = setTimeout(() => {
           setWebgl(enabled);
-        }, 0);
+        }, 1200);
         const pointer = (event: PointerEvent) => {
           motionState.x = event.clientX / window.innerWidth;
           motionState.y = event.clientY / window.innerHeight;
@@ -125,9 +99,6 @@ export default function CinematicEngine() {
       },
     );
     return () => {
-      disposed = true;
-      window.removeEventListener("cinema-webgl-ready", shaderLoaded);
-      clearTimeout(timeout);
       media.revert();
       window.removeEventListener("cinema-webgl-lost", lost);
     };
@@ -142,12 +113,7 @@ export default function CinematicEngine() {
           </SceneBoundary>
         </div>
       )}
-      {loading && (
-        <div className="film-loader" aria-hidden="true">
-          <span className="film-pulse" />
-          <span>VIJAY / A PORTFOLIO IN MOTION</span>
-        </div>
-      )}
+
     </>
   );
 }

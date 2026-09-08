@@ -1,3 +1,4 @@
+import PortfolioAnalytics from "@/components/PortfolioAnalytics";
 import type { Metadata, Viewport } from "next";
 import { Bebas_Neue, Inter, JetBrains_Mono, Playfair_Display } from "next/font/google";
 import { person } from "@/content/resume";
@@ -155,6 +156,7 @@ export default function RootLayout({
           Skip to content
         </a>
         {children}
+        {process.env.VERCEL && <PortfolioAnalytics />}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}

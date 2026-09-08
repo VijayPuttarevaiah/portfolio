@@ -13,7 +13,7 @@ export default function Hero() {
         <EngineeringBackdrop />
         <div className="cinema-grid" aria-hidden="true" />
         <div className="cinema-kicker">
-          <span className="tl-live" /> {person.availability}
+          <span className="tl-live" /> {person.availability}<span className="hero-work-auth">{person.workAuth}</span>
         </div>
         <div className="cinema-stage">
           <div className="cinema-edition" aria-hidden="true">
@@ -26,9 +26,9 @@ export default function Hero() {
             {person.headline}
             <span>Built to keep running.</span>
           </p>
-          <a href="#projects" className="cinema-work">
+          <div className="hero-actions"><a href="#projects" className="cinema-work">
             Explore my work <span aria-hidden="true">↗</span>
-          </a>
+          </a><a href="/resume/Vijay-Puttarevaiah-Resume.pdf" download className="hero-resume">Download resume · PDF ↓</a><a href={`mailto:${person.email}`} className="hero-email">{person.email}</a></div>
           <div className="cinema-coordinate" aria-hidden="true">
             BASED IN HALIFAX, CANADA
             <br />

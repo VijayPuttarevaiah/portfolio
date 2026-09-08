@@ -12,8 +12,8 @@ export default function Education() {
     >
       <ol className="grid gap-6 sm:grid-cols-2">
         {education.map((entry, i) => (
-          <Reveal key={entry.credential} delay={i * 70}>
-            <li
+          <Reveal as="li" key={entry.credential} delay={i * 70}>
+            <div
               className="education-story card-r h-full border-2 p-6 sm:p-7"
               style={{ borderColor: i === 0 ? "var(--h3)" : "var(--h2)" }}
             >
@@ -33,7 +33,7 @@ export default function Education() {
               <p className="mt-3 text-sm font-medium text-[var(--fg-muted)]">
                 {entry.detail}
               </p>
-            </li>
+            </div>
           </Reveal>
         ))}
       </ol>

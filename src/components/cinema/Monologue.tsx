@@ -10,7 +10,7 @@ export default function Monologue({ text }: { text: string }) {
     media.add("(prefers-reduced-motion: no-preference)", () => {
       gsap.fromTo(
         ref.current?.querySelectorAll(".monologue-word") ?? [],
-        { opacity: 0.18 },
+        { opacity: 0.62 },
         {
           opacity: 1,
           stagger: 0.08,
@@ -27,9 +27,9 @@ export default function Monologue({ text }: { text: string }) {
     return () => media.revert();
   }, []);
   return (
-    <p ref={ref} className="monologue" aria-label={text}>
+    <p ref={ref} className="monologue">
       {text.split(" ").map((word, i) => (
-        <span key={i} aria-hidden="true" className="monologue-word">
+        <span key={i} className="monologue-word">
           {word}{" "}
         </span>
       ))}

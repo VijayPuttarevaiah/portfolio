@@ -7,7 +7,7 @@ export default function TitleSequence() {
   useEffect(() => {
     const start = () => setReady(true);
     window.addEventListener("cinema-intro-ready", start, { once: true });
-    const timeout = setTimeout(start, 2200);
+    const timeout = setTimeout(start, 0);
     return () => {
       clearTimeout(timeout);
       window.removeEventListener("cinema-intro-ready", start);
@@ -31,7 +31,7 @@ export default function TitleSequence() {
                   }
             }
             transition={{
-              duration: 0.8,
+              duration: 0.45,
               delay: i * 0.05,
               ease: [0.16, 1, 0.3, 1],
             }}
@@ -53,7 +53,7 @@ export default function TitleSequence() {
                 filter: ["blur(8px)", "blur(0px)"],
               }
         }
-        transition={{ duration: 1.2, delay: 0.3 }}
+        transition={{ duration: 0.45, delay: 0.1 }}
       >
         PUTTAREVAIAH
       </motion.span>

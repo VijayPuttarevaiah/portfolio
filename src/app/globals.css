@@ -2080,3 +2080,28 @@ html.cinema-motion {
   max-width: 72rem;
   padding: 0 1.5rem;
 }
+
+/* Hiring essentials: immediate access to role, evidence and contact. */
+.hero-work-auth{display:block;margin-top:8px;color:var(--h3);font-size:12px;letter-spacing:.04em}
+.cinema-kicker{height:auto;min-height:58px;padding-bottom:12px}
+.hero-actions{position:absolute;right:6%;bottom:15%;display:flex;flex-direction:column;align-items:flex-start;gap:16px;z-index:4}
+.hero-actions .cinema-work{position:static}
+.hero-resume{border:1px solid var(--h2);border-radius:999px;padding:12px 20px;font-size:13px;color:var(--h2)}
+.hero-email{font-size:12px;color:var(--fg-muted);overflow-wrap:anywhere}
+.project-play{min-height:44px;padding:8px 12px;font-size:12px;color:var(--h2);border:1px solid var(--border-strong);border-radius:30px}
+.triage-architecture{margin-top:28px;padding:24px;border:1px solid #b49aff55;border-radius:16px;background:linear-gradient(135deg,#b49aff0c,#7ddfff08)}
+.triage-intro{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.triage-intro h4{font-size:22px;margin-top:8px}.triage-intro>span,.triage-caption{font-size:12px;color:var(--fg-muted)}
+.triage-caption{margin-top:12px;line-height:1.7}.triage-flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:24px 0;list-style:none;padding:0}
+.triage-flow li{position:relative}.triage-flow li:not(:last-child)::after{content:'→';position:absolute;right:-12px;top:40%;color:var(--h2)}
+.triage-flow button{display:flex;flex-direction:column;gap:10px;text-align:left;padding:14px 10px;border:1px solid var(--border-strong);border-radius:10px;width:100%;height:100%;background:var(--bg)}
+.triage-flow button[aria-pressed=true]{border-color:var(--h2);box-shadow:0 0 24px #7ddfff14}.triage-step-number{font:11px var(--font-mono);color:var(--h3)}.triage-flow small{font-size:10px;line-height:1.5;color:var(--fg-muted)}
+.triage-stage{border-left:2px solid var(--h2);padding-left:16px;min-height:100px}.triage-stage h5{font-size:16px}.triage-stage p,.triage-policy{font-size:13px;line-height:1.8;color:var(--fg-muted)}
+.triage-policy{margin:20px 0;padding:16px;background:var(--bg);border-radius:8px}.triage-policy label{display:flex;align-items:center;gap:10px;color:var(--fg)}.triage-policy input{width:18px;height:18px;accent-color:var(--h2)}.triage-policy p{margin-top:10px}.triage-architecture>a{font-size:13px;color:var(--h2);text-decoration:underline;text-underline-offset:4px}
+:focus-visible{outline:2px solid var(--h2);outline-offset:5px}
+@media(max-width:700px){.cinema-kicker{padding:14px 20px;font-size:10px;line-height:1.7}.hero-work-auth{font-size:11px}.hero-actions{left:6%;right:6%;bottom:8%;gap:12px}.cinema-role{bottom:39%;max-width:90%}.hero-actions .cinema-work{font-size:13px}.triage-architecture{padding:16px}.triage-flow{grid-template-columns:1fr}.triage-flow button{display:grid;grid-template-columns:24px 85px 1fr;align-items:center}.triage-flow li:not(:last-child)::after{content:'↓';right:50%;top:auto;bottom:-15px}.triage-stage{min-height:0}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+.ring-tile .ring-tile-blurb{color:#c0c6d5}
+
+.ring-tile{opacity:1}.ring-tile .ring-tile-blurb{color:#e5e9f3}

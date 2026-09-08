@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
+import TriageArchitecture from "./TriageArchitecture";
 import { projects } from "@/content/resume";
 
 /** How long each project holds before the ring advances. */
@@ -26,6 +27,7 @@ function Ring() {
   const [rotation, setRotation] = useState(0);
   const [radius, setRadius] = useState(220);
   const [paused, setPaused] = useState(false);
+  const [autoplay, setAutoplay] = useState(false);
 
   const count = projects.length;
   const angleStep = 360 / count;
@@ -51,10 +53,10 @@ function Ring() {
    * fastest way to make a carousel hostile.
    */
   useEffect(() => {
-    if (reduced || paused) return;
+    if (reduced || paused || !autoplay) return;
     const id = setInterval(() => setRotation((r) => r + angleStep), AUTOPLAY_MS);
     return () => clearInterval(id);
-  }, [angleStep, paused, reduced]);
+  }, [angleStep, paused, reduced, autoplay]);
 
   const rotate = useCallback(
     (dir: "prev" | "next") =>
@@ -100,17 +102,16 @@ function Ring() {
                 className="absolute inset-0 flex items-center justify-center"
                 style={{ transformStyle: "preserve-3d" }}
                 animate={{ rotateY: targetAngle }}
-                transition={SPRING}
+                transition={reduced ? { duration: 0 } : SPRING}
               >
                 <motion.button
                   type="button"
                   onClick={() => goTo(index)}
-                  aria-label={`Show ${project.name}`}
                   aria-current={isActive}
                   className={`ring-tile ${isActive ? "ring-tile-active" : ""}`}
                   style={{ transformStyle: "preserve-3d" }}
                   animate={{ rotateY: -targetAngle, rotateX: RING_TILT_DEG, z: radius }}
-                  transition={SPRING}
+                  transition={reduced ? { duration: 0 } : SPRING}
                 >
                   <span className="ring-tile-name">{project.name}</span>
                   <span className="ring-tile-blurb">{project.stack[0]}</span>
@@ -127,6 +128,7 @@ function Ring() {
           {activeIndex + 1} / {count}
         </p>
         <RingButton label="Next project" onClick={() => rotate("next")} dir="next" />
+        {!reduced && <button type="button" className="project-play" aria-pressed={autoplay} onClick={() => setAutoplay(!autoplay)}>{autoplay ? "Pause rotation" : "Play rotation"}</button>}
       </div>
 
       <div className="mt-8 min-h-[24rem] sm:min-h-[21rem]">
@@ -164,6 +166,8 @@ function Ring() {
                 </p>
               </div>
             </div>
+
+            {active.name === "Triage" && <TriageArchitecture />}
 
             {active.status ? (
               <p className="mt-5 border-l-2 border-[var(--border-strong)] py-0.5 pl-3 text-[0.88rem] leading-relaxed text-[var(--fg-subtle)]">

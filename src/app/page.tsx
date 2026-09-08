@@ -36,7 +36,7 @@ export default function Home() {
       <footer className="film-credits border-t border-[var(--border)]">
         <div className="mx-auto flex w-full max-w-5xl flex-col gap-3 px-6 py-10 text-sm text-[var(--fg-subtle)] sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <p>
-            © {year} {person.name} · Designed to keep running.
+            © {year} {person.name} · Updated <time dateTime="2026-09-08">September 8, 2026</time>.
           </p>
           <div className="flex gap-6">
             <a

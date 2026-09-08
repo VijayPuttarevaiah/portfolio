@@ -41,6 +41,7 @@ export default function EngineeringBackdrop() {
         src="/photos/engineering-background.webp"
         alt=""
         fill
+        fetchPriority="high"
         sizes="100vw"
         className="engineering-scene"
         priority
