@@ -133,8 +133,7 @@ function Availability() {
 /**
  * The arc is scroll-scrubbed: a sweep runs the years from 2015 to 2027 and
  * lights each one as it passes. Anyone who asked for reduced motion gets the
- * two static tracks instead — education and work are kept apart there because
- * the five-year gap between the degrees is the shape of the story.
+ * two static tracks instead, education and work side by side.
  */
 export default function Journey() {
   const reduced = useReducedMotion();
@@ -144,8 +143,8 @@ export default function Journey() {
       <Section
         id="journey"
         eyebrow="01 — The arc"
-        title="Two tracks, one direction"
-        intro="An electrical engineering degree, five years in industry, then back for a computer science master's. The education and the work run on separate clocks."
+        title="Software engineer, five years in"
+        intro="Three of those years writing Java and Spring Boot services in production — healthcare claims at Wipro, retail order and logistics systems at Acuver. Now a computer science master's at Dalhousie."
         tinted
       >
         <div className="grid gap-16 lg:grid-cols-2 lg:gap-12">
@@ -164,12 +163,12 @@ export default function Journey() {
           01 — The arc
         </p>
         <h2 className="display mt-3 text-3xl leading-tight text-[var(--fg)] sm:text-4xl">
-          Two tracks, one direction
+          Software engineer, five years in
         </h2>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--fg-muted)]">
-          An electrical engineering degree, five years in industry, then back for a
-          computer science master&apos;s. The education and the work run on separate
-          clocks.
+          Three of those years writing Java and Spring Boot services in production —
+          healthcare claims at Wipro, retail order and logistics systems at Acuver. Now a
+          computer science master&apos;s at Dalhousie.
         </p>
       </div>
 
