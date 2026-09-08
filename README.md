@@ -16,7 +16,7 @@ npm run dev      # http://localhost:3000
 ```bash
 npm run build && npm start   # production build
 npm run lint                 # eslint
-npx tsc --noEmit             # typecheck
+npm run typecheck            # typecheck
 ```
 
 ## Deploy to Vercel
