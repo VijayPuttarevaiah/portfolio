@@ -1,4 +1,4 @@
-import { person, stats } from "@/content/resume";
+import { gmailCompose, person, stats } from "@/content/resume";
 import CountUp from "./CountUp";
 import Reveal from "./Reveal";
 import CinemaMotion from "./CinemaMotion";
@@ -26,9 +26,34 @@ export default function Hero() {
             {person.headline}
             <span>Built to keep running.</span>
           </p>
-          <div className="hero-actions"><a href="#projects" className="cinema-work">
-            Explore my work <span aria-hidden="true">↗</span>
-          </a><a href="/resume/Vijay-Puttarevaiah-Resume.pdf" download className="hero-resume">Download resume · PDF ↓</a><a href={`mailto:${person.email}`} className="hero-email">{person.email}</a></div>
+          <div className="hero-actions">
+            <a
+              href={gmailCompose("Winter 2027 co-op — Vijay Puttarevaiah")}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="hero-hire"
+            >
+              Hire me <span aria-hidden="true">↗</span>
+            </a>
+            <a href="#projects" className="cinema-work">
+              Explore my work <span aria-hidden="true">↗</span>
+            </a>
+            <a
+              href="/resume/Vijay-Puttarevaiah-Resume.pdf"
+              download
+              className="hero-resume"
+            >
+              Download resume · PDF ↓
+            </a>
+            <a
+              href={gmailCompose("Hello Vijay")}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="hero-email"
+            >
+              {person.email}
+            </a>
+          </div>
           <div className="cinema-coordinate" aria-hidden="true">
             BASED IN HALIFAX, CANADA
             <br />

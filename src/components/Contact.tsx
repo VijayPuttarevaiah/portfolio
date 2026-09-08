@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { person } from "@/content/resume";
+import { gmailCompose, person } from "@/content/resume";
 import Reveal from "./Reveal";
 
 type Mode = "choose" | "call" | "email";
@@ -144,7 +144,12 @@ export default function Contact() {
             08 — Contact
           </p>
           <h2 id="contact-heading" className="credits-heading">
-            <a href={`mailto:${person.email}`} className="credits-link">
+            <a
+              href={gmailCompose("Hello Vijay")}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="credits-link"
+            >
               <span className="credits-still">LET’S TALK ↗</span>
               <span className="credits-roll" aria-hidden="true">
                 LET’S TALK ↗ LET’S TALK ↗ LET’S TALK ↗ LET’S TALK ↗{" "}

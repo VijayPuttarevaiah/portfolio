@@ -27,31 +27,18 @@ export default function Experience() {
               </div>
 
               <div>
-                {role.company === "Wipro" ||
-                role.company === "Acuver Consulting" ? (
+                {role.photo ? (
                   <figure className="experience-location">
                     <div className="relative aspect-[16/7] overflow-hidden">
                       <Image
-                        src={
-                          role.company === "Wipro"
-                            ? "/photos/wipro-campus.jpg"
-                            : "/photos/acuver-office.jpg"
-                        }
-                        alt={
-                          role.company === "Wipro"
-                            ? "Wipro Kodathi campus in Bengaluru"
-                            : "Acuver Consulting office in Bengaluru"
-                        }
+                        src={role.photo.src}
+                        alt={role.photo.alt}
                         fill
                         sizes="(max-width: 768px) 100vw, 700px"
                         className="object-cover"
                       />
                     </div>
-                    <figcaption>
-                      {role.company === "Wipro"
-                        ? "Wipro · Kodathi campus, Bengaluru"
-                        : "Acuver Consulting · Bengaluru"}
-                    </figcaption>
+                    <figcaption>{role.photo.caption}</figcaption>
                   </figure>
                 ) : null}
                 <h3 className="text-xl font-semibold tracking-tight text-[var(--fg)]">

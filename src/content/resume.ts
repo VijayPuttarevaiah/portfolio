@@ -69,6 +69,20 @@ export type Engagement = {
   bullets: string[];
 };
 
+/**
+ * Gmail's compose URL rather than a mailto:. Opens a prefilled draft in the
+ * browser, which is what most people checking a portfolio actually have open.
+ */
+export function gmailCompose(subject: string) {
+  const params = new URLSearchParams({
+    view: "cm",
+    fs: "1",
+    to: person.email,
+    su: subject,
+  });
+  return `https://mail.google.com/mail/?${params.toString()}`;
+}
+
 export type Role = {
   company: string;
   companyUrl?: string;
@@ -80,6 +94,8 @@ export type Role = {
   /** Honest framing note rendered as a small qualifier. */
   note?: string;
   context: string;
+  /** Location photo shown alongside the role. */
+  photo?: { src: string; alt: string; caption: string };
   engagements: Engagement[];
   stack: string[];
 };
@@ -94,6 +110,11 @@ export const experience: Role[] = [
     location: "Bengaluru, India",
     context:
       "Built order management and logistics integrations for enterprise retail clients, working against live production systems on two separate engagements.",
+    photo: {
+      src: "/photos/acuver-office.jpg",
+      alt: "The Acuver Consulting office floor in Bengaluru, with the company sign on the wall.",
+      caption: "Acuver Consulting · Bengaluru",
+    },
     engagements: [
       {
         project: "Smart Order Rerouting",
@@ -142,6 +163,11 @@ export const experience: Role[] = [
     location: "Bengaluru, India",
     context:
       "Modernized a real-time healthcare claims platform for Oracle Cerner, moving it off a legacy engine onto containerized services.",
+    photo: {
+      src: "/photos/wipro-entrance.jpg",
+      alt: "The main gate at Wipro's Kodathi campus in Bengaluru, with the Wipro sign in the foreground.",
+      caption: "Wipro · Kodathi campus, Bengaluru",
+    },
     engagements: [
       {
         project: "Integrated Scrubbing Modernization",
