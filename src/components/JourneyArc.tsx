@@ -253,28 +253,8 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
                 >
                   <span className="drafting-year">{stop.year}</span>
                   <span className="drafting-dot" />
-                  <span className="drafting-card-body">
-                    <span className="drafting-brand">
-                      <BrandMark
-                        brand={stop.brand}
-                        label={stop.org}
-                        size={44}
-                      />
-                      <span>
-                        {String(i + 1).padStart(2, "0")} /{" "}
-                        {stop.kind === "education" || stop.kind === "now"
-                          ? "LEARN"
-                          : "BUILD"}
-                      </span>
-                    </span>
-                    <span className="drafting-org">
-                      {stop.org.split(" ·")[0].split(",")[0]}
-                    </span>
-                    <span className="drafting-title">{stop.title}</span>
-                    <span className="drafting-period">
-                      {stop.period.split(" ·")[0]}
-                    </span>
-                  </span>
+                  <span className="journey-zoom-mark"><BrandMark brand={stop.brand} label={stop.org} size={58} /></span>
+                  <span className="journey-zoom-label">{stop.org.split(" ·")[0].split(",")[0]}</span>
                 </button>
               );
             })}

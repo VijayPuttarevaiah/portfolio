@@ -1,5 +1,6 @@
 "use client";
 import Image from "next/image";
+import BrandMark from "../BrandMark";
 import { useEffect, useRef } from "react";
 const routes = [
   "M 770 500 C 640 460 700 260 470 210 S 270 170 110 250",
@@ -45,6 +46,7 @@ export default function EngineeringBackdrop() {
         priority
       />
       <div className="laptop-glow" />
+      <div className="background-brands"><span><BrandMark brand="wipro" label="Wipro" size={70}/></span><span><BrandMark brand="acuver" label="Acuver Consulting" size={70}/></span><span><BrandMark brand="dalhousie" label="Dalhousie University" size={70}/></span></div>
       <svg
         className="data-flow"
         viewBox="0 0 1200 700"
@@ -57,11 +59,11 @@ export default function EngineeringBackdrop() {
         </defs>
         {routes.map((route, i) => (
           <g key={route}>
-            <path d={route} fill="none" stroke="#ff243c" strokeOpacity=".13" />
+            <path d={route} fill="none" stroke={["#7ddfff", "#b49aff", "#79e3ba", "#f2c77d"][i]} strokeOpacity=".13" />
             <path
               d={route}
               fill="none"
-              stroke="#ff4156"
+              stroke={["#7ddfff", "#b49aff", "#79e3ba", "#f2c77d"][i]}
               strokeWidth="2"
               pathLength="100"
               strokeDasharray="2 98"
@@ -74,7 +76,7 @@ export default function EngineeringBackdrop() {
             <path
               d={route}
               fill="none"
-              stroke="#ff4156"
+              stroke={["#7ddfff", "#b49aff", "#79e3ba", "#f2c77d"][i]}
               strokeWidth="5"
               pathLength="100"
               strokeDasharray="2 98"

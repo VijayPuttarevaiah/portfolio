@@ -1498,7 +1498,7 @@ html.cinema-motion {
   width: 5px;
   background: var(--accent);
   border-radius: 50%;
-  box-shadow: 0 0 35px 10px #ff243c44;
+  box-shadow: 0 0 35px 10px #a48bff44;
   animation: opening-pulse 1s ease-in-out infinite alternate;
 }
 @keyframes opening-pulse {
@@ -1521,7 +1521,7 @@ html.cinema-motion {
   top: 58px;
   pointer-events: none;
   text-shadow:
-    var(--scroll-chroma, 0px) 0 #ff243c55,
+    var(--scroll-chroma, 0px) 0 #8abfff55,
     calc(var(--scroll-chroma, 0px) * -1) 0 #ffffff44;
 }
 .cinema-name > span:first-child {
@@ -1697,7 +1697,7 @@ html.cinema-motion {
 }
 .work-visual:hover h3 {
   text-shadow:
-    -4px 0 #ff243c,
+    -4px 0 #9f87ff,
     3px 0 #ffffff44;
 }
 @keyframes rgb-shift {
@@ -1967,3 +1967,38 @@ html.cinema-motion {
 @media(max-height:740px) and (min-width:701px){.drafting-stage{max-width:900px}.drafting-sticky{min-height:0}.drafting-card-body{min-height:160px;padding:12px}.drafting-title{font-size:9px}.drafting-detail{padding-top:12px}.drafting-detail p{font-size:11px}}
 @media(prefers-reduced-motion:reduce){.engineering-scene,.data-packet,.laptop-glow{animation:none}.data-packet{opacity:.15}.drafting-runway{height:auto}.drafting-sticky{position:relative;height:auto}.drafting-stage{transition:none}}
 @media(min-width:701px){.drafting-stage{width:min(1280px,100%,calc((100svh - 300px) * 1.967));}}
+/* Aurora palette: a deliberate spectrum with warm metal reserved for the clock. */
+:root {--bg:#090b12;--bg-elevated:#10141f;--bg-sunken:#0b0e17;--fg:#f3f4f9;--fg-muted:#b5bdd0;--fg-subtle:#8b96ae;--border:#242d40;--border-strong:#3c4964;--accent:#b49aff;--accent-fg:#11101c;--h1:#b49aff;--h2:#7ddfff;--h3:#79e3ba;--h4:#f2c77d;--h5:#e9a7d8;--h1-soft:#211a37;--h2-soft:#122937;--h3-soft:#132b25;--h4-soft:#302718;--h5-soft:#2b1c2b;--compass-ink:#d3bc82;}
+:root[data-theme="light"] {--bg:#f6f7fc;--bg-elevated:#fff;--bg-sunken:#edf0f7;--fg:#171b2b;--fg-muted:#48546b;--fg-subtle:#626f86;--border:#d8ddec;--border-strong:#bfc9df;--accent:#6641bc;--accent-fg:#fff;--h1:#6641bc;--h2:#146789;--h3:#267353;--h4:#8b601c;--h5:#98356e;--h1-soft:#ece5fa;--h2-soft:#e2f2fa;--h3-soft:#e2f2e9;--h4-soft:#f6eddb;--h5-soft:#f6e6f0;}
+.cinema-hero {background:#090b12;}
+.cinema-name>span:first-child {color:#b49aff;}
+.kinetic-first>span:nth-child(2){color:#a4b6ff;}.kinetic-first>span:nth-child(3){color:#83d8f2;}.kinetic-first>span:nth-child(4){color:#89dfd0;}.kinetic-first>span:nth-child(5){color:#c1d6ae;}
+.cinema-surname{color:#f3f4f9;}
+.cinema-grid{background:radial-gradient(ellipse at 25% 25%,#8561d51c,transparent 55%),radial-gradient(ellipse at 80% 65%,#49b8d71b,transparent 60%);}
+.laptop-glow{background:radial-gradient(ellipse,#78dfff30,transparent 70%);}
+.data-telemetry{color:#9daee1;}
+.background-brands{position:absolute;left:29%;right:7%;bottom:15%;display:flex;align-items:center;justify-content:space-between;opacity:.2;transform:rotate(-5deg);}
+.background-brands>span:nth-child(2){transform:translateY(24px) rotate(10deg)}.background-brands>span:nth-child(3){transform:translateY(-28px) rotate(4deg)}
+.background-brands .brand-tile{background:transparent;box-shadow:none;border:0;}
+.work-poster{background:radial-gradient(ellipse at 90% 30%,var(--h1-soft),transparent 65%),var(--bg-sunken);}
+.work-shot:nth-child(2) .work-poster{background:radial-gradient(ellipse at 90% 30%,var(--h2-soft),transparent 65%),var(--bg-sunken);}.work-shot:nth-child(3) .work-poster{background:radial-gradient(ellipse at 90% 30%,var(--h3-soft),transparent 65%),var(--bg-sunken);}.work-shot:nth-child(4) .work-poster{background:radial-gradient(ellipse at 90% 30%,var(--h4-soft),transparent 65%),var(--bg-sunken);}
+.work-shot:nth-child(1) .work-visual h3{color:var(--h1)}.work-shot:nth-child(2) .work-visual h3{color:var(--h2)}.work-shot:nth-child(3) .work-visual h3{color:var(--h3)}.work-shot:nth-child(4) .work-visual h3{color:var(--h4)}
+.experience-story{position:relative;isolation:isolate;overflow:hidden;border:1px solid var(--border);padding:36px;border-radius:10px;background:var(--bg-elevated);}
+.experience-location{position:absolute;inset:0;z-index:-1;margin:0;border:0;pointer-events:none;mask-image:linear-gradient(100deg,transparent,black 75%);}
+.experience-location>div{height:100%;aspect-ratio:auto;}.experience-location img{opacity:.13;filter:saturate(.85);}.experience-location figcaption{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);}
+.experience-brand{margin-bottom:24px;}.experience-brand .brand-tile{box-shadow:0 0 40px #8294d41a;}
+.education-story{position:relative;isolation:isolate;overflow:hidden;background:var(--bg-elevated);}.education-watermark{position:absolute;right:-15px;bottom:-20px;z-index:-1;opacity:.12;transform:rotate(-12deg);pointer-events:none;}
+.education-watermark .brand-tile{border:0;background:transparent;box-shadow:none;}
+/* Bring back the original milestone zoom: .7 → 1.85 → 1 as each year passes. */
+.drafting-card{text-align:center;width:14%;}
+.drafting-year{left:50%;transform:translateX(-50%);bottom:calc(100% + 16px);}
+.drafting-dot{margin:-2px auto 32px;}
+.journey-zoom-mark{display:flex;justify-content:center;align-items:center;transform:scale(.7);filter:grayscale(1) brightness(.75);transition:transform .9s cubic-bezier(.16,1,.3,1),filter .65s;transform-origin:50% 50%;}
+.journey-zoom-label{display:block;margin:30px auto 0;max-width:170px;font:11px/1.5 var(--font-mono);color:var(--fg-subtle);opacity:.5;transition:opacity .6s,color .6s,transform .9s;}
+.drafting-card[data-state="active"] .journey-zoom-mark{transform:scale(1.85);filter:drop-shadow(0 0 24px #bd9fff45);}
+.drafting-card[data-state="past"] .journey-zoom-mark{transform:scale(1);filter:none;}
+.drafting-card[data-state="active"] .journey-zoom-label{color:var(--fg);opacity:1;transform:translateY(12px);}
+.drafting-card[data-state="past"] .journey-zoom-label{opacity:.8;}
+.drafting-detail{background:linear-gradient(100deg,#b49aff08,transparent);padding:20px 24px;border-color:var(--border);}
+@media(max-width:700px){.experience-story{padding:24px;}.experience-location img{opacity:.09;}.background-brands{left:12%;right:12%;bottom:7%;opacity:.15;}.background-brands .brand-tile{transform:scale(.65)}.journey-zoom-label{font-size:9px;}.drafting-detail{padding:14px;}}
+@media(prefers-reduced-motion:reduce){.journey-zoom-mark,.journey-zoom-label{transition:none;}}

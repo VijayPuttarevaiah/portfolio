@@ -1,6 +1,6 @@
 # Cinematic portfolio implementation
 
-The site keeps Next.js App Router, React, Tailwind CSS, the existing resume content, and the working contact API. Its visual system is charcoal, white and crimson, with muted brass reserved for the vintage compass instrument. The opening has no personal portrait. An anonymous laptop silhouette forms a quiet animated background, with a pulsing screen glow and moving data packets. Wipro and Acuver photographs appear only in their corresponding Experience entries; the gallery section is removed. Projects use typography and abstract grids.
+The site keeps Next.js App Router, React, Tailwind CSS, the existing resume content, and the working contact API. Its visual system is deep navy, violet, cyan, mint and warm gold, with muted brass reserved for the vintage compass instrument. The opening has no personal portrait. An anonymous laptop silhouette forms a quiet animated background, with a pulsing screen glow and moving data packets. Wipro and Acuver photographs appear as subtle backgrounds only in their corresponding Experience entries; the gallery section is removed. Projects use typography and abstract grids. Existing employer and university logos form restrained background layers in the opening and education sections, with legible foreground employer marks in Experience.
 
 ## Run it
 
@@ -89,7 +89,7 @@ The monologue targets `.monologue-word` and scrubs opacity from 0.18 to 1, with 
 The complete shaders are in `src/components/cinema/shaders.ts`, not pseudocode. `FilmScene.tsx` attaches them to `THREE.ShaderMaterial` through React Three Fiber:
 
 - `particleVertex`: animated particle drift, cursor repulsion and velocity-driven Z displacement. Repulsion is `normalize(delta + vec2(.001)) * exp(-distanceToPointer * 2.0) * .8`.
-- `particleFragment`: soft crimson points using radial `smoothstep` and additive blending.
+- `particleFragment`: soft violet/cyan points using radial `smoothstep` and additive blending.
 - `screenFragment`: cursor orb, delayed trail, localized grain, vignette and a small velocity-based color displacement. Pointer and trail uniforms interpolate at 0.3 and 0.12 per frame.
 - `wireVertex`: a rotating icosahedron deformed by scroll speed, with sinusoidal displacement. The mesh rotates at 0.07 and 0.1 radians per second on its X/Y axes.
 - `wireFragment`: low-opacity wireframe shading, visible only while About is in view.
@@ -110,7 +110,7 @@ The supplied video was re-examined at 16–21 seconds. Its distinguishing struct
 
 `JourneyArc.tsx` defines a quadratic path from (105, 140), through control point (520, 360), to (1090, 290). Two metal drawing arms hinge at (880, 35). The active arm follows the exact quadratic point for normalized scroll progress; the resting arm trails by 0.24 of that progress. A sampled arc-length fraction keeps the glowing trail attached to the drawing nib.
 
-The scene includes an oversized engraved construction circle, 111 ruler marks, a warm gold trail, and five milestone cards. Cards brighten and lift as the nib reaches their years. Mobile uses a wider scene and follows the active milestone with a horizontal camera movement. Reduced-motion visitors retain the static education and professional tracks.
+The scene includes an oversized engraved construction circle, 111 ruler marks, a warm gold trail, and five milestone logos. The original zoom sequence is restored: logos scale from 0.7 to 1.85 at the active year, then settle to 1.0 as the next logo takes focus. The current drafting compass and clock markings stay intact. Mobile uses a wider scene and follows the active milestone with a horizontal camera movement. Reduced-motion visitors retain the static education and professional tracks.
 
 The background uses one optimized WebP asset and four SVG data routes. Their dash offsets animate from 100 to 0 over 7–10 seconds, while the image drifts slowly and the screen glow pulses. An IntersectionObserver pauses those animations when the hero leaves view; hidden tabs and reduced motion also pause or disable effects.
 

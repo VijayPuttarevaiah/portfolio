@@ -1,3 +1,4 @@
+import BrandMark from "./BrandMark";
 import { education } from "@/content/resume";
 import Reveal from "./Reveal";
 import Section from "./Section";
@@ -13,9 +14,10 @@ export default function Education() {
         {education.map((entry, i) => (
           <Reveal key={entry.credential} delay={i * 70}>
             <li
-              className="card-r h-full border-2 p-6 sm:p-7"
+              className="education-story card-r h-full border-2 p-6 sm:p-7"
               style={{ borderColor: i === 0 ? "var(--h3)" : "var(--h2)" }}
             >
+              <span className="education-watermark" aria-hidden="true"><BrandMark brand={entry.institution.includes("Dalhousie") ? "dalhousie" : "nie"} label={entry.institution} size={140}/></span>
               <p
                 className="font-mono text-[0.65rem] uppercase tracking-[0.16em]"
                 style={{ color: i === 0 ? "var(--h3)" : "var(--h2)" }}

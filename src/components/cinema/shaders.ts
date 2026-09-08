@@ -22,7 +22,7 @@ varying float vAlpha;
 void main() {
   float d = length(gl_PointCoord - .5);
   float glow = smoothstep(.5, .04, d);
-  gl_FragColor = vec4(vec3(1.0, .11, .16), glow * vAlpha);
+  gl_FragColor = vec4(mix(vec3(.45, .84, 1.0), vec3(.68, .48, 1.0), vAlpha), glow * vAlpha);
 }`;
 export const screenVertex = /* glsl */ `
 varying vec2 vUv;
@@ -44,7 +44,7 @@ void main() {
   float texture = random(floor(vUv * vec2(900.0*uAspect,900.0)) + floor(uTime*12.0));
   float vignette = smoothstep(.30,.85,length((vUv-.5)*vec2(1.0,.8))) * .2;
   float split = exp(-length((vUv-uPointer-vec2(uSpeed*.003,0.0))*ratio)*100.0)*uSpeed*.03;
-  vec3 color = vec3(1.0,.13,.20)*(orb+split) + vec3(texture*.015);
+  vec3 color = vec3(.48,.80,1.0)*(orb+split) + vec3(texture*.015);
   gl_FragColor = vec4(color, clamp(orb + vignette + .018,0.0,.8));
 }`;
 export const wireVertex = /* glsl */ `

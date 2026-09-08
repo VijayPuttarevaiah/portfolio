@@ -1,4 +1,5 @@
 import Image from "next/image";
+import BrandMark from "./BrandMark";
 import { experience } from "@/content/resume";
 import Reveal from "./Reveal";
 import Section from "./Section";
@@ -14,8 +15,9 @@ export default function Experience() {
       <ol className="space-y-14">
         {experience.map((role, index) => (
           <Reveal as="li" key={role.company} delay={index * 60}>
-            <article className="grid gap-6 md:grid-cols-[13rem_1fr] md:gap-10">
+            <article className="experience-story grid gap-6 md:grid-cols-[13rem_1fr] md:gap-10">
               <div className="md:pt-1">
+                <div className="experience-brand"><BrandMark brand={role.company === "Wipro" ? "wipro" : role.company === "Acuver Consulting" ? "acuver" : "amazon"} label={role.company} size={64} /></div>
                 <p className="font-mono text-[0.72rem] uppercase tracking-[0.12em] text-[var(--fg-subtle)]">
                   {role.period}
                 </p>
