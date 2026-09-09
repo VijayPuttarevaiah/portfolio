@@ -141,3 +141,9 @@ Contact hover uses a single restrained exposure pulse, not a repeating strobe. T
 - One generated anonymous engineering-background image; original workplace photographs appear only under the correct employer.
 
 Validation: production compilation, TypeScript and ESLint passed during implementation. Browser interaction testing, device GPU performance profiling, and live email delivery were not performed; hardware-specific frame rates are not guaranteed.
+
+### Milestone logo films
+
+`JourneyLogoReveal` plays a 3.6-second muted, inline MP4 when its journey milestone is active and at least half visible. It holds the final frame, pauses in a hidden tab, and unmounts inactive clips. Static BrandMark artwork remains the accessible fallback for reduced motion, media errors or blocked playback. The clock, path, dates and description panel are unchanged.
+
+All five films (NIE, Amazon, Wipro, Acuver, Dalhousie) are in `public/videos/journey/`, with matching WebP posters. The Wipro reference's opening dot expansion inspired a colored particle sweep and logo pop; its unrelated promotional footage and soundtrack are not included. Original logo artwork is preserved. Regenerate the deterministic 480px / 30fps H.264 clips with `node scripts/render-journey-videos.mjs` (requires Sharp and FFmpeg). Only one clip is mounted at a time, and each MP4 is under 100 KB.

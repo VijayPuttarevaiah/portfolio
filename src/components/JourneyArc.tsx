@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { educationJourney, professionalJourney } from "@/content/resume";
-import BrandMark from "./BrandMark";
+import JourneyLogoReveal from "./JourneyLogoReveal";
 const W = 1200,
   H = 610;
 const pivot = { x: 880, y: 35 };
@@ -253,7 +253,7 @@ export default function JourneyArc({ reduced }: { reduced: boolean }) {
                   onClick={() => select(i)}
                 >
                   <span className="drafting-year">{stop.year}</span>
-                  <span className="journey-zoom-mark"><BrandMark brand={stop.brand} label={stop.org} size={58} /></span>
+                  <span className="journey-zoom-mark"><JourneyLogoReveal key={`${stop.brand}-${i === active}`} brand={stop.brand} label={stop.org} active={i === active} reduced={reduced} /></span>
                 </button>
               );
             })}
