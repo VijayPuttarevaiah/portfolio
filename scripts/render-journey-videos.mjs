@@ -16,7 +16,11 @@ const ease = x => 1 - Math.pow(1 - clamp(x), 3);
 const fps = 30, duration = 3.6;
 await mkdir('public/videos/journey', {recursive:true});
 for (const [brand, file, palette] of brands) {
-  const png = await sharp(`public/logos/${file}`).resize(250,230,{fit:'inside'}).png().toBuffer();
+  if (process.argv[2] && process.argv[2] !== brand) continue;
+  const source = sharp(`public/logos/${file}`);
+  // The supplied Acuver bitmap has a cut-off slogan; keep its complete wordmark.
+  if (brand === "acuver") source.extract({left:0,top:0,width:738,height:215});
+  const png = await source.resize(250,230,{fit:"inside"}).png().toBuffer();
   const meta = await sharp(png).metadata();
   const img = `data:image/png;base64,${png.toString('base64')}`;
   const encoder = spawn('ffmpeg',['-y','-loglevel','error','-f','image2pipe','-framerate',String(fps),'-i','pipe:0','-an','-c:v','libx264','-preset','slow','-crf','23','-pix_fmt','yuv420p','-movflags','+faststart',`public/videos/journey/${brand}.mp4`]);
