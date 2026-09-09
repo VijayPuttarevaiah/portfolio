@@ -39,13 +39,6 @@ export default function Hero() {
               Explore my work <span aria-hidden="true">↗</span>
             </a>
             <a
-              href="/resume/Vijay-Puttarevaiah-Resume.pdf"
-              download
-              className="hero-resume"
-            >
-              Download resume · PDF ↓
-            </a>
-            <a
               href={gmailCompose("Hello Vijay")}
               target="_blank"
               rel="noreferrer noopener"
