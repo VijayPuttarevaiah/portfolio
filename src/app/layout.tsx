@@ -98,11 +98,11 @@ const themeScript = `
 (function () {
   document.documentElement.classList.add('js');
   try {
-    // Dark is the site's identity, not a preference to be negotiated with
-    // the OS. Only an explicit click on the toggle switches to light.
+    // Light is the site's identity, not a preference to be negotiated with
+    // the OS. Only an explicit click on the toggle switches to dark.
     var stored = localStorage.getItem('theme');
     document.documentElement.dataset.theme =
-      stored === 'light' ? 'light' : 'dark';
+      stored === 'dark' ? 'dark' : 'light';
   } catch (e) {}
 })();
 `;
@@ -141,7 +141,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" data-theme="dark" suppressHydrationWarning>
+    <html lang="en" data-theme="light" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{ __html: themeScript }}

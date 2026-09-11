@@ -76,18 +76,26 @@
 }
 
 /*
- * next/font puts its face variables on <body>, one level below :root. A nested
- * var() is substituted where it is DECLARED, not where it is used, so these
- * four tokens computed to the guaranteed-invalid value up on :root and
- * inherited down as invalid. Every `font:` shorthand built on them was being
- * dropped whole — size, family and line-height together. Re-declaring them
- * here, where the face variables exist, makes them resolve.
+ * One typeface across the whole site: the system sans stack.
+ *
+ * These four tokens are declared here, on <body>, rather than on :root — the
+ * next/font face variables live here, and a nested var() is substituted where
+ * it is DECLARED, not where it is used. On :root they computed to the
+ * guaranteed-invalid value, which silently voided every `font:` shorthand
+ * built on them, size and line-height included. Keeping them valid but
+ * pointing them all at the same stack means the sizing rules apply while the
+ * letterforms stay uniform.
  */
 body {
-  --font-display: var(--font-display-face), ui-sans-serif, sans-serif;
-  --font-serif: var(--font-playfair), Georgia, serif;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-mono-jb), ui-monospace, SFMono-Regular, monospace;
+  /* Byte-for-byte the stack the body already resolves to, so a token-based
+     rule and a Tailwind-based one pick the identical face. */
+  --font-system: -apple-system, "system-ui", "Segoe UI", Roboto,
+    "Helvetica Neue", "Noto Sans", Arial, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-display: var(--font-system);
+  --font-serif: var(--font-system);
+  --font-sans: var(--font-system);
+  --font-mono: var(--font-system);
 }
 
 * {
@@ -166,7 +174,7 @@ body {
 /* Display face is condensed and uppercase-only — that is what makes the
    headings read as a poster instead of a document. */
 .display {
-  font-family: var(--font-display), ui-sans-serif, sans-serif;
+  font-family: var(--font-display);
   font-weight: 400;
   letter-spacing: 0.005em;
   line-height: 0.88;
@@ -477,7 +485,7 @@ body {
   align-items: center;
   gap: 1.75rem;
   padding-right: 1.75rem;
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-display);
   font-size: 1.6rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -1627,7 +1635,7 @@ html.cinema-motion {
 }
 
 .section-heading {
-  font-family: var(--font-display), ui-sans-serif, sans-serif;
+  font-family: var(--font-display);
   font-size: 30px;
   font-weight: 700;
   line-height: 1.15;
@@ -2854,6 +2862,12 @@ html.cinema-motion {
 /* The active year was near-white gold with a bright halo — invisible on paper.
    On the light theme it takes the ink colour and drops the glow. */
 :root[data-theme="light"] .drafting-year{color:#8a7245}
+/* The two primary actions take the same dark fill a certification row gets on
+   hover in this theme, rather than the teal accent. */
+:root[data-theme="light"] .hero-hire,
+:root[data-theme="light"] .contact-route.is-primary{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+:root[data-theme="light"] .hero-hire:hover,
+:root[data-theme="light"] .contact-route.is-primary:hover{filter:none;background:color-mix(in srgb,var(--fg) 88%,var(--bg));border-color:color-mix(in srgb,var(--fg) 88%,var(--bg))}
 :root[data-theme="light"] .journey-detail-badge{background:#8a72451c;border-color:#8a724545;color:#6d5931}
 :root[data-theme="light"] .journey-org-link{text-decoration-color:#8a724577}
 :root[data-theme="light"] .journey-org-link:hover{color:#6d5931;text-decoration-color:#6d5931}
