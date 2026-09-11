@@ -99,8 +99,17 @@ function Ring() {
             return (
               <motion.div
                 key={project.name}
-                className="absolute inset-0 flex items-center justify-center"
-                style={{ transformStyle: "preserve-3d" }}
+                // The wrapper spans the whole ring to place its tile, so each
+                // one covers the tiles before it. Only the button should be a
+                // click target.
+                className="pointer-events-none absolute inset-0 flex items-center justify-center"
+                // Stacking was DOM order, so a tile at the back could paint over
+                // the selected one. Depth now drives z-index: the nearer the tile
+                // faces the viewer, the higher it sits.
+                style={{
+                  transformStyle: "preserve-3d",
+                  zIndex: 10 + Math.round(Math.cos((targetAngle * Math.PI) / 180) * 100),
+                }}
                 animate={{ rotateY: targetAngle }}
                 transition={reduced ? { duration: 0 } : SPRING}
               >
@@ -108,7 +117,7 @@ function Ring() {
                   type="button"
                   onClick={() => goTo(index)}
                   aria-current={isActive}
-                  className={`ring-tile ${isActive ? "ring-tile-active" : ""}`}
+                  className={`ring-tile pointer-events-auto ${isActive ? "ring-tile-active" : ""}`}
                   style={{ transformStyle: "preserve-3d" }}
                   animate={{ rotateY: -targetAngle, rotateX: RING_TILT_DEG, z: radius }}
                   transition={reduced ? { duration: 0 } : SPRING}
@@ -248,9 +257,8 @@ export default function WorkRing() {
   return (
     <section id="projects" className="ring-section" aria-labelledby="projects-heading">
       <div className="work-heading">
-        <p className="cinema-label">03 / SELECTED WORK</p>
-        <h2 id="projects-heading" className="display">
-          Systems in motion.
+        <h2 id="projects-heading" className="section-heading">
+          Selected work
         </h2>
       </div>
       <div className="ring-body">

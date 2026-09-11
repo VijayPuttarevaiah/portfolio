@@ -4,75 +4,38 @@ import { useEffect, useRef, useState } from "react";
 import { gmailCompose, person } from "@/content/resume";
 import Reveal from "./Reveal";
 
-type Mode = "choose" | "call" | "email";
+type Mode = "closed" | "email";
 type Status =
   | { kind: "idle" }
   | { kind: "sending" }
   | { kind: "sent" }
   | { kind: "error"; message: string };
 
-function PhoneIcon() {
-  return (
-    <svg
-      width="22"
-      height="22"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M6.5 3h3l1.5 4-2 1.5a12 12 0 0 0 6.5 6.5l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.2 2 2 0 0 1 6.5 3Z" />
-    </svg>
-  );
-}
-
-function MailIcon() {
-  return (
-    <svg
-      width="22"
-      height="22"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <rect x="3" y="5" width="18" height="14" rx="2.5" />
-      <path d="m3.5 7 8.5 6 8.5-6" />
-    </svg>
-  );
-}
-
-function BackIcon() {
-  return (
-    <svg
-      width="14"
-      height="14"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M15 6l-6 6 6 6" />
-    </svg>
-  );
-}
-
 const inputClass =
   "w-full rounded-xl border-2 border-[var(--border)] bg-[var(--bg)] px-4 py-3 text-[0.95rem] text-[var(--fg)] outline-none transition-colors placeholder:text-[var(--fg-subtle)] focus:border-[var(--accent)]";
 
 const MESSAGE_MAX = 4000;
 
+
+function MailMark() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <rect x="2.5" y="4.5" width="19" height="15" rx="2.5" />
+      <path d="m3.5 6.5 8.5 6 8.5-6" />
+    </svg>
+  );
+}
+
+function LinkedInMark() {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.36 4.26 5.44v6.3zM5.34 7.43a2.07 2.07 0 1 1 0-4.13 2.07 2.07 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z" />
+    </svg>
+  );
+}
+
 export default function Contact() {
-  const [mode, setMode] = useState<Mode>("choose");
+  const [mode, setMode] = useState<Mode>("closed");
   const [status, setStatus] = useState<Status>({ kind: "idle" });
   const [copied, setCopied] = useState(false);
   const [message, setMessage] = useState("");
@@ -138,130 +101,56 @@ export default function Contact() {
       aria-labelledby="contact-heading"
       className="scroll-mt-24 border-t border-[var(--border)]"
     >
-      <div className="mx-auto w-full max-w-5xl px-6 py-20 sm:px-8 sm:py-28">
+      <div className="mx-auto w-full max-w-6xl px-6 py-20 sm:px-8 sm:py-28">
         <Reveal>
-          <p className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--fg-subtle)]">
-            08 — Contact
+          <h2 id="contact-heading" className="section-heading">
+            Contact
+          </h2>
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--fg-muted)]">
+            {person.availability}, and{" "}
+            {person.workAuth.charAt(0).toLowerCase() + person.workAuth.slice(1)}. Pick
+            whichever is easier.
           </p>
-          <h2 id="contact-heading" className="credits-heading">
+
+          <div className="contact-routes">
+            <button
+              type="button"
+              onClick={() => {
+                setMode("email");
+                window.setTimeout(() => {
+                  document
+                    .getElementById("contact-form")
+                    ?.scrollIntoView({ behavior: "smooth", block: "center" });
+                  document.getElementById("name")?.focus({ preventScroll: true });
+                }, 90);
+              }}
+              aria-expanded={mode === "email"}
+              aria-controls="contact-form"
+              className="contact-route is-primary"
+            >
+              <span>Write here</span>
+              <span className="contact-route-note">Sends straight to my inbox</span>
+            </button>
+
             <a
               href={gmailCompose("Hello Vijay")}
               target="_blank"
               rel="noreferrer noopener"
-              className="credits-link"
+              className="contact-route"
             >
-              <span className="credits-still">LET’S TALK ↗</span>
-              <span className="credits-roll" aria-hidden="true">
-                LET’S TALK ↗ LET’S TALK ↗ LET’S TALK ↗ LET’S TALK ↗{" "}
+              <span>
+                Open in Gmail <span aria-hidden="true">↗</span>
               </span>
+              <span className="contact-route-note">Compose in your own account</span>
             </a>
-          </h2>
-          <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--fg-muted)]">
-            {person.availability}, and {person.workAuth.toLowerCase()}. Pick
-            whichever is easier.
-          </p>
-        </Reveal>
-
-        {/* ---------- Step 1: choose a channel ---------- */}
-        {mode === "choose" ? (
-          <Reveal delay={80}>
-            <div className="mt-10 grid gap-4 sm:grid-cols-2">
-              <button
-                type="button"
-                onClick={() => setMode("call")}
-                className="card-r flex items-start gap-4 border-2 p-6 text-left transition-shadow hover:shadow-xl"
-                style={{ borderColor: "var(--h2)" }}
-              >
-                <span
-                  className="mt-0.5 shrink-0 rounded-xl p-2.5"
-                  style={{ background: "var(--h2-soft)", color: "var(--h2)" }}
-                >
-                  <PhoneIcon />
-                </span>
-                <span>
-                  <span className="block text-lg font-semibold text-[var(--fg)]">
-                    Call
-                  </span>
-                  <span className="mt-1 block text-sm leading-relaxed text-[var(--fg-muted)]">
-                    Quickest for a short conversation.
-                  </span>
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setMode("email")}
-                className="card-r flex items-start gap-4 border-2 p-6 text-left transition-shadow hover:shadow-xl"
-                style={{ borderColor: "var(--h1)" }}
-              >
-                <span
-                  className="mt-0.5 shrink-0 rounded-xl p-2.5"
-                  style={{ background: "var(--h1-soft)", color: "var(--h1)" }}
-                >
-                  <MailIcon />
-                </span>
-                <span>
-                  <span className="block text-lg font-semibold text-[var(--fg)]">
-                    Email
-                  </span>
-                  <span className="mt-1 block text-sm leading-relaxed text-[var(--fg-muted)]">
-                    Write a message here and it reaches my inbox.
-                  </span>
-                </span>
-              </button>
-            </div>
-          </Reveal>
-        ) : null}
-
-        {/* ---------- Call ---------- */}
-        {mode === "call" ? (
-          <div className="mt-10">
-            <button
-              type="button"
-              onClick={() => setMode("choose")}
-              className="inline-flex items-center gap-1.5 text-sm text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
-            >
-              <BackIcon /> Back
-            </button>
-            <div
-              className="card-r mt-5 border-2 p-7 sm:p-9"
-              style={{ borderColor: "var(--h2)" }}
-            >
-              <p className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[var(--fg-subtle)]">
-                Phone
-              </p>
-              <a
-                href={`tel:${person.phone.replace(/[^\d]/g, "")}`}
-                className="mt-3 block font-display text-3xl font-bold tracking-tight transition-opacity hover:opacity-80 sm:text-4xl"
-                style={{ color: "var(--h2)" }}
-              >
-                {person.phone}
-              </a>
-              <p className="mt-4 text-sm leading-relaxed text-[var(--fg-muted)]">
-                I am on Atlantic Time. If I miss the call, a text or an email
-                gets a faster reply.
-              </p>
-            </div>
           </div>
-        ) : null}
+        </Reveal>
 
         {/* ---------- Email ---------- */}
         {mode === "email" ? (
           <div className="mt-10">
-            <button
-              type="button"
-              onClick={() => {
-                setMode("choose");
-                setStatus({ kind: "idle" });
-              }}
-              className="inline-flex items-center gap-1.5 text-sm text-[var(--fg-muted)] transition-colors hover:text-[var(--fg)]"
-            >
-              <BackIcon /> Back
-            </button>
-
             <div
-              className="card-r mt-5 border-2 p-6 sm:p-9"
-              style={{ borderColor: "var(--h1)" }}
+              className="contact-panel mt-5 p-6 sm:p-9"
             >
               {status.kind === "sent" ? (
                 <div className="py-6 text-center">
@@ -284,7 +173,7 @@ export default function Contact() {
                   </button>
                 </div>
               ) : (
-                <form onSubmit={onSubmit} noValidate>
+                <form id="contact-form" onSubmit={onSubmit} noValidate>
                   {/* honeypot — hidden from people, tempting to bots */}
                   <div
                     className="absolute h-0 w-0 overflow-hidden"
@@ -436,26 +325,21 @@ export default function Contact() {
               {
                 label: "Email",
                 value: person.email,
-                href: `mailto:${person.email}`,
-              },
-              {
-                label: "Phone",
-                value: person.phone,
-                href: `tel:${person.phone.replace(/[^\d]/g, "")}`,
-              },
-              {
-                label: "GitHub",
-                value: person.githubHandle,
-                href: person.github,
+                href: gmailCompose("Hello Vijay"),
+                icon: <MailMark />,
               },
               {
                 label: "LinkedIn",
                 value: person.linkedinHandle,
                 href: person.linkedin,
+                icon: <LinkedInMark />,
               },
             ].map((link) => (
               <div key={link.label}>
-                <dt className="font-mono text-[0.68rem] uppercase tracking-[0.16em] text-[var(--fg-subtle)]">
+                <dt className="contact-label">
+                  <span className="contact-mark" aria-hidden="true">
+                    {link.icon}
+                  </span>
                   {link.label}
                 </dt>
                 <dd className="mt-2">

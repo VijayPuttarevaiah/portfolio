@@ -8,16 +8,12 @@ import {
   particleFragment,
   screenVertex,
   screenFragment,
-  wireVertex,
-  wireFragment,
 } from "./shaders";
 
 function Scene() {
   const points = useRef<THREE.Points>(null);
   const particleMaterial = useRef<THREE.ShaderMaterial>(null);
   const screenMaterial = useRef<THREE.ShaderMaterial>(null);
-  const wireMaterial = useRef<THREE.ShaderMaterial>(null);
-  const wire = useRef<THREE.Mesh>(null);
   const { invalidate, gl } = useThree();
   const uniforms = useMemo(
     () => ({
@@ -34,14 +30,6 @@ function Scene() {
       uTrail: { value: new THREE.Vector2(-10, -10) },
       uSpeed: { value: 0 },
       uAspect: { value: 1 },
-    }),
-    [],
-  );
-  const wireUniforms = useMemo(
-    () => ({
-      uTime: { value: 0 },
-      uSpeed: { value: 0 },
-      uOpacity: { value: 0 },
     }),
     [],
   );
@@ -73,15 +61,9 @@ function Scene() {
     };
   }, [invalidate, gl]);
   useFrame(({ clock, viewport, size }) => {
-    if (
-      !particleMaterial.current ||
-      !screenMaterial.current ||
-      !wireMaterial.current
-    )
-      return;
+    if (!particleMaterial.current || !screenMaterial.current) return;
     const uniforms = particleMaterial.current.uniforms;
     const screen = screenMaterial.current.uniforms;
-    const wireUniforms = wireMaterial.current.uniforms;
     const t = clock.elapsedTime;
     uniforms.uTime.value = t;
     uniforms.uPointer.value.set(
@@ -97,15 +79,7 @@ function Scene() {
     );
     screen.uTrail.value.lerp(screen.uPointer.value, 0.12);
     screen.uSpeed.value = motionState.speed;
-    wireUniforms.uTime.value = t;
-    wireUniforms.uSpeed.value = motionState.speed;
-    wireUniforms.uOpacity.value = motionState.about;
     if (points.current) points.current.visible = motionState.hero > 0;
-    if (wire.current) {
-      wire.current.visible = motionState.about > 0.01;
-      wire.current.rotation.set(t * 0.07, t * 0.1, 0);
-      wire.current.position.x = viewport.width * 0.24;
-    }
     if (!motionState.ready) {
       motionState.ready = true;
       requestAnimationFrame(() =>
@@ -133,18 +107,6 @@ function Scene() {
           blending={THREE.AdditiveBlending}
         />
       </points>
-      <mesh ref={wire}>
-        <icosahedronGeometry args={[1.7, 2]} />
-        <shaderMaterial
-          ref={wireMaterial}
-          uniforms={wireUniforms}
-          vertexShader={wireVertex}
-          fragmentShader={wireFragment}
-          wireframe
-          transparent
-          depthWrite={false}
-        />
-      </mesh>
       <mesh frustumCulled={false} renderOrder={10}>
         <planeGeometry args={[2, 2]} />
         <shaderMaterial

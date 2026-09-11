@@ -1,42 +1,53 @@
-import BrandMark from "./BrandMark";
 import { education } from "@/content/resume";
+import BrandMark from "./BrandMark";
 import Reveal from "./Reveal";
 import Section from "./Section";
 
+/**
+ * Same row rhythm as Certifications: mark, then the record, so the two
+ * credential sections read as one system rather than two layouts.
+ */
 export default function Education() {
   return (
-    <Section
-      id="education"
-      eyebrow="06 — Education"
-      title="Education"
-    >
-      <ol className="grid gap-6 sm:grid-cols-2">
+    <Section id="education" title="Education">
+      <ul className="record-rows">
         {education.map((entry, i) => (
           <Reveal as="li" key={entry.credential} delay={i * 70}>
-            <div
-              className="education-story card-r h-full border-2 p-6 sm:p-7"
-              style={{ borderColor: i === 0 ? "var(--h3)" : "var(--h2)" }}
-            >
-              <span className="education-watermark" aria-hidden="true"><BrandMark brand={entry.institution.includes("Dalhousie") ? "dalhousie" : "nie"} label={entry.institution} size={140}/></span>
-              <p
-                className="font-mono text-[0.65rem] uppercase tracking-[0.16em]"
-                style={{ color: i === 0 ? "var(--h3)" : "var(--h2)" }}
-              >
-                {entry.period}
-              </p>
-              <p className="mt-3 text-lg font-semibold leading-snug text-[var(--fg)]">
-                {entry.credential}
-              </p>
-              <p className="mt-1.5 text-sm text-[var(--fg-muted)]">
-                {entry.institution} · {entry.location}
-              </p>
-              <p className="mt-3 text-sm font-medium text-[var(--fg-muted)]">
-                {entry.detail}
-              </p>
-            </div>
+            <article className="record-row">
+              <span className="record-mark">
+                <BrandMark
+                  brand={entry.institution.includes("Dalhousie") ? "dalhousie" : "nie"}
+                  label={entry.institution}
+                  size={120}
+                />
+              </span>
+
+              <span className="record-body">
+                <span className="record-name">{entry.credential}</span>
+                <span className="record-blurb">
+                  {entry.institution} · {entry.location}
+                </span>
+                <span className="record-note">{entry.detail}</span>
+                {"coursework" in entry && entry.coursework.length ? (
+                  <>
+                  <span className="record-coursework-label">Coursework</span>
+                  <ul className="record-coursework">
+                    {entry.coursework.map((course) => (
+                      <li key={course}>
+                        <span aria-hidden="true" />
+                        {course}
+                      </li>
+                    ))}
+                  </ul>
+                  </>
+                ) : null}
+              </span>
+
+              <span className="record-period">{entry.period}</span>
+            </article>
           </Reveal>
         ))}
-      </ol>
+      </ul>
     </Section>
   );
 }

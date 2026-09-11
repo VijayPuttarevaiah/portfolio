@@ -75,6 +75,21 @@
   --font-mono: var(--font-mono-jb), ui-monospace, SFMono-Regular, monospace;
 }
 
+/*
+ * next/font puts its face variables on <body>, one level below :root. A nested
+ * var() is substituted where it is DECLARED, not where it is used, so these
+ * four tokens computed to the guaranteed-invalid value up on :root and
+ * inherited down as invalid. Every `font:` shorthand built on them was being
+ * dropped whole — size, family and line-height together. Re-declaring them
+ * here, where the face variables exist, makes them resolve.
+ */
+body {
+  --font-display: var(--font-display-face), ui-sans-serif, sans-serif;
+  --font-serif: var(--font-playfair), Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-jb), ui-monospace, SFMono-Regular, monospace;
+}
+
 * {
   border-color: var(--border);
 }
@@ -1291,7 +1306,7 @@ body {
 }
 .cinema-nav nav ul a {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -1311,11 +1326,9 @@ body {
   color: var(--fg-muted);
 }
 #journey {
-  background:
-    radial-gradient(ellipse at 50% 45%, var(--h1-soft), transparent 65%),
-    var(--bg);
+  background: radial-gradient(ellipse at 50% 45%, var(--h1-soft), transparent 65%);
 }
-#journey h2 {
+#journey h2:not(.section-heading) {
   font-size: clamp(36px, 5.7vw, 78px);
   max-width: 850px;
   line-height: 1;
@@ -1470,6 +1483,14 @@ html.cinema-motion {
   z-index: 45;
   pointer-events: none;
 }
+/* R3F sets pointer-events:auto on the <canvas> itself, which re-enabled hit
+   testing on a layer sitting at z-index 45 over the whole page — every link
+   below it was being swallowed. The parent's pointer-events:none does not
+   reach the child, so it has to be set here too. */
+.film-canvas,
+.film-canvas * {
+  pointer-events: none !important;
+}
 .film-vignette {
   position: fixed;
   inset: 0;
@@ -1568,8 +1589,7 @@ html.cinema-motion {
   background: radial-gradient(ellipse at 50% 80%, #42101755, transparent 60%);
 }
 #journey {
-  background:
-    radial-gradient(ellipse at 70% 40%, #b9a8870c, transparent 70%), var(--bg);
+  background: radial-gradient(ellipse at 70% 40%, #b9a8870c, transparent 70%);
 }
 .journey-instrument {
   padding-top: 40px;
@@ -1585,16 +1605,532 @@ html.cinema-motion {
   text-shadow: none;
 }
 .monologue {
-  font-size: clamp(28px, 3.5vw, 49px);
+  /* Was clamp(28px, 3.5vw, 49px) — ten lines of it on its own, which pushed
+     About well past a screenful. Still a display statement, just one that
+     leaves the section readable without scrolling. */
+  font-size: clamp(21px, 2.1vw, 30px);
   font-weight: 500;
-  line-height: 1.35;
-  letter-spacing: -0.04em;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
 }
 .monologue-word {
   display: inline;
 }
+
+/* One screenful exactly: the jump lands the section 81px under the header, so
+   that is the height it has to fill. Content centres in whatever is left. */
+#about {
+  min-height: calc(100svh - 81px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.section-heading {
+  font-family: var(--font-display), ui-sans-serif, sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.005em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+@media (max-width: 640px) {
+  .section-heading {
+    font-size: 24px;
+  }
+}
+
+/* Experience. Story on the left, a narrow rail on the right carrying the logo,
+   dates, tenure and the location photo. */
+.experience-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 11rem;
+  gap: 32px;
+  align-items: start;
+}
+.experience-meta {
+  grid-column: 2;
+  grid-row: 1;
+  text-align: right;
+}
+.experience-body {
+  grid-column: 1;
+  grid-row: 1;
+}
+.experience-meta .experience-brand {
+  display: flex;
+  justify-content: flex-end;
+}
+.experience-period {
+  margin-top: 14px;
+  font: 500 13px/1.5 var(--font-mono);
+  letter-spacing: 0.06em;
+  color: var(--about-label);
+}
+.experience-duration {
+  margin-top: 5px;
+  font-size: 15px;
+  color: var(--about-label);
+}
+.experience-role {
+  font-size: 19px;
+  font-weight: 650;
+  color: var(--fg);
+}
+.experience-company {
+  margin-top: 5px;
+  font-size: 16px;
+  color: var(--about-label);
+}
+
+/* Recognition closes each role, under a rule so it reads as the last word on
+   that job rather than another list of projects. */
+.experience-recognition {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.experience-recognition h4 {
+  font: 500 11px/1.5 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--about-label);
+}
+.experience-recognition ul {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.experience-recognition li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px 7px 11px;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--accent);
+}
+.experience-recognition svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+.experience-company a,
+.experience-client a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  text-underline-offset: 3px;
+  transition: color 0.2s, text-decoration-color 0.2s;
+}
+.experience-company a:hover,
+.experience-client a:hover {
+  color: var(--accent);
+  text-decoration-color: var(--accent);
+}
+.experience-note {
+  margin-top: 12px;
+  border-left: 2px solid var(--border-strong);
+  padding: 2px 0 2px 12px;
+  font-size: 14px;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--about-label);
+}
+.experience-project {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+.experience-project h4 {
+  font-size: 15.5px;
+  font-weight: 600;
+  color: var(--accent);
+}
+.experience-client {
+  font-size: 14px;
+  color: var(--about-label);
+}
+.experience-engagement-period {
+  /* Pushed to the right edge of the project line rather than dropping below it.
+     Left in normal case so it reads the way the dates are written. */
+  margin-left: auto;
+  padding-left: 14px;
+  white-space: nowrap;
+  font: 14px/1.45 var(--font-mono);
+  letter-spacing: 0.01em;
+  color: var(--about-label);
+}
+/* The labels are metadata, so they run smaller than the names they introduce —
+   which also buys back the width the longer project names need. */
+.experience-key {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--about-label);
+}
+.experience-bullets {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.experience-bullets li {
+  display: flex;
+  gap: 12px;
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: var(--about-text);
+}
+.experience-bullets li > span:last-child {
+  margin-top: 0;
+  min-width: 0;
+}
+.experience-bullets strong {
+  font-weight: 650;
+  color: var(--fg);
+}
+.experience-bullets li > span:first-child {
+  margin-top: 0.62rem;
+  height: 4px;
+  width: 4px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.experience-stack {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.experience-stack li {
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: var(--about-text);
+}
+
+@media (max-width: 860px) {
+  /* Single column: logo and dates lead, then the story. */
+  .experience-row {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .experience-meta {
+    grid-column: 1;
+    grid-row: 1;
+    text-align: left;
+  }
+  .experience-body {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .experience-meta .experience-brand {
+    justify-content: flex-start;
+  }
+}
+
+/* Projects. One box per project; the whole box links to the code. */
+.project-boxes{margin-top:20px;display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;align-items:stretch}
+.project-boxes>li{display:flex}
+.project-box{position:relative;display:flex;flex-direction:column;gap:8px;width:100%;padding:22px;border:1px solid var(--border);border-radius:12px;background:var(--about-surface);text-decoration:none;transition:transform .25s,border-color .25s,background .25s}
+.project-box:hover{transform:translateY(-3px);border-color:var(--accent);background:color-mix(in srgb,var(--accent) 7%,var(--about-surface));transition:transform .25s,border-color .2s,background .2s}
+.project-box:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.project-box-name{padding-right:126px;font-size:19px;font-weight:650;color:var(--fg)}
+.project-box-blurb{font-size:14px;font-weight:600;line-height:1.45;color:var(--accent)}
+.project-box-summary{font-size:14.5px;line-height:1.55;color:var(--about-text)}
+.project-box-stack{margin-top:6px;display:flex;flex-wrap:wrap;gap:6px}
+.project-box-stack span{padding:3px 9px;border:1px solid var(--border);border-radius:999px;font-size:12px;line-height:1.35;color:var(--about-label)}
+.project-box-cta{position:absolute;top:20px;right:20px;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:650;color:var(--about-label);transition:color .2s}
+.project-box:hover .project-box-cta{color:var(--accent)}
+.project-box-cta svg{width:16px;height:16px}
+@media (max-width:700px){.project-boxes{grid-template-columns:1fr}}
+
+/* Skills. A wrapped card grid whose first view is clamped, with a fade and a
+   reveal button — the reference layout, drawn in the site's own palette. */
+.skills-intro {
+  margin-top: 12px;
+  max-width: 60ch;
+  font-size: 15.5px;
+  line-height: 1.6;
+  color: var(--about-label);
+}
+.skills-wrap {
+  position: relative;
+  margin-top: 26px;
+}
+/* Clipped on the wrapper, not the grid: a max-height on the grid itself made
+   the 1fr rows compress to fit, so cards in the last visible row came out
+   shorter than the rest. */
+.skills-wrap.is-clamped {
+  max-height: 430px;
+  overflow: hidden;
+}
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(268px, 1fr));
+  gap: 14px;
+  /* Every row the same height and every card filling its cell, so the grid
+     reads as one set of identical boxes rather than a ragged stack. */
+  grid-auto-rows: 1fr;
+  align-items: stretch;
+}
+.skill-card {
+  height: 100%;
+  padding: 16px 18px 18px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--about-surface);
+}
+.skill-card-title {
+  font-size: 19px;
+  font-weight: 650;
+  color: var(--accent);
+}
+.skill-chips {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.skill-chips li {
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-size: 12.5px;
+  line-height: 1.35;
+  color: var(--about-text);
+}
+
+/* The fade sits above the clipped grid, the button above the fade. */
+.skills-more {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 140px;
+  background: linear-gradient(to top, var(--bg) 18%, transparent);
+  pointer-events: none;
+}
+.skills-more button {
+  pointer-events: auto;
+  padding: 9px 20px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--about-surface);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fg);
+  cursor: pointer;
+  transition: transform 0.25s;
+}
+.skills-more button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+  transition:
+    border-color 0.2s,
+    color 0.2s,
+    transform 0.25s;
+}
+.skills-more button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Story two thirds, Current focus one third. The card aligns to the first
+   paragraph and the story runs past it, so nothing waits on the card's height. */
+.about-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+
+.about-story p {
+  /* Capped short of the column so lines do not stretch to the full width. */
+  max-width: 66ch;
+  margin: 0 0 22px;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--about-text);
+}
+.about-lead strong {
+  font-weight: 600;
+  color: var(--fg);
+}
+
+/* Three figures, each a link into the section that backs it up. */
+/* The aside: focus card, then the three figures beneath it. */
+.about-aside {
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.stat-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.stat-card {
+  /* Figure and label on one line, as on the card this was modelled on — it
+     halves the height and reads faster than a stacked pair. */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--about-surface);
+  text-decoration: none;
+  transition: transform 0.25s;
+}
+/* Scoped to the hover state so a theme switch repaints these in step with
+   every other surface instead of fading a quarter-second behind it. */
+.stat-card:hover {
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    transform 0.25s;
+}
+.stat-card:hover {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 7%, var(--about-surface));
+  transform: translateY(-2px);
+}
+.stat-card:focus-visible {
+  border-color: var(--accent);
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.stat-value {
+  font: 600 28px/1.05 var(--font-display);
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.stat-label {
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--about-label);
+}
+
+/* Deliberately quieter than the story: hairline border, small radius, a
+   sentence-case heading and plain stacked lines. */
+.focus-card {
+  /* No align-self here: the aside is a column flex box, so `start` sized this
+     to its text and left it narrower than the stat cards below it. The aside
+     itself is what top-aligns against the story. */
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--about-surface);
+  padding: 18px 20px 20px;
+}
+.focus-card-label {
+  font-size: 16px;
+  font-weight: 600;
+  /* Same accent as the stat figures, so the two cards read as one set. */
+  color: var(--accent);
+}
+.focus-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.focus-list li {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--about-label);
+}
+
+@media (max-width: 860px) {
+  /* Story first, then Current focus. Text keeps its size and the page scrolls. */
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  /* Room to run side by side again once the aside is full width. */
+  .stat-row {
+    flex-direction: row;
+  }
+  .stat-card {
+    height: 100%;
+  }
+}
+@media (max-width: 520px) {
+  .stat-row {
+    flex-direction: column;
+  }
+}
 #about {
   position: relative;
+}
+/*
+ * About-scoped palette. The surfaces here are solid on purpose: --bg-elevated
+ * is translucent site-wide, which let the WebGL wash bleed through the cards
+ * and made them read differently down the page. Everything else is the same
+ * navy/blue and cream/teal pairing the homepage uses.
+ */
+#about,
+#skills,
+#experience,
+#certifications,
+#education,
+#projects,
+#involvement {
+  --about-surface: #10141f;
+  --about-text: #dce0e9;
+  --about-label: #b5bdd0;
+}
+:root[data-theme="light"] #about,
+:root[data-theme="light"] #skills,
+:root[data-theme="light"] #experience,
+:root[data-theme="light"] #certifications,
+:root[data-theme="light"] #education,
+:root[data-theme="light"] #projects,
+:root[data-theme="light"] #involvement {
+  --about-surface: #faf4e7;
+  --about-text: #463d30;
+  --about-label: #665844;
+}
+
+/* An even veil of the page ground over the WebGL layer, feathered top and
+   bottom so it does not read as a band. Keeps the reading area flat. */
+#about::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* The section is a centred max-width box; a veil confined to it drew visible
+     vertical edges against the page. Widen it past the column on both sides. */
+  margin-inline: calc(50% - 50vw);
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--bg) 55%, transparent) 0%,
+    var(--bg) 13%,
+    var(--bg) 87%,
+    color-mix(in srgb, var(--bg) 55%, transparent) 100%
+  );
+  opacity: 0.88;
+}
+#about > * {
+  position: relative;
+  z-index: 1;
 }
 .work-runway {
   overflow: clip;
@@ -1770,33 +2306,7 @@ html.cinema-motion {
   overflow: hidden;
   margin-top: 25px;
 }
-.credits-link {
-  display: block;
-  position: relative;
-  white-space: nowrap;
-  font: clamp(60px, 12vw, 170px)/1 var(--font-display);
-  letter-spacing: -0.025em;
-  padding: 20px 0;
-}
-.credits-roll {
-  position: absolute;
-  left: 0;
-  top: 20px;
-  display: none;
-  width: max-content;
-}
-.credits-link:hover .credits-still {
-  opacity: 0;
-}
-.credits-link:hover .credits-roll {
-  display: block;
-  animation: credits-marquee 10s linear infinite;
-}
-.credits-link:hover {
-  color: #080808;
-  background: #e5e2dc;
-  transition: background 0.12s;
-}
+
 @keyframes credits-marquee {
   to {
     transform: translateX(-50%);
@@ -1886,12 +2396,6 @@ html.cinema-motion {
   .work-rgb {
     display: none;
   }
-  .credits-link:hover .credits-still {
-    opacity: 1;
-  }
-  .credits-link:hover .credits-roll {
-    display: none;
-  }
   .cinema-name {
     text-shadow: none;
   }
@@ -1939,10 +2443,10 @@ html.cinema-motion {
 /* Wide drafting-compass tableau, based on the supplied reference sequence. */
 .drafting-runway{height:360svh;position:relative}
 .drafting-sticky{position:sticky;top:64px;height:calc(100svh - 64px);min-height:640px;display:flex;flex-direction:column;justify-content:center;overflow:clip}
-.drafting-heading{width:min(1280px,92%);margin:20px auto 0;display:flex;justify-content:space-between;position:relative;z-index:2}
-.drafting-heading>p{font:14px/1.5 Georgia,serif;letter-spacing:.25em}.drafting-heading>span{text-align:right;font:9px/1.8 var(--font-mono);letter-spacing:.1em;color:var(--fg-subtle)}
+.drafting-heading{width:min(1280px,92%);margin:20px auto 0;display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:2}
+.drafting-heading>span{text-align:right;font:500 11px/1.6 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--fg-subtle)}
 .drafting-viewport{width:100%;overflow:clip}.drafting-stage{--camera:0;position:relative;width:min(1280px,100%);aspect-ratio:1200/610;margin:auto;isolation:isolate}
-.drafting-stage::before{content:"";position:absolute;inset:30% 15% 0;background:radial-gradient(ellipse at 60% 70%,#d66a1420,transparent 70%);z-index:-1}
+
 .drafting-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 .drafting-card{position:absolute;width:17%;text-align:left;transform:translateX(-50%);color:var(--fg);border:0;background:none;cursor:pointer;perspective:800px}
 .drafting-year{position:absolute;bottom:calc(100% + 16px);left:0;font:clamp(20px,2.5vw,36px)/1 var(--font-display);color:#bca36d;transition:color .5s,text-shadow .5s}
@@ -1951,8 +2455,7 @@ html.cinema-motion {
 .drafting-brand{display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:1px solid #ffffff15;padding-bottom:16px;margin-bottom:14px}.drafting-brand>span{font:7px/1.7 var(--font-mono);letter-spacing:.05em;color:#a99a82}
 .drafting-org{display:block;font:clamp(13px,1.5vw,21px)/1.1 var(--font-display);letter-spacing:.02em;color:#e8e3d8}.drafting-title{display:block;font-size:10px;line-height:1.5;color:#bdb5a5;margin-top:9px}.drafting-period{display:block;font:8px/1.5 var(--font-mono);color:#8e816b;margin-top:14px}
 .drafting-card[data-state="past"] .drafting-card-body{opacity:.7;transform:rotateY(-8deg)}.drafting-card[data-state="active"]{z-index:5}.drafting-card[data-state="active"] .drafting-card-body{opacity:1;transform:translateY(-6px) scale(1.045);border-color:#d2ae63;box-shadow:0 0 30px #c17d1922}.drafting-card[data-state="active"] .drafting-year{color:#fff0ae;text-shadow:0 0 18px #eabe4c88}
-.drafting-detail{width:min(1160px,90%);margin:0 auto 20px;display:grid;grid-template-columns:1fr 190px;gap:35px;align-items:center;border-top:1px solid #6a542333;padding-top:20px}.drafting-detail h3{font:24px/1.2 var(--font-display);margin-top:8px}.drafting-detail p{max-width:780px;font-size:12px;line-height:1.7;color:var(--fg-muted);margin-top:8px;min-height:42px}.drafting-index{font:10px var(--font-mono);color:var(--compass-ink)}.drafting-index>div{height:1px;margin:16px 0;background:var(--border)}.drafting-index i{display:block;height:100%;background:var(--compass-ink);transform:scaleX(0);transform-origin:left}.drafting-index small{font-size:7px;letter-spacing:.1em}
-.experience-location{margin-bottom:30px;border:1px solid var(--border);overflow:hidden}.experience-location img{filter:saturate(.65)}.experience-location figcaption{font:9px var(--font-mono);letter-spacing:.06em;padding:12px 16px;color:var(--fg-subtle)}
+.drafting-detail{width:min(1160px,90%);margin:0 auto 20px;display:grid;grid-template-columns:1fr 190px;gap:35px;align-items:center;border-top:1px solid #6a542333;padding-top:20px}.drafting-detail h3{font:24px/1.2 var(--font-display);margin-top:8px}.drafting-detail p{max-width:780px;font-size:12px;line-height:1.7;color:var(--fg-muted);margin-top:8px;min-height:42px}.drafting-index{font:500 11px/1.5 var(--font-mono);letter-spacing:.14em;color:var(--compass-ink)}.drafting-index>div{height:1px;margin:16px 0;background:var(--border)}.drafting-index i{display:block;height:100%;background:var(--compass-ink);transform:scaleX(0);transform-origin:left}.drafting-index small{font-size:7px;letter-spacing:.1em}
 .work-poster{background:linear-gradient(140deg,#1d171a,#090909 70%);border:1px solid var(--border)}.work-poster-grid{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 47px,#ffffff07 48px),repeating-linear-gradient(90deg,transparent,transparent 47px,#ffffff07 48px)}.work-poster:hover h3{color:var(--accent)}
 .engineering-backdrop{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:#080808;mask-image:linear-gradient(black 80%,transparent)}
 .engineering-scene{object-fit:cover;object-position:65% 50%;opacity:.75;animation:engineer-drift 22s ease-in-out infinite alternate}
@@ -1969,12 +2472,22 @@ html.cinema-motion {
 @media(prefers-reduced-motion:reduce){.engineering-scene,.data-packet,.laptop-glow{animation:none}.data-packet{opacity:.15}.drafting-runway{height:auto}.drafting-sticky{position:relative;height:auto}.drafting-stage{transition:none}}
 @media(min-width:701px){.drafting-stage{width:min(1280px,100%,calc((100svh - 300px) * 1.967));}}
 /* Aurora palette: a deliberate spectrum with warm metal reserved for the clock. */
-:root {--bg:#090b12;--bg-elevated:#10141f;--bg-sunken:#0b0e17;--fg:#f3f4f9;--fg-muted:#b5bdd0;--fg-subtle:#8b96ae;--border:#242d40;--border-strong:#3c4964;--accent:#b49aff;--accent-fg:#11101c;--h1:#b49aff;--h2:#7ddfff;--h3:#79e3ba;--h4:#f2c77d;--h5:#e9a7d8;--h1-soft:#211a37;--h2-soft:#122937;--h3-soft:#132b25;--h4-soft:#302718;--h5-soft:#2b1c2b;--compass-ink:#d3bc82;}
-:root[data-theme="light"] {--bg:#f6f7fc;--bg-elevated:#fff;--bg-sunken:#edf0f7;--fg:#171b2b;--fg-muted:#48546b;--fg-subtle:#626f86;--border:#d8ddec;--border-strong:#bfc9df;--accent:#6641bc;--accent-fg:#fff;--h1:#6641bc;--h2:#146789;--h3:#267353;--h4:#8b601c;--h5:#98356e;--h1-soft:#ece5fa;--h2-soft:#e2f2fa;--h3-soft:#e2f2e9;--h4-soft:#f6eddb;--h5-soft:#f6e6f0;}
+:root {--bg:#090b12;--bg-elevated:#10141f;--bg-sunken:#0b0e17;--fg:#f3f4f9;--fg-muted:#b5bdd0;--fg-subtle:#8b96ae;--border:#242d40;--border-strong:#3c4964;--accent:#5aa2ff;--accent-fg:#08121f;--h1:#5aa2ff;--h2:#7ddfff;--h3:#79e3ba;--h4:#f2c77d;--h5:#e9a7d8;--h1-soft:#0e1e33;--h2-soft:#122937;--h3-soft:#132b25;--h4-soft:#302718;--h5-soft:#2b1c2b;--compass-ink:#d3bc82;}
+/* Light mode is aged paper, not a white page: warm ecru ground, sepia ink, and
+   a chart-blue accent that sits beside the compass gold rather than fighting it. */
+:root[data-theme="light"] {
+  --bg:#efe6d3;--bg-elevated:#f7f0e0;--bg-sunken:#e4d9c2;
+  --fg:#2a2318;--fg-muted:#584a37;--fg-subtle:#83725a;
+  --border:#d8c9a9;--border-strong:#bda98a;
+  --accent:#1f4c5e;--accent-fg:#f7f0e0;
+  --h1:#1f4c5e;--h2:#2f5d7c;--h3:#3f6b45;--h4:#8a5a1f;--h5:#84364f;
+  --h1-soft:#dfe6e6;--h2-soft:#dee7ee;--h3-soft:#e0e8dd;--h4-soft:#f0e3c9;--h5-soft:#f0dfe0;
+  --compass-ink:#6b5636;
+}
 .cinema-hero {background:#090b12;}
-.cinema-name>span:first-child {color:#b49aff;}
+.cinema-name>span:first-child {color:var(--h1);}
 .kinetic-first>span:nth-child(2){color:#a4b6ff;}.kinetic-first>span:nth-child(3){color:#83d8f2;}.kinetic-first>span:nth-child(4){color:#89dfd0;}.kinetic-first>span:nth-child(5){color:#c1d6ae;}
-.cinema-surname{color:#f3f4f9;}
+.cinema-surname{color:var(--fg);}
 .cinema-grid{background:radial-gradient(ellipse at 25% 25%,#8561d51c,transparent 55%),radial-gradient(ellipse at 80% 65%,#49b8d71b,transparent 60%);}
 .laptop-glow{background:radial-gradient(ellipse,#78dfff30,transparent 70%);}
 .data-telemetry{color:#9daee1;}
@@ -1984,7 +2497,7 @@ html.cinema-motion {
 .work-poster{background:radial-gradient(ellipse at 90% 30%,var(--h1-soft),transparent 65%),var(--bg-sunken);}
 .work-shot:nth-child(2) .work-poster{background:radial-gradient(ellipse at 90% 30%,var(--h2-soft),transparent 65%),var(--bg-sunken);}.work-shot:nth-child(3) .work-poster{background:radial-gradient(ellipse at 90% 30%,var(--h3-soft),transparent 65%),var(--bg-sunken);}.work-shot:nth-child(4) .work-poster{background:radial-gradient(ellipse at 90% 30%,var(--h4-soft),transparent 65%),var(--bg-sunken);}
 .work-shot:nth-child(1) .work-visual h3{color:var(--h1)}.work-shot:nth-child(2) .work-visual h3{color:var(--h2)}.work-shot:nth-child(3) .work-visual h3{color:var(--h3)}.work-shot:nth-child(4) .work-visual h3{color:var(--h4)}
-.experience-story{position:relative;isolation:isolate;overflow:hidden;border:1px solid var(--border);padding:36px;border-radius:10px;background:var(--bg-elevated);}
+.experience-story{position:relative;isolation:isolate;overflow:hidden;border:1px solid var(--border);padding:36px;border-radius:12px;background:var(--about-surface);}
 .experience-location{position:absolute;inset:0;z-index:-1;margin:0;border:0;pointer-events:none;mask-image:linear-gradient(100deg,transparent,black 75%);}
 .experience-location>div{height:100%;aspect-ratio:auto;}.experience-location img{opacity:.13;filter:saturate(.85);}.experience-location figcaption{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);}
 .experience-brand{margin-bottom:24px;}.experience-brand .brand-tile{box-shadow:0 0 40px #8294d41a;}
@@ -2000,25 +2513,30 @@ html.cinema-motion {
 .drafting-card[data-state="past"] .journey-zoom-mark{transform:scale(1);filter:none;}
 .drafting-card[data-state="active"] .journey-zoom-label{color:var(--fg);opacity:1;transform:translateY(12px);}
 .drafting-card[data-state="past"] .journey-zoom-label{opacity:.8;}
-.drafting-detail{background:linear-gradient(100deg,#b49aff08,transparent);padding:20px 24px;border-color:var(--border);}
+.drafting-detail{background:linear-gradient(100deg,#5aa2ff08,transparent);padding:20px 24px;border-color:var(--border);}
 @media(max-width:700px){.experience-story{padding:24px;}.experience-location img{opacity:.09;}.background-brands{left:12%;right:12%;bottom:7%;opacity:.15;}.background-brands .brand-tile{transform:scale(.65)}.journey-zoom-label{font-size:9px;}.drafting-detail{padding:14px;}}
 @media(prefers-reduced-motion:reduce){.journey-zoom-mark,.journey-zoom-label{transition:none;}}
 /* Only the milestone mark zooms; complete details enter below the instrument. */
 .drafting-card{transform:translate(-50%,-50%);}
 .drafting-year{bottom:calc(100% + 45px);}
-.drafting-card[data-track="work"] .drafting-year{bottom:auto;top:calc(100% + 45px);}
-.drafting-card[data-state="active"] .journey-zoom-mark{transform:scale(1.4);filter:drop-shadow(0 0 22px #b49aff44);}
+
+.drafting-card[data-state="active"] .journey-zoom-mark{transform:scale(1.4);filter:drop-shadow(0 0 22px #5aa2ff44);}
 .drafting-detail{grid-template-columns:minmax(0,1fr) 115px;gap:24px;background:none;align-items:start;padding:24px 0;}
 .journey-detail-content{animation:journey-details-enter .65s .18s both;max-height:33svh;overflow-y:auto;}
-.journey-detail-meta{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;font:11px/1.6 var(--font-mono);letter-spacing:.1em;color:var(--fg-subtle);text-transform:uppercase;}
-.journey-detail-badge{display:inline-block;border-radius:999px;padding:5px 12px;background:var(--h3);color:var(--bg);font-weight:700;}
-.drafting-detail h3{font:clamp(25px,2.5vw,38px)/1.15 var(--font-display);margin-top:16px;}
-.drafting-detail p.journey-detail-org{font-size:13px;margin-top:8px;min-height:0;line-height:1.5;}
-.drafting-detail p.journey-detail-summary{font-size:15px;line-height:1.7;margin-top:18px;min-height:0;max-width:980px;}
-.drafting-detail p.journey-detail-note{font-size:12px;font-style:italic;min-height:0;}
+.journey-detail-meta{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;font:500 11px/1.5 var(--font-mono);letter-spacing:.14em;color:var(--fg-subtle);text-transform:uppercase;}
+/* The designation reads as a highlight on the page ground, not a green chip —
+   same accent the hero uses on "Engineer". */
+.journey-detail-badge{display:inline-block;border-radius:999px;padding:5px 13px;background:#c2a3671f;border:1px solid #c2a36745;color:#e8d1a0;font-weight:700;letter-spacing:.14em;}
+.journey-org-link{color:inherit;text-decoration:underline;text-decoration-color:#c2a36766;text-underline-offset:3px;text-decoration-thickness:1px;transition:text-decoration-color .25s,color .25s;}
+.journey-org-link:hover{color:#e8d1a0;text-decoration-color:#e8d1a0;}
+.drafting-detail h3{font:700 clamp(25px,2.5vw,38px)/1.15 var(--font-display);margin-top:16px;}
+.journey-detail-lines{margin-top:8px;display:flex;flex-direction:column;gap:5px;}
+.journey-detail-lines h3,.journey-detail-lines p{margin:0;font-size:15.5px;font-weight:600;line-height:1.5;color:var(--fg);}
+.journey-detail-key{font-weight:500;color:var(--fg-subtle);}
+.drafting-detail p.journey-detail-org{font-size:14px;font-weight:600;margin-top:8px;min-height:0;line-height:1.5;color:var(--fg);}
 @keyframes journey-details-enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @media(min-width:701px){.drafting-stage{width:min(1200px,100%,calc((100svh - 390px)*1.967));}}
-@media(max-width:700px){.drafting-stage{width:820px;height:417px;transform:translateX(calc(var(--camera)*(100vw - 820px)));}.drafting-detail{display:block;padding:16px 0;}.drafting-detail h3{font-size:24px}.drafting-detail p.journey-detail-org{font-size:12px}.drafting-detail p.journey-detail-summary{font-size:13px;margin-top:12px}.journey-detail-meta{font-size:9px;gap:8px}.journey-detail-content{max-height:29svh;}.drafting-card[data-state="active"] .journey-zoom-mark{transform:scale(1.3);}}
+@media(max-width:700px){.drafting-stage{width:820px;height:417px;transform:translateX(calc(var(--camera)*(100vw - 820px)));}.drafting-detail{display:block;padding:16px 0;}.drafting-detail h3{font-size:24px}.drafting-detail p.journey-detail-org{font-size:12px}.journey-detail-meta{font-size:9px;gap:8px}.journey-detail-content{max-height:29svh;}.drafting-card[data-state="active"] .journey-zoom-mark{transform:scale(1.3);}}
 @media(prefers-reduced-motion:reduce){.journey-detail-content{animation:none}}
 
 /* --- Project ring ------------------------------------------------------- */
@@ -2092,7 +2610,7 @@ html.cinema-motion {
 .hero-hire:hover span{transform:translate(3px,-3px)}
 .hero-email{font-size:12px;color:var(--fg-muted);overflow-wrap:anywhere}
 .project-play{min-height:44px;padding:8px 12px;font-size:12px;color:var(--h2);border:1px solid var(--border-strong);border-radius:30px}
-.triage-architecture{margin-top:28px;padding:24px;border:1px solid #b49aff55;border-radius:16px;background:linear-gradient(135deg,#b49aff0c,#7ddfff08)}
+.triage-architecture{margin-top:28px;padding:24px;border:1px solid #5aa2ff55;border-radius:16px;background:linear-gradient(135deg,#5aa2ff0c,#7ddfff08)}
 .triage-intro{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .triage-intro h4{font-size:22px;margin-top:8px}.triage-intro>span,.triage-caption{font-size:12px;color:var(--fg-muted)}
 .triage-caption{margin-top:12px;line-height:1.7}.triage-flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin:24px 0;list-style:none;padding:0}
@@ -2110,7 +2628,587 @@ html.cinema-motion {
 .ring-tile{opacity:1}.ring-tile .ring-tile-blurb{color:#e5e9f3}
 
 /* One short brand film plays only at the active journey milestone. */
-.journey-logo-reveal{position:relative;display:inline-flex;align-items:center;justify-content:center;isolation:isolate}
-.journey-logo-video{position:absolute;width:110px;height:110px;max-width:none;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:25px;pointer-events:none;transition:opacity .18s;box-shadow:0 0 25px #b49aff14}
-@media(max-width:700px){.journey-logo-video{width:100px;height:100px;border-radius:23px}}
-@media(prefers-reduced-motion:reduce){.journey-logo-video{display:none}}
+
+/* Nav sliding pill. Dark is the default ground; the light theme needs a
+   darker wash to read at the same weight. */
+:root{--nav-pill:rgb(255 255 255 / 0.09)}
+:root[data-theme="light"]{--nav-pill:rgb(0 0 0 / 0.07)}
+
+/* Expanding search dock. Sized to the VP logo (34px) and set in the same face,
+   size and tracking as the nav tabs, so the bar reads as one control set. */
+.search-dock{position:relative}
+.search-trigger,.search-form{height:34px;border:1px solid var(--border-strong);border-radius:999px;background:var(--bg-elevated);color:var(--fg-muted)}
+.search-trigger{display:flex;width:34px;align-items:center;justify-content:center;cursor:pointer;transition:border-color .25s,color .25s,transform .25s}
+.search-trigger:hover{border-color:var(--accent);color:var(--fg);transform:translateY(-1px)}
+.search-form{display:flex;align-items:center;gap:8px;overflow:hidden;padding:0 6px 0 12px}
+.search-form-icon{display:flex;flex:none;color:var(--fg-subtle)}
+.search-form input{flex:1;min-width:0;border:0;background:transparent;color:var(--fg);outline:none;font-family:var(--font-mono);font-size:12px;letter-spacing:.04em}
+.search-form input::placeholder{color:var(--fg-subtle);text-transform:uppercase;letter-spacing:.04em}
+.search-form > button{display:flex;flex:none;height:22px;width:22px;align-items:center;justify-content:center;border:0;border-radius:999px;background:transparent;color:var(--fg-subtle);cursor:pointer;transition:background .2s,color .2s}
+.search-form > button:hover{background:var(--nav-pill);color:var(--fg)}
+.search-trigger:focus-visible,.search-form:focus-within{outline:2px solid var(--accent);outline-offset:2px}
+
+.search-results{position:absolute;top:calc(100% + 8px);right:0;z-index:90;width:min(420px,80vw);max-height:60vh;overflow-y:auto;margin:0;padding:6px;list-style:none;border:1px solid var(--border-strong);border-radius:12px;background:var(--bg-elevated);box-shadow:0 20px 60px rgb(0 0 0 / 0.45)}
+.search-empty{padding:16px 12px;font-family:var(--font-mono);font-size:12px;letter-spacing:.04em;color:var(--fg-subtle)}
+.search-hit{display:grid;gap:3px;width:100%;padding:9px 11px;border:0;border-radius:9px;background:transparent;text-align:left;cursor:pointer}
+.search-hit.is-active{background:var(--nav-pill)}
+.search-hit-section{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.search-hit-title{font-size:13.5px;font-weight:600;color:var(--fg)}
+.search-hit-body{font-size:12px;line-height:1.55;color:var(--fg-muted)}
+.search-mark{background:transparent;color:var(--accent);font-weight:600}
+
+/* VP monogram. A mark rather than the full name — the name is already the
+   first thing the hero says, and a wordmark in the bar repeats it. */
+.nav-logo{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;border:1px solid var(--border-strong);background:linear-gradient(150deg,var(--accent-soft),transparent 70%);font-family:var(--font-display);font-size:14px;font-weight:700;letter-spacing:.02em;color:var(--fg);transition:border-color .25s,background .25s,transform .25s}
+.nav-logo:hover{border-color:var(--accent);transform:translateY(-1px)}
+.nav-logo:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* Credential rows — shared by Education and Certifications so the two sections
+   read as one system. On hover the row inverts against the page: --fg and --bg
+   swap with the theme, so it is white-on-black in dark and black-on-white in
+   light, matching the recommendation deck. */
+.cert-rows,.record-rows{display:grid;gap:14px;margin:0;padding:0;list-style:none}
+/* Two across, so all four certifications sit in one screen. Cards keep the
+   badge beside the text — stacking it would double the height. */
+.cert-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;grid-auto-rows:1fr;align-items:stretch}
+.cert-grid>li{display:flex}
+.cert-grid>li>*{width:100%}
+.cert-grid .cert-row{grid-template-columns:112px minmax(0,1fr);gap:18px;padding:24px;align-items:start}
+.cert-grid .cert-badge img{width:112px;height:112px}
+.cert-grid .cert-blurb{font-size:12.8px;line-height:1.45}
+/* The section only needs to clear the header, not carry the full section pad. */
+#certifications>div{padding-top:40px;padding-bottom:40px}
+@media (max-width:900px){.cert-grid{grid-template-columns:1fr}}
+.cert-row,.record-row{display:grid;grid-template-columns:120px 1fr;gap:22px;align-items:center;padding:28px 32px;border:1px solid var(--border);border-radius:12px;background:var(--about-surface);transition:transform .38s cubic-bezier(.16,1,.3,1),background .38s ease,border-color .38s,box-shadow .38s,color .38s ease}
+.record-row{grid-template-columns:96px 1fr;align-items:center}
+
+.cert-row:hover,.cert-row:focus-visible,.record-row:hover{transform:scale(1.045) translateY(-6px);background:var(--fg);border-color:var(--fg);box-shadow:0 26px 64px rgb(0 0 0 / .42)}
+.cert-row:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.cert-row:hover .cert-name,.cert-row:hover .cert-blurb,.cert-row:hover .cert-issuer,.cert-row:hover .cert-verify,
+.record-row:hover .record-name,.record-row:hover .record-blurb,.record-row:hover .record-eyebrow,.record-row:hover .record-note{color:var(--bg)}
+.cert-row:hover .cert-issuer,.record-row:hover .record-eyebrow,.record-row:hover .record-note{opacity:.68}
+.cert-row:hover .cert-blurb,.record-row:hover .record-blurb{opacity:.82}
+
+.cert-badge,.record-mark{display:flex;align-items:center;justify-content:center}
+.cert-badge img{width:120px;height:120px;object-fit:contain;transition:transform .38s cubic-bezier(.16,1,.3,1)}
+.cert-row:hover .cert-badge img{transform:scale(1.14)}
+.cert-body,.record-body{display:grid;gap:5px}
+/* Education carries a third column for the period, so the dates line up down
+   the right edge instead of sitting above each credential. */
+.record-row{grid-template-columns:120px minmax(0,1fr) auto;align-items:start}
+.record-period{justify-self:end;text-align:right;white-space:nowrap;font:500 11px/1.5 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--fg-subtle);transition:color .38s ease,opacity .38s ease}
+.record-row:hover .record-period{color:var(--bg);opacity:.68}
+.record-coursework-label{display:block;margin-top:16px;font:500 11px/1.5 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--fg-subtle);transition:color .38s ease}
+.record-row:hover .record-coursework-label{color:var(--bg);opacity:.68}
+/* Two columns: eight courses in a single stack made the row twice as tall as
+   the degree beside it. */
+.record-coursework{margin-top:10px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 28px}
+@media (max-width:760px){.record-coursework{grid-template-columns:1fr}}
+.record-coursework li{display:flex;gap:10px;font-size:13.5px;line-height:1.55;color:var(--fg-muted);transition:color .38s ease}
+.record-coursework li>span{margin-top:.58rem;height:4px;width:4px;flex-shrink:0;border-radius:50%;background:var(--accent);transition:background .38s ease}
+.record-row:hover .record-coursework li{color:var(--bg)}
+.record-row:hover .record-coursework li>span{background:var(--bg)}
+@media (max-width:640px){
+  .record-row{grid-template-columns:64px minmax(0,1fr)}
+  .record-period{grid-column:2;justify-self:start;text-align:left;margin-top:8px}
+  /* BrandMark sizes itself inline, so the mark has to be reined in to the
+     narrow column or it overflows the row on a phone. */
+  .record-mark>*{width:64px!important;height:64px!important}
+  .record-mark .brand-tile-img{width:100%;height:100%;object-fit:contain}
+}
+.cert-issuer,.record-eyebrow{font:500 11px/1.5 var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--fg-subtle);transition:color .38s ease,opacity .38s ease}
+.cert-name,.record-name{font-size:19px;font-weight:650;line-height:1.3;color:var(--fg);transition:color .38s ease}
+.cert-grid .cert-name{font-size:19px;font-weight:650;line-height:1.28}
+.cert-blurb,.record-blurb{margin-top:3px;max-width:62ch;font-size:14px;line-height:1.6;color:var(--fg-muted);transition:color .38s ease,opacity .38s ease}
+.record-note{margin-top:6px;font-size:13.5px;line-height:1.55;color:var(--fg-muted);transition:color .38s ease,opacity .38s ease}
+.cert-verify{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:13px;font-weight:600;color:var(--accent);transition:color .38s ease}
+
+/* In progress reads as pending, not achieved: dashed edge, muted badge, a
+   status line where the earned rows carry a verify link — and no hover
+   inversion, since it is not a link. */
+.cert-row.is-progress{border-style:dashed;border-color:var(--border-strong);background:transparent}
+/* Hovers like every other certification row. The dashed border is what marks
+   it as unearned, so that stays; the lift and inversion do not need to differ. */
+.cert-row.is-progress:hover{background:var(--fg);border-color:var(--fg)}
+.cert-row.is-progress:hover .cert-name{color:var(--bg)}
+/* The green status keeps its own colour on the inverted ground, darkened so it
+   still reads against the near-white surface. */
+.cert-row.is-progress:hover .cert-status{color:color-mix(in srgb,var(--h3) 72%,var(--bg))}
+.cert-row.is-progress:hover .cert-status::before{background:color-mix(in srgb,var(--h3) 72%,var(--bg));box-shadow:0 0 0 3px color-mix(in srgb,var(--h3) 20%,transparent)}
+.cert-row.is-progress:hover .cert-badge img{filter:none;opacity:1}
+.cert-row.is-progress .cert-badge img{filter:grayscale(.55);opacity:.7}
+.cert-row.is-progress .cert-name{color:var(--fg-muted)}
+.cert-status{display:inline-flex;align-items:center;gap:7px;margin-top:8px;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--h3)}
+.cert-status::before{content:"";width:6px;height:6px;border-radius:999px;background:var(--h3);box-shadow:0 0 0 3px color-mix(in srgb,var(--h3) 22%,transparent)}
+
+@media (max-width:640px){.cert-row{grid-template-columns:64px 1fr;gap:16px;padding:16px}.record-row{grid-template-columns:64px 1fr;gap:16px;padding:16px}.cert-badge img{width:64px;height:64px}}
+@media (prefers-reduced-motion:reduce){
+  .cert-row,.record-row,.cert-badge img{transition:background .2s ease,color .2s ease}
+  .cert-row:hover,.record-row:hover{transform:none}
+  .cert-row:hover .cert-badge img{transform:none}
+}
+
+/* Beyond-work entries. Same row rhythm as the certifications, without the
+   verify affordance — nothing here is a credential to check. */
+.involve-list{display:grid;gap:14px;margin:0;padding:0;list-style:none}
+.involve-row{display:grid;grid-template-columns:52px 1fr;gap:22px;align-items:start;padding:28px 32px;border:1px solid var(--border);border-radius:12px;background:var(--about-surface)}
+.involve-mark{display:flex;padding-top:2px}
+.involve-bullets{margin-top:12px;display:flex;flex-direction:column;gap:9px}
+.involve-bullets li{display:flex;gap:12px;max-width:76ch;font-size:15.5px;line-height:1.65;color:var(--about-text)}
+.involve-bullets li>span{margin-top:.62rem;height:4px;width:4px;flex-shrink:0;border-radius:50%;background:var(--accent)}
+.involve-role{margin:0;font-size:19px;font-weight:650;line-height:1.3;color:var(--fg)}
+.involve-org{margin:3px 0 0;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--fg-subtle)}
+@media (max-width:640px){.involve-row{grid-template-columns:44px 1fr;gap:16px;padding:16px}}
+
+/* Award cards. Short content, so a 3-up grid rather than the wide rows used
+   where there is a paragraph to read. */
+.award-grid{display:grid;gap:14px;margin:0;padding:0;list-style:none;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.award-card{display:grid;align-content:start;gap:5px;height:100%;padding:22px;border:1px solid var(--border);border-radius:14px;background:var(--bg-elevated)}
+.award-mark{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;margin-bottom:8px;border-radius:10px;background:var(--h4-soft);color:var(--h4)}
+.award-name{margin:0;font-size:16px;font-weight:600;line-height:1.3;color:var(--fg)}
+.award-issuer{margin:2px 0 0;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--fg-subtle)}
+.award-note{margin:9px 0 0;font-size:13.5px;line-height:1.6;color:var(--fg-muted)}
+
+/* Recommendation deck. The clipped top-right corner and the hairline are kept
+   from the reference; the palette is this site's. */
+.rec-stage{position:relative;width:100%;overflow:hidden}
+.rec-card{position:absolute;left:50%;top:50%;display:flex;flex-direction:column;gap:14px;padding:26px 28px;cursor:pointer;border:1px solid var(--border-strong);background:var(--bg-elevated);transition:transform .5s cubic-bezier(.16,1,.3,1),border-color .4s,box-shadow .4s,opacity .4s;clip-path:polygon(0 0,calc(100% - 34px) 0,100% 34px,100% 100%,0 100%);opacity:.55;z-index:0}
+/* The centre card inverts against the page. --fg and --bg already swap with
+   the theme, so one rule gives white-on-black in light mode and black-on-white
+   in dark, with no per-theme overrides. */
+.rec-card.is-center{opacity:1;z-index:10;background:var(--fg);color:var(--bg);border-color:var(--fg);box-shadow:0 22px 60px rgb(0 0 0 / .45)}
+.rec-card.is-center .rec-name{color:var(--bg)}
+.rec-card.is-center .rec-quote{color:var(--bg);opacity:.88}
+.rec-card.is-center .rec-title,.rec-card.is-center .rec-foot{color:var(--bg);opacity:.6}
+.rec-card.is-center .rec-avatar{background:var(--bg);color:var(--fg);border-color:transparent}
+.rec-card:not(.is-center):hover{opacity:.8;border-color:var(--accent)}
+.rec-head{display:flex;align-items:center;gap:13px}
+.rec-avatar{display:flex;align-items:center;justify-content:center;flex:none;width:52px;height:52px;overflow:hidden;border-radius:999px;border:1px solid var(--border-strong);background:var(--accent-soft);font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--fg)}
+.rec-avatar img{width:52px;height:52px;object-fit:cover;object-position:center top}
+.rec-name{display:block;font-size:15px;font-weight:600;color:var(--fg)}
+.rec-title{display:block;margin-top:2px;font-size:11.5px;line-height:1.45;color:var(--fg-subtle)}
+.rec-quote{flex:1;overflow:auto;margin:0;font-size:14px;line-height:1.62;color:var(--fg-muted)}
+.rec-foot{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--fg-subtle)}
+.rec-controls{position:absolute;bottom:6px;left:50%;display:flex;gap:9px;transform:translateX(-50%);z-index:20}
+.rec-controls button{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid var(--border-strong);border-radius:999px;background:var(--bg-elevated);color:var(--fg-muted);cursor:pointer;transition:border-color .25s,color .25s}
+.rec-controls button:hover{border-color:var(--accent);color:var(--fg)}
+.rec-controls button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){.rec-card{transition:none}}
+
+/* Section index rail. Fixed to the left edge, above the film layer, and only
+   where there is room beside the 72rem content column. */
+.section-index{position:fixed;left:14px;top:50%;transform:translateY(-50%);z-index:46;display:none}
+.section-index table-of-content{
+  /* A fixed parent shrinks to fit, so the host's min(100%,33rem) resolved to
+     zero. The width is set here; only the rail takes pointer events, so the
+     card's empty area never blocks the page behind it. */
+  width:33rem;
+  pointer-events:none;
+  --toc-surface:var(--bg-elevated);
+  --toc-ink:var(--fg);
+  --toc-copy:var(--fg-muted);
+  --toc-line:var(--border-strong);
+  --toc-accent:var(--accent);
+}
+.section-index table-of-content::part(rail){pointer-events:auto}
+@media (min-width:1500px) and (min-height:680px){.section-index{display:block}}
+
+/* The brand tile carries a 5px ring in the page background so it reads against
+   the journey art. Inside a credential row that ring becomes a black halo the
+   moment the row inverts to white, so it comes off here — the 2px brand border
+   is enough separation on both grounds. */
+.record-row .brand-tile,.involve-row .brand-tile{box-shadow:none}
+
+/* Contact labels carry their mark, so the row scans as icons first. */
+.contact-label{display:flex;align-items:center;gap:9px;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:var(--fg-subtle)}
+.contact-mark{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;flex:none;border:1px solid var(--border-strong);border-radius:8px;color:var(--fg-muted);transition:color .25s,border-color .25s}
+.contact-label:hover .contact-mark{color:var(--fg);border-color:var(--accent)}
+
+/* Two ways to reach the inbox, stated rather than implied. The primary is the
+   on-page form; Gmail is there for anyone who would rather use their own client. */
+.contact-routes{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.contact-route{display:grid;gap:3px;padding:14px 20px;border:1px solid var(--border-strong);border-radius:12px;background:var(--bg-elevated);color:var(--fg);font-size:15px;font-weight:600;text-align:left;cursor:pointer;transition:border-color .25s,transform .25s cubic-bezier(.16,1,.3,1),background .25s}
+.contact-route:hover{border-color:var(--accent);transform:translateY(-2px)}
+.contact-route:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.contact-route.is-primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.contact-route.is-primary:hover{filter:brightness(1.08)}
+.contact-route-note{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:400;opacity:.72}
+
+/* No dark plate ring on the journey marks — the arc is the frame, and the ring
+   read as a black border around every logo. */
+.journey-zoom-mark .brand-tile{box-shadow:none}
+
+/* Paper grain, light mode only. Generated, not an asset — one turbulence layer
+   at low opacity so the ground reads as stock rather than a flat fill. */
+:root[data-theme="light"] body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)' opacity='.19'/%3E%3C/svg%3E");
+  mix-blend-mode:multiply;
+}
+:root[data-theme="light"] .film-vignette{
+  background:radial-gradient(ellipse at 50% 40%,transparent 45%,rgb(90 70 40 / .16) 100%);
+}
+
+/* The active year was near-white gold with a bright halo — invisible on paper.
+   On the light theme it takes the ink colour and drops the glow. */
+:root[data-theme="light"] .drafting-year{color:#8a7245}
+:root[data-theme="light"] .journey-detail-badge{background:#8a72451c;border-color:#8a724545;color:#6d5931}
+:root[data-theme="light"] .journey-org-link{text-decoration-color:#8a724577}
+:root[data-theme="light"] .journey-org-link:hover{color:#6d5931;text-decoration-color:#6d5931}
+:root[data-theme="light"] .drafting-card[data-state="active"] .drafting-year{color:var(--fg);text-shadow:none}
+:root[data-theme="light"] .drafting-card[data-state="active"] .drafting-card-body{border-color:var(--border-strong);box-shadow:0 12px 30px rgb(90 70 40 / .16)}
+
+/* Hero on paper. The photo stays but reads as a faded sepia print rather than a
+   night shot, so ink-coloured type sits on it legibly instead of dark on dark. */
+:root[data-theme="light"] .cinema-hero{background:var(--bg)}
+:root[data-theme="light"] .engineering-scene{
+  opacity:.3;filter:sepia(.72) saturate(.6) brightness(1.5) contrast(.82);
+  mix-blend-mode:multiply;
+}
+:root[data-theme="light"] .cinema-grid{opacity:.35;mix-blend-mode:multiply}
+:root[data-theme="light"] .cinema-name>span:first-child{color:var(--fg)}
+:root[data-theme="light"] .kinetic-first>span{color:var(--fg) !important}
+:root[data-theme="light"] .cinema-surname{color:var(--fg-muted)}
+:root[data-theme="light"] .cinema-edition,
+:root[data-theme="light"] .cinema-coordinate,
+:root[data-theme="light"] .cinema-bottom{color:var(--fg-subtle)}
+:root[data-theme="light"] .cinema-role{color:var(--fg)}
+:root[data-theme="light"] .cinema-work{border-bottom-color:var(--border-strong);color:var(--fg-muted)}
+
+/* The backdrop painted a hardcoded #080808 under the hero, so the paper ground
+   never showed. These take the whole stack onto the light theme. */
+:root[data-theme="light"] .engineering-backdrop{background:var(--bg)}
+:root[data-theme="light"] .cinema-grid{background:linear-gradient(90deg,rgb(120 96 60 / .10),transparent)}
+:root[data-theme="light"] .laptop-glow{background:radial-gradient(ellipse,rgb(176 134 62 / .20),transparent 70%)}
+:root[data-theme="light"] .data-telemetry{color:var(--fg-subtle)}
+:root[data-theme="light"] .data-flow{opacity:.22;filter:sepia(.8) saturate(.7) brightness(.55)}
+:root[data-theme="light"] .film-canvas{opacity:.22;mix-blend-mode:multiply}
+:root[data-theme="light"] .background-brands{opacity:.14}
+
+/* Active stop: more zoom, and a backlight behind the mark so it reads as lit
+   from behind rather than merely larger. The glow is a pseudo-element so it
+   scales with the mark without touching the logo's own edges. */
+.journey-zoom-mark{position:relative}
+
+.drafting-card[data-state="active"] .journey-zoom-mark{transform:scale(2.35)}
+@media(max-width:700px){.drafting-card[data-state="active"] .journey-zoom-mark{transform:scale(1.7)}}
+
+/* One line, not two: every year sits above its mark. Education above and work
+   below read as two separate rows of logos. */
+.drafting-card .drafting-year{bottom:calc(100% + 16px);top:auto}
+
+/* Backlight sits on the logo tile itself, not on the flex wrapper around it —
+   the wrapper is wider than the mark, so a pseudo-element centred on it landed
+   off to one side. A box-shadow tracks the tile exactly and scales with it. */
+.journey-zoom-mark .brand-tile,
+.journey-zoom-mark .brand-mark{
+  transition:box-shadow .6s ease;
+}
+.drafting-card[data-state="active"] .journey-zoom-mark .brand-tile,
+.drafting-card[data-state="active"] .journey-zoom-mark .brand-mark{
+  box-shadow:
+    0 0 14px 2px rgb(255 206 132 / .75),
+    0 0 34px 10px rgb(255 176 74 / .38),
+    0 0 62px 22px rgb(255 158 52 / .16);
+}
+.drafting-card[data-state="past"] .journey-zoom-mark .brand-tile,
+.drafting-card[data-state="past"] .journey-zoom-mark .brand-mark{
+  box-shadow:0 0 16px 4px rgb(255 186 96 / .14);
+}
+@media(prefers-reduced-motion:reduce){
+  .journey-zoom-mark .brand-tile,.journey-zoom-mark .brand-mark{transition:none}
+}
+
+/* Clock movement. Gears turn at rates set per-element; meshing pairs run in
+   opposite directions, which is what makes the train read as connected. */
+:root{--gear-metal:#b99a5c;--gear-body:#241d12}
+:root[data-theme="light"]{--gear-metal:#8a7245;--gear-body:#e3d7bd}
+/* Rotation comes from scroll, not a timer: --journey-t is written once per
+   frame on the svg and each gear multiplies it by its own rate, so the movement
+   only turns while the hand is moving. */
+.clock-gear{transform:rotate(calc(var(--journey-t,0) * var(--rate,0) * 1deg));transform-origin:0 0;transform-box:view-box}
+@media(prefers-reduced-motion:reduce){.clock-gear{transform:none}}
+
+/* The compose panel takes the section's own ground so it reads as the page
+   opening up, not a card dropped on top. A hairline keeps the edge legible. */
+.contact-panel{
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:14px;
+  animation:contact-open .42s cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes contact-open{
+  from{opacity:0;transform:translateY(-8px)}
+  to{opacity:1;transform:none}
+}
+@media(prefers-reduced-motion:reduce){.contact-panel{animation:none}}
+
+/* Hero pitch: sits under the role, above the actions, sized to be read at a
+   glance rather than scanned. */
+.cinema-pitch{
+  /* The role block is anchored at bottom:19% and is ~3 lines tall, so the pitch
+     sits clear above it rather than across it. */
+  position:absolute;left:5%;bottom:calc(19% + 190px);max-width:33ch;
+  font-size:15px;line-height:1.62;color:var(--fg-muted);
+}
+@media(max-width:900px){.cinema-pitch{position:static;margin:14px 0 0;padding:0 6%;max-width:46ch}}
+
+
+/* --- Split hero ---------------------------------------------------------- */
+/* Every colour is a token, so the same layout holds on the dark ground and on
+   the paper light theme without a second set of rules. */
+.hero{
+  position:relative;
+  min-height:calc(100svh - 65px);
+  /* Column, so the availability banner spans the top instead of becoming a
+     sibling column beside the content. */
+  display:flex;flex-direction:column;justify-content:center;
+  padding:clamp(2rem,4.5vw,3.5rem) 0 clamp(2rem,4vw,3rem);
+  background:transparent;
+}
+.hero-inner{
+  width:100%;
+  display:grid;grid-template-columns:auto 1fr minmax(280px,360px);
+  align-items:center;gap:clamp(1.5rem,4vw,3.5rem);
+  margin:0 auto;width:100%;max-width:1180px;padding:0 clamp(1.25rem,4vw,2.5rem);
+}
+
+.hero-follow{
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  padding:18px 12px;border-radius:999px;
+  background:var(--bg-elevated);border:1px solid var(--border);
+}
+.hero-follow>span{
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--fg-subtle);
+}
+.hero-follow a{
+  display:flex;align-items:center;justify-content:center;width:36px;height:36px;
+  border-radius:999px;background:var(--bg);color:var(--fg-muted);
+  border:1px solid var(--border);transition:color .25s,border-color .25s,transform .25s;
+}
+.hero-follow a:hover{color:var(--fg);border-color:var(--accent);transform:translateY(-2px)}
+.hero-follow a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* The name is a headline in its own right, not a caption above one. */
+.hero-name{
+  margin:0 0 12px;font-family:var(--font-display);font-weight:600;
+  font-size:clamp(24px,2.7vw,36px);letter-spacing:.01em;color:var(--fg);
+}
+.hero-title{
+  margin:0;font-family:var(--font-display);font-weight:700;
+  font-size:clamp(32px,4.1vw,54px);line-height:1.06;letter-spacing:-.02em;
+  color:var(--fg);text-wrap:balance;
+}
+.hero-title{color:var(--fg)}
+/* The rotating role needs a stable line box so the layout does not jump as the
+   word grows and shrinks. */
+.hero-title{min-height:1.14em}
+.hero-lede{
+  margin:22px 0 0;max-width:54ch;font-size:16px;line-height:1.65;color:var(--fg-muted);
+}
+/* The years of experience carry the weight — a recruiter screens on this. */
+.hero-lede strong{
+  font-weight:600;color:var(--fg);
+  box-shadow:inset 0 -0.42em 0 color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.hero-cta{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-top:28px}
+/* One button shape for the pair: same radius, padding, size and weight. Only
+   the fill separates the primary action from the secondary one. */
+.hero-hire,
+.hero-secondary{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:150px;border-radius:999px;padding:13px 26px;
+  font-size:15px;font-weight:600;line-height:1;
+  border:1px solid transparent;
+  transition:filter .25s,transform .25s,border-color .25s,color .25s,background .25s;
+}
+.hero-hire{background:var(--accent);color:var(--accent-fg)}
+.hero-hire:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.hero-secondary{background:transparent;color:var(--fg);border-color:var(--border-strong)}
+.hero-secondary:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-1px)}
+.hero-hire:focus-visible,.hero-secondary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+.hero-portrait{position:relative;justify-self:center}
+.hero-portrait img{
+  position:relative;z-index:2;display:block;width:100%;
+  height:min(52vh,460px);object-fit:contain;object-position:bottom center;
+  /* A cutout sliced flat at the bottom floats. Fading the lower edge lets him
+     sit into the page instead of ending on a straight line. */
+  -webkit-mask-image:linear-gradient(180deg,#000 62%,rgb(0 0 0 / .55) 84%,transparent 100%);
+  mask-image:linear-gradient(180deg,#000 62%,rgb(0 0 0 / .55) 84%,transparent 100%);
+}
+
+/* The shot is high-key daylight. Each theme grades it to its own light so the
+   subject belongs to the scene rather than being pasted onto it. */
+:root:not([data-theme="light"]) .hero-portrait img{
+  filter:brightness(.84) contrast(1.08) saturate(.86)
+    drop-shadow(0 22px 38px rgb(0 0 0 / .55));
+}
+:root[data-theme="light"] .hero-portrait img{
+  filter:sepia(.18) saturate(.94) brightness(1.03) contrast(.97)
+    drop-shadow(0 20px 32px rgb(122 98 62 / .3));
+}
+/* The offset outline from the reference, drawn behind the photo. */
+.hero-frame{
+  position:absolute;z-index:1;inset:2% 0 6% 0;border:0;border-radius:0;
+  background:radial-gradient(ellipse 62% 48% at 50% 42%,
+    color-mix(in srgb, var(--accent) 26%, transparent), transparent 72%);
+  filter:blur(26px);opacity:.85;
+}
+/* A soft contact shadow on the ground, so he stands rather than hovers. */
+.hero-portrait::after{
+  content:"";position:absolute;z-index:1;left:16%;right:16%;bottom:2%;height:26px;
+  border-radius:50%;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 50%, rgb(0 0 0 / .38), transparent 72%);
+}
+:root[data-theme="light"] .hero-portrait::after{
+  background:radial-gradient(ellipse at 50% 50%, rgb(120 96 60 / .3), transparent 72%);
+}
+/* Availability stack: the three facts a recruiter screens on, beside the photo. */
+.hero-status{
+  display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-top:24px;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;white-space:nowrap;
+  padding:8px 14px;border-radius:999px;
+  background:var(--bg-elevated);border:1px solid var(--border-strong);
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--fg-muted);
+  box-shadow:0 10px 26px rgb(0 0 0 / .22);
+  backdrop-filter:blur(6px);
+}
+
+@media(max-width:980px){
+  .hero{padding:24px 0}
+  .hero-inner{grid-template-columns:1fr 1fr;gap:24px}
+  .hero-copy{grid-column:1;grid-row:1}
+  .hero-portrait{grid-column:2;grid-row:1;max-width:340px}
+  .hero-follow{grid-column:1 / -1;flex-direction:row;justify-self:center;padding:8px 14px}
+
+  
+}
+
+/* The hero's paper-plus-wash ground, carried across the whole page in light
+   mode. The gradient lives on the body and is fixed, so every section sits on
+   one continuous sheet rather than each painting its own flat panel. */
+:root[data-theme="light"] body{
+  background:
+    radial-gradient(ellipse 90% 60% at 15% 6%, var(--h1-soft), transparent 58%),
+    radial-gradient(ellipse 80% 55% at 88% 45%, var(--h2-soft), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 40% 96%, var(--h4-soft), transparent 62%),
+    var(--bg);
+  background-attachment:fixed;
+}
+/* Section grounds go translucent so that sheet shows through instead of being
+   covered by an opaque panel per section. */
+:root[data-theme="light"]{
+  --bg-elevated:rgb(250 244 231 / .58);
+  --bg-sunken:rgb(228 217 194 / .5);
+}
+:root[data-theme="light"] .hero,
+:root[data-theme="light"] .ring-section,
+:root[data-theme="light"] .work-runway{background:transparent}
+
+/* Only the co-op badge is green — it is the one status that is an invitation
+   rather than a fact. */
+.hero-badge.is-open{color:var(--h3);border-color:color-mix(in srgb,var(--h3) 45%,var(--border-strong))}
+
+/* Follow marks keep their brand colours rather than inheriting the text tone. */
+.hero-follow a.is-linkedin{color:#0a66c2}
+.hero-follow a.is-github{color:var(--fg)}
+.hero-follow a.is-mail{color:#ea4335}
+.hero-follow a:hover{border-color:currentColor}
+
+/* Typing caret. Blinks while typing, then settles rather than flickering on. */
+.type-caret{
+  display:inline-block;width:2px;height:1em;margin-left:3px;
+  vertical-align:-0.13em;background:var(--accent);
+  animation:type-blink .9s step-end infinite;
+}
+.type-caret.is-done{animation:type-blink 1.4s step-end 3;opacity:0}
+@keyframes type-blink{0%,100%{opacity:1}50%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.type-caret{animation:none;opacity:0}}
+
+/* One ground for the whole portfolio. The hero's wash now lives on the body and
+   is fixed, so every section sits on the same sheet instead of stacking its own
+   opaque panel. Section surfaces are translucent so that sheet shows through. */
+body{
+  background:
+    radial-gradient(ellipse 88% 58% at 16% 6%, var(--h1-soft), transparent 58%),
+    radial-gradient(ellipse 78% 54% at 88% 42%, var(--h2-soft), transparent 60%),
+    radial-gradient(ellipse 70% 50% at 38% 94%, var(--h3-soft), transparent 62%),
+    var(--bg);
+  background-attachment:fixed;
+}
+:root{
+  --bg-elevated:rgb(16 20 31 / .72);
+  --bg-sunken:rgb(11 14 23 / .6);
+}
+
+/* Keep the opening within one screen on phones, with all detail in About.
+   A minimum height lets enlarged text remain accessible without clipping. */
+#about{scroll-margin-top:65px}
+@media(max-width:600px){
+  .hero-inner{grid-template-columns:1fr;gap:16px;text-align:center}
+  .hero-copy{grid-column:1;grid-row:2;min-width:0}
+  .hero-portrait{grid-column:1;grid-row:1;width:100%;max-width:240px}
+  .hero-portrait img{height:clamp(120px,25svh,220px)}
+  .hero-name{font-size:clamp(20px,5.5vw,28px);margin-bottom:8px}
+  .hero-title{font-size:clamp(30px,8vw,44px)}
+  .hero-lede{margin:14px auto 0}
+  .hero-cta{justify-content:center;margin-top:18px}
+  .hero-follow{grid-row:3;gap:10px;padding:5px 12px}
+  .hero-follow a{width:32px;height:32px}
+}
+
+/* Availability banner across the top of the hero — the first line read. */
+/* A tag beneath the role, not a banded segment of its own. */
+.hero-open{
+  display:inline-flex;align-items:center;gap:8px;
+  margin:12px 0 0;padding:0;border:0;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--h3);
+}
+/* The focus line: four keywords, not a sentence — set apart from the summary. */
+.hero-focus{
+  margin:14px 0 0;font-family:var(--font-mono);font-size:11.5px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--accent);
+}
+
+/* "Other" holds the sections that would otherwise stretch the tab row. */
+.nav-more{position:relative}
+/* Height and line-height are pinned to the tab links (27px box, 12px type) so
+   the trigger sits on exactly the same line rather than 5px taller. */
+.nav-more-trigger{
+  display:inline-flex;align-items:center;gap:6px;
+  height:27px;padding:0 12px;line-height:1;
+  border:0;border-radius:999px;background:transparent;
+  font-family:var(--font-mono);font-size:12px;letter-spacing:.04em;
+  text-transform:uppercase;color:var(--fg-muted);cursor:pointer;
+  transition:color .25s,background .25s;
+}
+.nav-more-trigger svg{flex:none}
+.nav-more-trigger:hover,.nav-more[aria-expanded="true"] .nav-more-trigger{color:var(--fg);background:var(--nav-pill)}
+.nav-more-trigger:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.nav-more-menu{
+  position:absolute;top:calc(100% + 8px);left:0;z-index:60;min-width:210px;
+  margin:0;padding:6px;list-style:none;
+  border:1px solid var(--border-strong);border-radius:12px;
+  background:var(--bg-elevated);backdrop-filter:blur(10px);
+  box-shadow:0 18px 44px rgb(0 0 0 / .38);
+}
+.nav-more-menu button{
+  display:block;width:100%;padding:9px 12px;border:0;border-radius:8px;
+  background:transparent;text-align:left;cursor:pointer;
+  font-family:var(--font-mono);font-size:11.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--fg-muted);transition:background .2s,color .2s;
+}
+.nav-more-menu button:hover{background:var(--nav-pill);color:var(--fg)}
+.nav-more-menu button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+
+/* The coloured half of a typed line: the name, and the trailing word of a role.
+   Both take the accent so the two highlights read as one decision. */
+.hero-name .type-hl,
+.hero-title .type-hl{color:var(--accent)}

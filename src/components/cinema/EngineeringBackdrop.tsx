@@ -1,6 +1,5 @@
 "use client";
 import Image from "next/image";
-import BrandMark from "../BrandMark";
 import { useEffect, useRef } from "react";
 const routes = [
   "M 770 500 C 640 460 700 260 470 210 S 270 170 110 250",
@@ -47,7 +46,6 @@ export default function EngineeringBackdrop() {
         priority
       />
       <div className="laptop-glow" />
-      <div className="background-brands"><span><BrandMark brand="wipro" label="Wipro" size={70}/></span><span><BrandMark brand="acuver" label="Acuver Consulting" size={70}/></span><span><BrandMark brand="dalhousie" label="Dalhousie University" size={70}/></span></div>
       <svg
         className="data-flow"
         viewBox="0 0 1200 700"
@@ -91,10 +89,6 @@ export default function EngineeringBackdrop() {
           </g>
         ))}
       </svg>
-      <div className="data-telemetry">
-        <span>request → service → response</span>
-        <span>0101 · 1100 · 0010</span>
-      </div>
     </div>
   );
 }

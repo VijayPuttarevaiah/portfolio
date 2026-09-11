@@ -11,7 +11,6 @@ export default function Expertise() {
   return (
     <Section
       id="expertise"
-      eyebrow="05 — Expertise"
       title="Technical expertise"
       intro="Weighted, not exhaustive. The first four groups are where I've spent professional time; the rest is supporting range."
     >

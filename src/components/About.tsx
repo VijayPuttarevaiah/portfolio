@@ -1,51 +1,58 @@
-import { about } from "@/content/resume";
+import { about, stats } from "@/content/resume";
 import Reveal from "./Reveal";
-import Section from "./Section";
-import Monologue from "./cinema/Monologue";
+import SectionLink from "./SectionLink";
+
+const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+/** The lead paragraph with the two tenures bolded, everything else plain. */
+function Lead({ text, emphasis }: { text: string; emphasis: readonly string[] }) {
+  const parts = text.split(new RegExp(`(${emphasis.map(escape).join("|")})`, "g"));
+  return (
+    <p className="about-lead">
+      {parts.map((part, i) =>
+        emphasis.includes(part) ? <strong key={i}>{part}</strong> : part,
+      )}
+    </p>
+  );
+}
 
 export default function About() {
   return (
-    <Section
-      id="about"
-      eyebrow="02 — About"
-      title="The quiet work matters."
-      tinted
-    >
-      <div className="grid gap-12 md:grid-cols-[1.6fr_1fr] md:gap-16">
-        <div className="space-y-8">
-          <Monologue text={about.paragraphs[2]} />
-          {about.paragraphs
-            .filter((_, i) => i !== 2)
-            .map((paragraph) => (
-              <p
-                key={paragraph}
-                className="text-base leading-relaxed text-[var(--fg-muted)]"
-              >
-                {paragraph}
-              </p>
-            ))}
+    <section id="about" aria-labelledby="about-title" className="mx-auto max-w-6xl border-t border-[var(--border)] px-6 py-10 sm:px-8">
+      <h2 id="about-title" className="section-heading">
+        About me
+      </h2>
+
+      <div className="about-grid mt-6">
+        <div className="about-story">
+          <Lead text={about.lead} emphasis={about.leadEmphasis} />
+          {about.paragraphs.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
         </div>
 
-        <Reveal delay={80}>
-          <h3 className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--fg-subtle)]">
-            Currently interested in
-          </h3>
-          <ul className="mt-5 space-y-3">
-            {about.interests.map((interest) => (
-              <li
-                key={interest}
-                className="flex gap-3 text-sm leading-relaxed text-[var(--fg-muted)]"
-              >
-                <span
-                  aria-hidden="true"
-                  className="mt-[0.55rem] h-px w-3 shrink-0 bg-[var(--border-strong)]"
-                />
-                {interest}
+        <div className="about-aside">
+          <Reveal className="focus-card">
+            <h3 className="focus-card-label">Current focus</h3>
+            <ul className="focus-list">
+              {about.interests.map((interest) => (
+                <li key={interest}>{interest}</li>
+              ))}
+            </ul>
+          </Reveal>
+
+          <ul className="stat-row">
+            {stats.map((stat) => (
+              <li key={stat.label}>
+                <SectionLink id={stat.href} className="stat-card">
+                  <span className="stat-value">{stat.value}</span>
+                  <span className="stat-label">{stat.label}</span>
+                </SectionLink>
               </li>
             ))}
           </ul>
-        </Reveal>
+        </div>
       </div>
-    </Section>
+    </section>
   );
 }

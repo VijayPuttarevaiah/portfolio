@@ -1,57 +1,99 @@
 import Image from "next/image";
 import BrandMark from "./BrandMark";
-import { experience } from "@/content/resume";
+import { achievements, experience } from "@/content/resume";
 import Reveal from "./Reveal";
-import Section from "./Section";
+
+const BRAND: Record<string, string> = {
+  Wipro: "wipro",
+  "Acuver Consulting": "acuver",
+  Amazon: "amazon",
+};
+
+/**
+ * Bullets carry ** ** around the metrics and technology names they want
+ * emphasised. Opening verbs are deliberately left plain.
+ */
+function Emphasis({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(/(\*\*[^*]+\*\*)/g).map((part, i) =>
+        part.startsWith("**") && part.endsWith("**") ? (
+          <strong key={i}>{part.slice(2, -2)}</strong>
+        ) : (
+          part
+        ),
+      )}
+    </>
+  );
+}
+
+/** Trophy mark shown beside each award. */
+function TrophyIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path
+        d="M7 4h10v5a5 5 0 0 1-10 0V4Z M7 5H4.5a2.5 2.5 0 0 0 2.5 4 M17 5h2.5a2.5 2.5 0 0 1-2.5 4 M12 14v3 M9 20h6 M10 17h4l.6 3h-5.2l.6-3Z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 export default function Experience() {
   return (
-    <Section
+    <section
       id="experience"
-      eyebrow="03 — Experience"
-      title="Where I've worked"
-      intro="Three and a half years of software engineering across enterprise retail and healthcare platforms, preceded by two years in transaction risk analysis at Amazon."
+      aria-labelledby="experience-title"
+      className="mx-auto max-w-6xl border-t border-[var(--border)] px-6 py-14 sm:px-8"
     >
-      <ol className="space-y-14">
-        {experience.map((role, index) => (
+      <h2 id="experience-title" className="section-heading">
+        Professional experience
+      </h2>
+
+      <ol className="mt-10 space-y-16">
+        {experience.map((role, index) => {
+          const awards = achievements.filter(
+            (award) => "company" in award && award.company === role.company,
+          );
+          return (
           <Reveal as="li" key={role.company} delay={index * 60}>
-            <article className="experience-story grid gap-6 md:grid-cols-[13rem_1fr] md:gap-10">
-              <div className="md:pt-1">
-                <div className="experience-brand"><BrandMark brand={role.company === "Wipro" ? "wipro" : role.company === "Acuver Consulting" ? "acuver" : "amazon"} label={role.company} size={64} /></div>
-                <p className="font-mono text-[0.72rem] uppercase tracking-[0.12em] text-[var(--fg-subtle)]">
-                  {role.period}
-                </p>
-                <p className="mt-1.5 text-sm font-medium text-[var(--fg-muted)]">
-                  {role.duration}
-                </p>
+            {/* Logo, dates and tenure sit in the right rail: as a left column
+                they left most of that width empty down the length of the role. */}
+            <article className="experience-story">
+              {/* The office photo is the card's backdrop, masked and dimmed. */}
+              {role.photo ? (
+                <figure className="experience-location">
+                  <div className="relative h-full overflow-hidden">
+                    <Image
+                      src={role.photo.src}
+                      alt={role.photo.alt}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 1100px"
+                      className="object-cover"
+                    />
+                  </div>
+                  <figcaption>{role.photo.caption}</figcaption>
+                </figure>
+              ) : null}
+
+              <div className="experience-row">
+              <div className="experience-meta">
+                <div className="experience-brand">
+                  <BrandMark brand={BRAND[role.company] ?? "amazon"} label={role.company} size={84} />
+                </div>
+                <p className="experience-period">{role.period}</p>
+                <p className="experience-duration">{role.duration}</p>
               </div>
 
-              <div>
-                {role.photo ? (
-                  <figure className="experience-location">
-                    <div className="relative aspect-[16/7] overflow-hidden">
-                      <Image
-                        src={role.photo.src}
-                        alt={role.photo.alt}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 700px"
-                        className="object-cover"
-                      />
-                    </div>
-                    <figcaption>{role.photo.caption}</figcaption>
-                  </figure>
-                ) : null}
-                <h3 className="text-xl font-semibold tracking-tight text-[var(--fg)]">
-                  {role.title}
-                </h3>
-                <p className="mt-1 text-sm text-[var(--fg-muted)]">
+              <div className="experience-body">
+                <h3 className="experience-role">{role.title}</h3>
+                <p className="experience-company">
                   {role.companyUrl ? (
-                    <a
-                      href={role.companyUrl}
-                      target="_blank"
-                      rel="noreferrer noopener"
-                      className="underline decoration-[var(--border-strong)] underline-offset-4 transition-colors hover:text-[var(--fg)] hover:decoration-[var(--accent)]"
-                    >
+                    <a href={role.companyUrl} target="_blank" rel="noreferrer noopener">
                       {role.company}
                     </a>
                   ) : (
@@ -59,32 +101,27 @@ export default function Experience() {
                   )}
                 </p>
 
-                {role.note ? (
-                  <p className="mt-3 border-l-2 border-[var(--border-strong)] py-0.5 pl-3 text-sm italic leading-relaxed text-[var(--fg-subtle)]">
-                    {role.note}
-                  </p>
-                ) : null}
+                <ul className="experience-stack">
+                  {role.stack.map((tech) => (
+                    <li key={tech}>{tech}</li>
+                  ))}
+                </ul>
 
-                <p className="mt-4 text-base leading-relaxed text-[var(--fg-muted)]">
-                  {role.context}
-                </p>
+                {role.note ? <p className="experience-note">{role.note}</p> : null}
 
-                <div className="mt-6 space-y-7">
+                <div className="mt-7 space-y-7">
                   {role.engagements.map((engagement) => (
                     <div key={engagement.project}>
-                      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                        <h4 className="text-[0.95rem] font-semibold text-[var(--fg)]">
+                      <div className="experience-project">
+                        <h4>
+                          <span className="experience-key">Project Name:</span>{" "}
                           {engagement.project}
                         </h4>
                         {engagement.client ? (
-                          <p className="text-sm text-[var(--fg-muted)]">
+                          <p className="experience-client">
+                            <span className="experience-key">, Client:</span>{" "}
                             {engagement.clientUrl ? (
-                              <a
-                                href={engagement.clientUrl}
-                                target="_blank"
-                                rel="noreferrer noopener"
-                                className="underline decoration-[var(--border-strong)] underline-offset-4 transition-colors hover:text-[var(--fg)] hover:decoration-[var(--accent)]"
-                              >
+                              <a href={engagement.clientUrl} target="_blank" rel="noreferrer noopener">
                                 {engagement.client}
                               </a>
                             ) : (
@@ -92,22 +129,16 @@ export default function Experience() {
                             )}
                           </p>
                         ) : null}
-                        <p className="font-mono text-[0.68rem] uppercase tracking-[0.12em] text-[var(--fg-subtle)]">
-                          {engagement.period}
-                        </p>
+                        <p className="experience-engagement-period">{engagement.period}</p>
                       </div>
 
-                      <ul className="mt-3 space-y-3">
+                      <ul className="experience-bullets">
                         {engagement.bullets.map((bullet) => (
-                          <li
-                            key={bullet.slice(0, 40)}
-                            className="flex gap-3 text-[0.95rem] leading-relaxed text-[var(--fg-muted)]"
-                          >
-                            <span
-                              aria-hidden="true"
-                              className="mt-[0.6rem] h-1 w-1 shrink-0 rounded-full bg-[var(--accent)]"
-                            />
-                            {bullet}
+                          <li key={bullet.slice(0, 40)}>
+                            <span aria-hidden="true" />
+                            <span>
+                              <Emphasis text={bullet} />
+                            </span>
                           </li>
                         ))}
                       </ul>
@@ -115,21 +146,26 @@ export default function Experience() {
                   ))}
                 </div>
 
-                <ul className="mt-6 flex flex-wrap gap-x-2 gap-y-2">
-                  {role.stack.map((tech) => (
-                    <li
-                      key={tech}
-                      className="rounded-md border border-[var(--border)] px-2.5 py-1 font-mono text-[0.7rem] text-[var(--fg-subtle)]"
-                    >
-                      {tech}
-                    </li>
-                  ))}
-                </ul>
+                {awards.length ? (
+                  <div className="experience-recognition">
+                    <h4>Recognition</h4>
+                    <ul>
+                      {awards.map((award) => (
+                        <li key={award.name}>
+                          <TrophyIcon />
+                          <span>{award.name}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ) : null}
+              </div>
               </div>
             </article>
           </Reveal>
-        ))}
+          );
+        })}
       </ol>
-    </Section>
+    </section>
   );
 }

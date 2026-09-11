@@ -12,7 +12,6 @@ export default function Gallery() {
   return (
     <Section
       id="gallery"
-      eyebrow="In practice"
       title="On the job"
       intro="Places behind the work — Wipro and Acuver Consulting."
       tinted

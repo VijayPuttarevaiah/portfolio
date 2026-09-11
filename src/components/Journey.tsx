@@ -130,21 +130,6 @@ function useReducedMotion() {
   return reduced;
 }
 
-function Availability() {
-  return (
-    <div className="mx-auto w-full max-w-6xl px-6 sm:px-8">
-      <div className="mt-14 border-t border-[var(--border)] pt-8 text-center">
-        <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-[var(--fg-subtle)]">
-          Available from January 2027
-        </p>
-        <p className="mx-auto mt-3 max-w-xl text-base leading-relaxed text-[var(--fg-muted)]">
-          Open to a Winter 2027 co-op on either a 4 month or an 8 month term.
-        </p>
-      </div>
-    </div>
-  );
-}
-
 /**
  * The arc is scroll-scrubbed: a sweep runs the years from 2015 to 2027 and
  * lights each one as it passes. Anyone who asked for reduced motion gets the
@@ -157,16 +142,13 @@ export default function Journey() {
     return (
       <Section
         id="journey"
-        eyebrow="01 — The arc"
-        title="Five years. A path of my own."
-        intro="Three and a half years writing Java and Spring Boot services in production — healthcare claims at Wipro, retail order and logistics systems at Acuver. Now a computer science master's at Dalhousie."
+        title="A journey through time"
         tinted
       >
         <div className="grid gap-16 lg:grid-cols-2 lg:gap-12">
           <Track stops={educationJourney} label="Education" hue="--h3" />
           <Track stops={professionalJourney} label="Professional" hue="--h1" />
         </div>
-        <Availability />
       </Section>
     );
   }
@@ -174,24 +156,10 @@ export default function Journey() {
   return (
     <section
       id="journey"
-      className="relative bg-[var(--bg-elevated)] py-16 sm:py-20"
+      aria-labelledby="journey-title"
+      className="relative py-16 sm:py-20"
     >
-      <div className="mx-auto w-full max-w-6xl px-6 sm:px-8">
-        <p className="font-mono text-[0.68rem] uppercase tracking-[0.2em] text-[var(--fg-subtle)]">
-          01 — The arc
-        </p>
-        <h2 className="display mt-3 text-3xl leading-tight text-[var(--fg)] sm:text-4xl">
-          Five years. A path of my own.
-        </h2>
-        <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--fg-muted)]">
-          Three and a half years writing Java and Spring Boot services in
-          production — healthcare claims at Wipro, retail order and logistics
-          systems at Acuver. Now a computer science master&apos;s at Dalhousie.
-        </p>
-      </div>
-
       <JourneyArc reduced={false} />
-      <Availability />
     </section>
   );
 }

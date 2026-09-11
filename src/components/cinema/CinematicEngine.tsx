@@ -4,7 +4,7 @@ import { Component, useEffect, useState, type ReactNode } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
-import { motionState } from "./motionState";
+import { motionState, scrollBridge } from "./motionState";
 import "lenis/dist/lenis.css";
 const FilmScene = dynamic(() => import("./FilmScene"), { ssr: false });
 class SceneBoundary extends Component<
@@ -33,7 +33,9 @@ export default function CinematicEngine() {
         lerp: 0.085,
         smoothWheel: true,
         syncTouch: false,
-        anchors: { offset: -80 },
+        // Anchor clicks are handled by jumpToOffset, which lands instantly;
+        // letting Lenis also animate them made every jump drift into place.
+        anchors: false,
         prevent: (node) => node.tagName === "TEXTAREA",
       });
       const tick = (time: number) => {
@@ -48,10 +50,12 @@ export default function CinematicEngine() {
         motionState.speed = Math.min(Math.abs(event.velocity) / 18, 3);
         ScrollTrigger.update();
       });
+      scrollBridge.lenis = lenis;
       gsap.ticker.add(tick);
       gsap.ticker.lagSmoothing(0);
       document.documentElement.classList.add("cinema-motion");
       return () => {
+        scrollBridge.lenis = null;
         lenis.destroy();
         gsap.ticker.remove(tick);
         document.documentElement.classList.remove("cinema-motion");

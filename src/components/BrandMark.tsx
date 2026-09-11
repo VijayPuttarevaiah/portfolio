@@ -16,9 +16,9 @@ import Image from "next/image";
  * its filename below. Nothing else changes.
  */
 const LOGO_FILES: Record<string, string> = {
-  acuver: "/logos/acuver.png",
+  acuver: "/logos/acuver-full.png",
   amazon: "/logos/amazon.svg",
-  dalhousie: "/logos/dalhousie.svg",
+  dalhousie: "/logos/dalhousie-crest.jpg",
   nie: "/logos/nie.png",
   wipro: "/logos/wipro.svg",
 };

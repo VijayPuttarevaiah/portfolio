@@ -3,8 +3,6 @@ import Reveal from "./Reveal";
 
 type Props = {
   id: string;
-  /** Small uppercase eyebrow, e.g. "02 — Experience". */
-  eyebrow: string;
   title: string;
   intro?: string;
   children: ReactNode;
@@ -14,7 +12,6 @@ type Props = {
 
 export default function Section({
   id,
-  eyebrow,
   title,
   intro,
   children,
@@ -28,15 +25,9 @@ export default function Section({
         tinted ? "bg-[var(--bg-elevated)]" : ""
       }`}
     >
-      <div className="mx-auto w-full max-w-5xl px-6 py-20 sm:px-8 sm:py-28">
+      <div className="mx-auto w-full max-w-6xl px-6 py-20 sm:px-8 sm:py-28">
         <Reveal>
-          <p className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--fg-subtle)]">
-            {eyebrow}
-          </p>
-          <h2
-            id={`${id}-heading`}
-            className="display t-section mt-4 text-[var(--fg)]"
-          >
+          <h2 id={`${id}-heading`} className="section-heading">
             {title}
           </h2>
           {intro ? (
