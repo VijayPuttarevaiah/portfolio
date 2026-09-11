@@ -780,7 +780,7 @@ export const involvement = [
   {
     role: "Student Representative",
     organization: "Dalhousie Machine Learning Society",
-    brand: "dalhousie",
+    brand: "dmls",
     bullets: [
       "Represent the student community within the Dalhousie Machine Learning Society, acting as a bridge between students and the executive leadership team.",
       "Lead student outreach to promote engagement in AI, machine learning, and data science initiatives.",

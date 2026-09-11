@@ -18,7 +18,7 @@ export default function Involvement() {
           <Reveal as="li" key={`${entry.organization}-${entry.role}`} delay={i * 70}>
             <article className="involve-row">
               <span className="involve-mark">
-                <BrandMark brand={entry.brand} label={entry.organization} size={52} />
+                <BrandMark brand={entry.brand} label={entry.organization} size={120} />
               </span>
               <div>
                 <h3 className="involve-role">{entry.role}</h3>

@@ -19,6 +19,7 @@ const LOGO_FILES: Record<string, string> = {
   acuver: "/logos/acuver-full.png",
   amazon: "/logos/amazon.svg",
   dalhousie: "/logos/dalhousie-crest.jpg",
+  dmls: "/photos/DMLS.jpeg",
   nie: "/logos/nie.png",
   wipro: "/logos/wipro.svg",
 };
@@ -35,6 +36,7 @@ const BRAND: Record<string, { color: string; initials: string }> = {
   amazon: { color: "#ff9900", initials: "A" },
   acuver: { color: "#5b8def", initials: "AC" },
   dalhousie: { color: "#ffcc00", initials: "D" },
+  dmls: { color: "#ffcc00", initials: "ML" },
   nie: { color: "#5ddb9c", initials: "NIE" },
 };
 
