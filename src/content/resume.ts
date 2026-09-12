@@ -747,7 +747,7 @@ export const certifications = [
     name: "AWS Certified Cloud Practitioner",
     issuer: "Amazon Web Services",
     badge: "/badges/aws-cloud-practitioner.png",
-    href: "https://www.credly.com/badges/eeae3828-22e0-4ec6-9a81-d1a5ec79746c/public_url",
+    href: "https://www.credly.com/badges/7809494e-8f23-479b-aba6-3149e789aac2/public_url",
     blurb:
       "The foundational AWS certification: core services, the shared responsibility model, billing, and how accounts and permissions are structured. It is the vocabulary the rest of the AWS track builds on, and the reason IAM boundaries and cost are things I now think about while designing rather than after.",
   },
